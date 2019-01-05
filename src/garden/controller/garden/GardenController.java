@@ -5,6 +5,7 @@ import garden.model.Sensor;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -22,7 +23,7 @@ public class GardenController extends VBox {
     /**
      * The size (radius) of the robot that displays on the screen. The default value is 21.
      */
-    private static double ROBOT_SIZE = 21;
+    private static double ROBOT_SIZE = 9;
     /**
      * The size of the screenSize.
      * Note that the screen has fixed size, so we achieve the different resolutions (width) by multiple this rate
@@ -117,9 +118,20 @@ public class GardenController extends VBox {
         garden.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Robot robot = robotGenerator(event);
-                garden.getChildren().add(robot.getGraphicalDisplay());
-                System.out.println("x: " + event.getX() * screenSizeMultiplierWidth + " y: " + event.getY() * screenSizeMultiplierHeight);
+                if (event.getButton() == MouseButton.PRIMARY) {// add listener for left click
+                    Robot robot = robotGenerator(event);
+                    Circle robotGraphicalDisplay = robot.getGraphicalDisplay();
+                    robotGraphicalDisplay.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            if (event.getButton() == MouseButton.SECONDARY) {// for each of the btn that has added event, add one right click listener for it.
+                                RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot);
+                            }
+                        }
+                    });
+                    garden.getChildren().add(robotGraphicalDisplay);
+                    System.out.println("x: " + event.getX() * screenSizeMultiplierWidth + " y: " + event.getY() * screenSizeMultiplierHeight);
+                }
             }
         });
     }

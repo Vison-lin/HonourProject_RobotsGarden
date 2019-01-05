@@ -28,12 +28,12 @@ public class GardenController extends VBox {
      * The size of the screenSize.
      * Note that the screen has fixed size, so we achieve the different resolutions (width) by multiple this rate
      */
-    private static double screenSizeMultiplierWidth = 1;
+//    private static double screenSizeMultiplierWidth = 10;
     /**
      * The size of the screenSize.
      * Note that the screen has fixed size, so we achieve the different resolutions (height) by multiple this rate
      */
-    private static double screenSizeMultiplierHeight = 1;
+//    private static double screenSizeMultiplierHeight = 10;
     /**
      * The garden instance
      */
@@ -80,36 +80,36 @@ public class GardenController extends VBox {
      *
      * @return the rate of the size
      */
-    public static double getScreenSizeMultiplierWidth() {
-        return screenSizeMultiplierWidth;
-    }
+//    public static double getScreenSizeMultiplierWidth() {
+//        return screenSizeMultiplierWidth;
+//    }
 
     /**
      * Set the rate of the screen size
      *
      * @return the rate of the size
      */
-    public static void setScreenSizeMultiplierWidth(double screenSizeMultiplierWidth) {
-        GardenController.screenSizeMultiplierWidth = screenSizeMultiplierWidth;
-    }
+//    public static void setScreenSizeMultiplierWidth(double screenSizeMultiplierWidth) {
+//        GardenController.screenSizeMultiplierWidth = screenSizeMultiplierWidth;
+//    }
 
     /**
      * Get the rate of the screen size
      *
      * @return the rate of the size
      */
-    public static double getScreenSizeMultiplierHeight() {
-        return screenSizeMultiplierHeight;
-    }
+//    public static double getScreenSizeMultiplierHeight() {
+//        return screenSizeMultiplierHeight;
+//    }
 
     /**
      * Set the rate of the screen size
      *
      * @return the rate of the size
      */
-    public static void setScreenSizeMultiplierHeight(double screenSizeMultiplierHeight) {
-        GardenController.screenSizeMultiplierHeight = screenSizeMultiplierHeight;
-    }
+//    public static void setScreenSizeMultiplierHeight(double screenSizeMultiplierHeight) {
+//        GardenController.screenSizeMultiplierHeight = screenSizeMultiplierHeight;
+//    }
 
     /**
      * Init the robots: add on click to the pane(garden) so where ever click the pane, a new robots will be created.
@@ -130,7 +130,9 @@ public class GardenController extends VBox {
                         }
                     });
                     garden.getChildren().add(robotGraphicalDisplay);
-                    System.out.println("x: " + event.getX() * screenSizeMultiplierWidth + " y: " + event.getY() * screenSizeMultiplierHeight);
+//                    System.out.println("The robot has been successfully created at the position x: " + event.getX() * screenSizeMultiplierWidth + " y: " + event.getY() * screenSizeMultiplierHeight + "!");
+
+                    System.out.println("The robot has been successfully created at the position x: " + event.getX() + " y: " + event.getY() + "!");
                 }
             }
         });

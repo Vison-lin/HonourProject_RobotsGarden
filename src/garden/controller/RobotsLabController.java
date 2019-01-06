@@ -21,6 +21,8 @@ public class RobotsLabController extends HBox {
         fxmlLoader.setController(this);
         try {
             fxmlLoader.load();
+            //passing gardenController into controlPanelController
+            controlPanelController.setGardenController(gardenController);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

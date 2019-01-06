@@ -1,5 +1,7 @@
 package garden.model;
 
+import garden.core.llibrary.DefaultAlgorithm;
+import garden.core.model.Algorithm;
 import javafx.scene.shape.Circle;
 
 /**
@@ -22,6 +24,11 @@ public class Robot {
     private Sensor sensor;
 
     /**
+     * The algorithm associate with this robot. Note that the default value is DefaultAlgorithm, which do nothing.
+     */
+    private Algorithm algorithm = new DefaultAlgorithm(this);
+
+    /**
      * Create a new robot object
      *
      * @param graphicalDisplay the Circle object which represent this robot on the screen
@@ -30,6 +37,22 @@ public class Robot {
     public Robot(Circle graphicalDisplay, Sensor sensor) {
         this.graphicalDisplay = graphicalDisplay;
         this.sensor = sensor;
+    }
+
+    /**
+     * Move the robot to the new position
+     * Note that this is the same if you get the graphicalDisplay (Circle) first and then call setTranslateX(x) and setTranslateY(y) respectively.
+     *
+     * @param x the x coordinate of the new position
+     * @param y the y coordinate of the new position
+     */
+    public void moveTo(double x, double y) {
+        graphicalDisplay.setTranslateX(x);
+        graphicalDisplay.setTranslateY(y);
+    }
+
+    public void next() {
+        algorithm.next();
     }
 
     /**
@@ -69,18 +92,6 @@ public class Robot {
     }
 
     /**
-     * Move the robot to the new position
-     * Note that this is the same if you get the graphicalDisplay (Circle) first and then call setTranslateX(x) and setTranslateY(y) respectively.
-     *
-     * @param x the x coordinate of the new position
-     * @param y the y coordinate of the new position
-     */
-    public void moveTo(double x, double y) {
-        graphicalDisplay.setTranslateX(x);
-        graphicalDisplay.setTranslateY(y);
-    }
-
-    /**
      * Get the x coordinate of robot's position
      * Note that this is the same if you get the graphicalDisplay (Circle) first and then call getTranslateX().
      *
@@ -100,4 +111,11 @@ public class Robot {
         return graphicalDisplay.getTranslateY();
     }
 
+    public Algorithm getAlgorithm() {
+        return algorithm;
+    }
+
+    public void setAlgorithm(Algorithm algorithm) {
+        this.algorithm = algorithm;
+    }
 }

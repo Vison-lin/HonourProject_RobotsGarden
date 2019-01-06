@@ -51,6 +51,9 @@ public class Robot {
         graphicalDisplay.setTranslateY(y);
     }
 
+    /**
+     * The robot (reference) will update after called this method.
+     */
     public void next() {
         algorithm.next();
     }

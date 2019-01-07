@@ -1,7 +1,6 @@
 package garden.controller.garden;
 
 import garden.model.Robot;
-import garden.model.Sensor;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -100,17 +99,24 @@ public class GardenController extends VBox {
      * Init the robots: add on click to the pane(garden) so where ever click the pane, a new robots will be created.
      */
     private void robotsInitBooster() {
+        //set onClickListener for creating robots
         garden.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY) {// add listener for left click
                     Robot robot = robotGenerator(event);
                     Circle robotGraphicalDisplay = robot.getGraphicalDisplay();
+                    //set onClickListener for opening robot setting & displaying vision range
                     robotGraphicalDisplay.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
                             if (event.getButton() == MouseButton.SECONDARY) {// for each of the btn that has added event, add one right click listener for it.
                                 RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot);
+                            } else if (event.getButton() == MouseButton.MIDDLE) {
+                                Circle visionRange = new Circle(robot.getSensor().getVision(), Color.YELLOW);
+                                visionRange.setTranslateX(robotGraphicalDisplay.getTranslateX());
+                                visionRange.setTranslateY(robotGraphicalDisplay.getTranslateY());
+                                garden.getChildren().add(visionRange);
                             }
                         }
                     });
@@ -127,7 +133,7 @@ public class GardenController extends VBox {
      * @return return a Circle that represent the robot.
      */
     private Robot robotGenerator(MouseEvent event) {
-        Robot robot = new Robot(new Circle(ROBOT_SIZE, Color.BLACK), new Sensor());
+        Robot robot = new Robot(new Circle(ROBOT_SIZE, Color.BLACK), 21);
         robot.moveTo(event.getX(), event.getY());
         return robot;
     }

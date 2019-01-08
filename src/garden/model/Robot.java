@@ -64,7 +64,8 @@ public class Robot {
      */
     public void next() {
         Point point = algorithm.next();
-        moveTo(point.x, point.y);
+        Point globalPoint = this.sensor.convertToGlobal(point);
+        moveTo(globalPoint.x, globalPoint.y);
     }
 
     /**
@@ -121,6 +122,12 @@ public class Robot {
      */
     public double getPositionY() {
         return graphicalDisplay.getTranslateY();
+    }
+
+    public Point getPosition(){
+        Point point = new Point();
+        point.setLocation(getPositionX(), getPositionY());
+        return point;
     }
 
     public Algorithm getAlgorithm() {

@@ -1,6 +1,6 @@
 package garden.core.llibrary;
 
-import garden.core.model.Algorithm;
+import garden.core.Algorithm;
 import garden.model.Robot;
 
 public class FakedAlgorithm_UpdateColor extends Algorithm {

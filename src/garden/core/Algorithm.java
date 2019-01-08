@@ -1,4 +1,4 @@
-package garden.core.model;
+package garden.core;
 
 import garden.model.Robot;
 

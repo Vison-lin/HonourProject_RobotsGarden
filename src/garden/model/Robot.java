@@ -1,7 +1,7 @@
 package garden.model;
 
+import garden.core.Algorithm;
 import garden.core.llibrary.DefaultAlgorithm;
-import garden.core.model.Algorithm;
 import javafx.scene.shape.Circle;
 
 /**
@@ -32,11 +32,11 @@ public class Robot {
      * Create a new robot object
      *
      * @param graphicalDisplay the Circle object which represent this robot on the screen
-     * @param sensor           the Sensor object which is the sensor of this robot
+     * @param vision           the vision of the robot. This value stores in the built-in sensor object.
      */
-    public Robot(Circle graphicalDisplay, Sensor sensor) {
+    public Robot(Circle graphicalDisplay, double vision) {
         this.graphicalDisplay = graphicalDisplay;
-        this.sensor = sensor;
+        this.sensor = new Sensor(vision, graphicalDisplay.getTranslateX(), graphicalDisplay.getTranslateY());
     }
 
     /**

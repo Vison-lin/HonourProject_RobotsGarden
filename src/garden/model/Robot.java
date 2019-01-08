@@ -64,7 +64,8 @@ public class Robot {
      */
     public void next() {
         Point point = algorithm.next();
-        moveTo(point.x, point.y);
+        Point globalPoint = this.sensor.convertToGlobal(point);
+        moveTo(globalPoint.x, globalPoint.y);
     }
 
     /**

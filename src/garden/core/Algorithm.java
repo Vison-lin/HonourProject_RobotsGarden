@@ -21,8 +21,12 @@ public abstract class Algorithm {
     }
 
     /**
-     * The Algorithm will compute the next step of the robot and manipulate to it.
-     * As long as called this method, the robot instance will be updated.
+     * CORE METHOD:
+     *
+     * Return a point object that represents the next position of the robot in LOCAL COORDINATE SYSTEM
+     *
+     * Put the computed new location in LOCAL COORDINATE SYSTEM as the return object
+     * @return
      */
     public abstract Point next();
 

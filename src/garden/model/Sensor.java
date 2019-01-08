@@ -76,6 +76,11 @@ public class Sensor {
         this.globalY = globalY;
     }
 
+    /**
+     * Test if a given robot is within the vision
+     * @param robot the robot to test
+     * @return
+     */
     public boolean isWithinVision(Robot robot){
         return distance(this.globalX, this.globalY, robot.getPositionX(), robot.getPositionY())<=vision;
     }
@@ -86,6 +91,10 @@ public class Sensor {
         return Math.sqrt(Math.pow(diffx, 2) + Math.pow(diffy, 2));
     }
 
+    /**
+     * Convert all the global robots' coordinate into local and remove all the robots that is outside of the vision of current robot.
+     * @return
+     */
     public List<Robot> getAllVisibleRobotsInLocalScale(){
         List<Robot> localRobotsList = new ArrayList<>();
         Collections.copy(localRobotsList, globalRobots);

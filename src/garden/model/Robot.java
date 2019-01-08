@@ -124,6 +124,12 @@ public class Robot {
         return graphicalDisplay.getTranslateY();
     }
 
+    public Point getPosition(){
+        Point point = new Point();
+        point.setLocation(getPositionX(), getPositionY());
+        return point;
+    }
+
     public Algorithm getAlgorithm() {
         return algorithm;
     }

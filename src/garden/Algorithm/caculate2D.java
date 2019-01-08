@@ -1,6 +1,7 @@
 package garden.Algorithm;
 
 import com.sun.xml.internal.bind.v2.TODO;
+import garden.core.Algorithm;
 import garden.model.Robot;
 
 import java.awt.*;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class caculate2D {
+public class caculate2D extends Algorithm{
 
 
     private int iter;
@@ -20,11 +21,14 @@ public class caculate2D {
 
     private int range;
 
-    public caculate2D(int iter,int todo, ArrayList state, int range){
-        this.iter = iter;
-        this.todo = todo;
-        this.state = state;
-        this.range = range;
+    public caculate2D(Robot robot){
+        super(robot);
+//        this.iter = iter;
+//        this.todo = todo;
+//        this.state = state;
+//        this.range = range;
+        robot.getSensor().getAllVisibleRobotsInLocalScale();
+        robot.getSensor().getVision();
 
     }
 
@@ -63,6 +67,7 @@ public class caculate2D {
             currRobot.setLocation(robot.getPositionX(),robot.getPositionY());
             Point connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
             //Todo disscussion
+            
 
 
         }
@@ -249,17 +254,8 @@ public class caculate2D {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Override
+    public Point next() {
+        return null;
+    }
 }

@@ -5,6 +5,9 @@ import garden.core.llibrary.DefaultAlgorithm;
 import javafx.scene.shape.Circle;
 
 import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class that represent Robot object.
@@ -30,15 +33,18 @@ public class Robot {
      */
     private Algorithm algorithm = new DefaultAlgorithm(this);
 
+    private java.util.List<Robot> globalRobots;
+
     /**
      * Create a new robot object
      *
      * @param graphicalDisplay the Circle object which represent this robot on the screen
      * @param vision           the vision of the robot. This value stores in the built-in sensor object.
      */
-    public Robot(Circle graphicalDisplay, double vision) {
+    public Robot(Circle graphicalDisplay, double vision, List<Robot> globalRobots) {
         this.graphicalDisplay = graphicalDisplay;
-        this.sensor = new Sensor(vision, graphicalDisplay.getTranslateX(), graphicalDisplay.getTranslateY());
+        this.sensor = new Sensor(vision, graphicalDisplay.getTranslateX(), graphicalDisplay.getTranslateY(), globalRobots);
+        this.globalRobots = globalRobots;
     }
 
     /**

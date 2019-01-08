@@ -15,10 +15,13 @@ public class Sensor {
 
     private double globalY;
 
-    public Sensor(double vision, double globalX, double globalY) {
+    private List<Robot> globalRobots;
+
+    public Sensor(double vision, double globalX, double globalY, List<Robot> globalRobots) {
         this.vision = vision;
         this.globalX = globalX;
         this.globalY = globalY;
+        this.globalRobots = globalRobots;
     }
 
     public Point convertToGlobal(Point point) {
@@ -83,12 +86,12 @@ public class Sensor {
         return Math.sqrt(Math.pow(diffx, 2) + Math.pow(diffy, 2));
     }
 
-    public List<Robot> getAllVisibleRobotsInLocalScale(List<Robot> robots){
+    public List<Robot> getAllVisibleRobotsInLocalScale(){
         List<Robot> localRobotsList = new ArrayList<>();
-        Collections.copy(localRobotsList, robots);
+        Collections.copy(localRobotsList, globalRobots);
         for (Robot robot:localRobotsList){
             if(!isWithinVision(robot)){
-                robots.remove(robot);
+                localRobotsList.remove(robot);
             }
         }
         for (Robot robot:localRobotsList){

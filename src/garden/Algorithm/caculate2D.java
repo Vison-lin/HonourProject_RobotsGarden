@@ -17,7 +17,7 @@ public class caculate2D extends Algorithm{
 
     private int todo;
 
-    private ArrayList state;
+    private ArrayList<Robot> state;
 
     private int range;
 
@@ -27,7 +27,7 @@ public class caculate2D extends Algorithm{
 //        this.todo = todo;
 //        this.state = state;
 //        this.range = range;
-        robot.getSensor().getAllVisibleRobotsInLocalScale();
+        this.state = new ArrayList<>(robot.getSensor().getAllVisibleRobotsInLocalScale());
         robot.getSensor().getVision();
 
     }
@@ -42,12 +42,12 @@ public class caculate2D extends Algorithm{
      * @param  range vision v of all robots
      */
 
-    public Boolean generate(int iter, int todo, ArrayList<Robot> state, int range){
+    public Boolean generate( ArrayList<Robot> state, int range){
         if(todo==0){
             return true;
         }
 
-        ArrayList<Robot> uniques = getUniqueRobots(state);
+        //ArrayList<Robot> uniques = getUniqueRobots(state);
         ArrayList newState = new ArrayList();
         for(Robot robot:state){
             ArrayList<Point> visibles = findRobotsVisible(robot,uniques,range);
@@ -67,7 +67,8 @@ public class caculate2D extends Algorithm{
             currRobot.setLocation(robot.getPositionX(),robot.getPositionY());
             Point connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
             //Todo disscussion
-            
+
+
 
 
         }
@@ -80,10 +81,38 @@ public class caculate2D extends Algorithm{
 
 
 
+
+
+
        return generate(iter+1,todo-1,newState,range);
     }
 
+    public Point generateOneRobot (ArrayList<Robot>visibles , int range){
+        Point result = new Point();
+        ArrayList newState = new ArrayList();
+        if (visibles.size()<2){
+            result.setLocation(0.0,0.0);
+            return result;
+        }
+        Disc C = miniDisc(visibles);
+        ArrayList rs = new ArrayList();
+        for(Point p:visibles){
+            if(p.getX()!=robot.getPositionX()|| p.getY()!= robot.getPositionY()){
+                rs.add(p);
+            }
+        }
+        Point currRobot  = new Point();
+        currRobot.setLocation(robot.getPositionX(),robot.getPositionY());
+        Point connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
 
+
+
+
+
+
+
+
+    }
 
 
 

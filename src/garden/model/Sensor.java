@@ -97,7 +97,16 @@ public class Sensor {
      * @return
      */
     public List<Robot> getAllVisibleRobotsInLocalScale(){
-        ArrayList<Robot> localRobotsList = new ArrayList<>(globalRobots);
+        ArrayList<Robot> localRobotsList = new ArrayList<>();
+
+        //deep copy
+        for(Robot robot:globalRobots){
+            Robot newRobotInstance = new Robot(robot.getGraphicalDisplay(), robot.getSensor().vision);
+            newRobotInstance.setAlgorithm(robot.getAlgorithm());
+            newRobotInstance.setSensor(this);
+            localRobotsList.add(newRobotInstance);
+        }
+
         for (Robot robot:localRobotsList){
             if(!isWithinVision(robot)){
                 localRobotsList.remove(robot);

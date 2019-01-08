@@ -4,6 +4,8 @@ import garden.core.Algorithm;
 import garden.core.llibrary.DefaultAlgorithm;
 import javafx.scene.shape.Circle;
 
+import java.awt.*;
+
 /**
  * Class that represent Robot object.
  * <p>
@@ -55,7 +57,8 @@ public class Robot {
      * The robot (reference) will update after called this method.
      */
     public void next() {
-        algorithm.next();
+        Point point = algorithm.next();
+        moveTo(point.x, point.y);
     }
 
     /**

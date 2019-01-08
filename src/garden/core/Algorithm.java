@@ -2,6 +2,8 @@ package garden.core;
 
 import garden.model.Robot;
 
+import java.awt.*;
+
 public abstract class Algorithm {
 
     /**
@@ -22,7 +24,7 @@ public abstract class Algorithm {
      * The Algorithm will compute the next step of the robot and manipulate to it.
      * As long as called this method, the robot instance will be updated.
      */
-    public abstract void next();
+    public abstract Point next();
 
     public Robot getRobot() {
         return robot;

@@ -9,6 +9,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class caculate2D extends Algorithm{
 
@@ -17,7 +18,7 @@ public class caculate2D extends Algorithm{
 
     private int todo;
 
-    private ArrayList<Robot> state;
+    private List<Robot> state;
 
     private double range;
 
@@ -246,26 +247,27 @@ public class caculate2D extends Algorithm{
      * @param  R
      */
 
-    public Point getConnectedCenter(double V,Point ci, Point Ri,ArrayList<Point> R){
+    public Point getConnectedCenter(double V,Point ci, Point Ri,ArrayList<Robot> R){
         Vector Vgoal = new Vector(Ri,ci);
         if(Vgoal.getNorm()==0){
             return Ri;
         }
 
         ArrayList<Double> test = new ArrayList<Double>();
-        for(Point Rj:R){
-            Vector Vrirj = new Vector(Ri,Rj);
+        for(Robot Rj:R){
+            Vector Vrirj = new Vector(Ri,Rj.getPosition());
             double dj = Vrirj.getNorm();
             ArrayList cosAndsin = Vrirj.getCosAndSin(Vgoal);
             double lj = (dj/2*(double)cosAndsin.get(0))+Math.sqrt((V/2)*(V/2)-Math.pow((dj/2*(double)cosAndsin.get(1)),2));
              test.add(lj);
         }
-        double limit = 0;
+        double limit = test.get(0);
         for(double num:test){
             if(num<limit){
                 limit = num;
             }
         }
+        System.out.println("Limit is: "+limit);
         double D = Math.min(Vgoal.getNorm(),limit);
         return Vgoal.resize(D).getEnd();
 
@@ -273,8 +275,12 @@ public class caculate2D extends Algorithm{
 
 
     @Override
-    public Point next() {
-
-        return generateOneRobot(state,range);
+    public Point next(List<Robot> robotList) {
+//        this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
+        this.state = robotList;
+        System.out.println("Has visible size: "+state.size());
+        Point point = generateOneRobot(new ArrayList<>(state),range);
+        System.out.println("NEXT POSITION: X: " + point.getX()+", Y: "+ point.getY());
+        return point;
     }
 }

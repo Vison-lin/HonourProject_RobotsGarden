@@ -4,6 +4,7 @@ import garden.core.Algorithm;
 import garden.model.Robot;
 
 import java.awt.*;
+import java.util.List;
 
 public class FakedAlgorithm_UpdateColor extends Algorithm {
     /**
@@ -16,7 +17,7 @@ public class FakedAlgorithm_UpdateColor extends Algorithm {
     }
 
     @Override
-    public Point next() {
+    public Point next(List<Robot> robots) {
         Point point = new Point();
         point.setLocation(getRobot().getPositionX() - 1, getRobot().getPositionY() - 1);
         return point;

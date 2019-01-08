@@ -17,11 +17,11 @@ public class Sensor {
 
     private List<Robot> globalRobots;
 
-    public Sensor(double vision, double globalX, double globalY, List<Robot> globalRobots) {
+    public Sensor(double vision, double globalX, double globalY) {
         this.vision = vision;
         this.globalX = globalX;
         this.globalY = globalY;
-        this.globalRobots = globalRobots;
+        this.globalRobots = new ArrayList<>();
     }
 
     public Point convertToGlobal(Point point) {
@@ -82,6 +82,7 @@ public class Sensor {
      * @return
      */
     public boolean isWithinVision(Robot robot){
+        System.out.println(distance(this.globalX, this.globalY, robot.getPositionX(), robot.getPositionY()));
         return distance(this.globalX, this.globalY, robot.getPositionX(), robot.getPositionY())<=vision;
     }
 
@@ -96,8 +97,7 @@ public class Sensor {
      * @return
      */
     public List<Robot> getAllVisibleRobotsInLocalScale(){
-        List<Robot> localRobotsList = new ArrayList<>();
-        Collections.copy(localRobotsList, globalRobots);
+        ArrayList<Robot> localRobotsList = new ArrayList<>(globalRobots);
         for (Robot robot:localRobotsList){
             if(!isWithinVision(robot)){
                 localRobotsList.remove(robot);
@@ -113,6 +113,14 @@ public class Sensor {
             robot.getGraphicalDisplay().setTranslateX(localPoint.y);
         }
         return localRobotsList;
+    }
+
+    public List<Robot> getGlobalRobots() {
+        return globalRobots;
+    }
+
+    public void setGlobalRobots(List<Robot> globalRobots) {
+        this.globalRobots = globalRobots;
     }
 
 }

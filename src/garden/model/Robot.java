@@ -33,18 +33,15 @@ public class Robot {
      */
     private Algorithm algorithm = new DefaultAlgorithm(this);
 
-    private java.util.List<Robot> globalRobots;
-
     /**
      * Create a new robot object
      *
      * @param graphicalDisplay the Circle object which represent this robot on the screen
      * @param vision           the vision of the robot. This value stores in the built-in sensor object.
      */
-    public Robot(Circle graphicalDisplay, double vision, List<Robot> globalRobots) {
+    public Robot(Circle graphicalDisplay, double vision) {
         this.graphicalDisplay = graphicalDisplay;
-        this.sensor = new Sensor(vision, graphicalDisplay.getTranslateX(), graphicalDisplay.getTranslateY(), globalRobots);
-        this.globalRobots = globalRobots;
+        this.sensor = new Sensor(vision, graphicalDisplay.getTranslateX(), graphicalDisplay.getTranslateY());
     }
 
     /**
@@ -62,8 +59,9 @@ public class Robot {
     /**
      * The robot (reference) will update after called this method.
      */
-    public void next() {
-        Point point = algorithm.next();
+    public void next(List<Robot> robots) {
+        sensor.setGlobalRobots(robots);//set curr gobal robots to sensor
+        Point point = algorithm.next(robots);
         Point globalPoint = this.sensor.convertToGlobal(point);
         moveTo(globalPoint.x, globalPoint.y);
     }

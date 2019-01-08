@@ -35,13 +35,19 @@ public class ControlPanelController extends VBox {
     }
 
     private void registerListener() {
+        //todo -? next -> setting -> error
         next.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Iterator<Robot> robotIterator = gardenController.getRobots().iterator();
-                while (robotIterator.hasNext()) {
-                    Robot curr = robotIterator.next();
-                    curr.next();
+                Iterator<Robot> robotIterator1 = gardenController.getRobots().iterator();
+                while (robotIterator1.hasNext()) {
+                    Robot curr = robotIterator1.next();
+                    curr.getSensor().setGlobalRobots(gardenController.getRobots());
+                }
+                Iterator<Robot> robotIterator2 = gardenController.getRobots().iterator();
+                while (robotIterator2.hasNext()) {
+                    Robot curr = robotIterator2.next();
+                    curr.next(gardenController.getRobots());
                 }
                 gardenController.updateGarden();
             }

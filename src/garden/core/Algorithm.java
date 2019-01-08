@@ -3,6 +3,8 @@ package garden.core;
 import garden.model.Robot;
 
 import java.awt.*;
+import java.util.List;
+
 
 public abstract class Algorithm {
 
@@ -28,7 +30,7 @@ public abstract class Algorithm {
      * Put the computed new location in LOCAL COORDINATE SYSTEM as the return object
      * @return
      */
-    public abstract Point next();
+    public abstract Point next(List<Robot> robotList);
 
     public Robot getRobot() {
         return robot;

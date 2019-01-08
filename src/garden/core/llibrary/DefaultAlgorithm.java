@@ -4,6 +4,7 @@ import garden.core.Algorithm;
 import garden.model.Robot;
 
 import java.awt.*;
+import java.util.List;
 
 /**
  * This represent the default behavior of each robot -- Do nothing. All the robots should be init with this algorithm.
@@ -22,7 +23,7 @@ public class DefaultAlgorithm extends Algorithm {
      * This is a default behavior for each robot. So do nothing
      */
     @Override
-    public Point next() {
+    public Point next(List<Robot> robots) {
         Point point = new Point();
         point.setLocation(this.getRobot().getPositionX(), this.getRobot().getPositionY());
         return  point;

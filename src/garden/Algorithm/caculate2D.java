@@ -19,7 +19,7 @@ public class caculate2D extends Algorithm{
 
     private ArrayList<Robot> state;
 
-    private int range;
+    private double range;
 
     public caculate2D(Robot robot){
         super(robot);
@@ -28,66 +28,60 @@ public class caculate2D extends Algorithm{
 //        this.state = state;
 //        this.range = range;
         this.state = new ArrayList<>(robot.getSensor().getAllVisibleRobotsInLocalScale());
-        robot.getSensor().getVision();
+        this.range = robot.getSensor().getVision();
 
     }
 
 
 
-    /**
-     * Compute the next generation of robots' positions
-     * @param  iter current iteration
-     * @param todo how many left to generate
-     * @param  state current state of robots' positions
-     * @param  range vision v of all robots
-     */
-
-    public Boolean generate( ArrayList<Robot> state, int range){
-        if(todo==0){
-            return true;
-        }
-
-        //ArrayList<Robot> uniques = getUniqueRobots(state);
-        ArrayList newState = new ArrayList();
-        for(Robot robot:state){
-            ArrayList<Point> visibles = findRobotsVisible(robot,uniques,range);
-            //Todo robot need faulty type.
-            if(visibles.size()<2){
-                newState.add(robot);
-                continue;
-            }
-            Disc C = miniDisc(visibles);
-            ArrayList rs = new ArrayList();
-            for(Point p:visibles){
-                if(p.getX()!=robot.getPositionX()|| p.getY()!= robot.getPositionY()){
-                    rs.add(p);
-                }
-            }
-            Point currRobot  = new Point();
-            currRobot.setLocation(robot.getPositionX(),robot.getPositionY());
-            Point connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
-            //Todo disscussion
 
 
+//    public Boolean generate( ArrayList<Robot> state, int range){
+//        if(todo==0){
+//            return true;
+//        }
+//
+//        //ArrayList<Robot> uniques = getUniqueRobots(state);
+//        ArrayList newState = new ArrayList();
+//        for(Robot robot:state){
+//            ArrayList<Point> visibles = findRobotsVisible(robot,uniques,range);
+//            //Todo robot need faulty type.
+//            if(visibles.size()<2){
+//                newState.add(robot);
+//                continue;
+//            }
+//            Disc C = miniDisc(visibles);
+//            ArrayList rs = new ArrayList();
+//            for(Point p:visibles){
+//                if(p.getX()!=robot.getPositionX()|| p.getY()!= robot.getPositionY()){
+//                    rs.add(p);
+//                }
+//            }
+//            Point currRobot  = new Point();
+//            currRobot.setLocation(robot.getPositionX(),robot.getPositionY());
+//            Point connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
+//            //Todo disscussion
+//
+//
+//
+//
+//        }
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//       return generate(iter+1,todo-1,newState,range);
+//    }
 
-
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-       return generate(iter+1,todo-1,newState,range);
-    }
-
-    public Point generateOneRobot (ArrayList<Robot>visibles , int range){
+    public Point generateOneRobot (ArrayList<Robot>visibles , double range){
         Point result = new Point();
         ArrayList newState = new ArrayList();
         if (visibles.size()<2){
@@ -96,20 +90,15 @@ public class caculate2D extends Algorithm{
         }
         Disc C = miniDisc(visibles);
         ArrayList rs = new ArrayList();
-        for(Point p:visibles){
-            if(p.getX()!=robot.getPositionX()|| p.getY()!= robot.getPositionY()){
+        for(Robot p:visibles){
+            if(p.getPositionX()!=0.0|| p.getPositionY()!= 0.0){
                 rs.add(p);
             }
         }
         Point currRobot  = new Point();
-        currRobot.setLocation(robot.getPositionX(),robot.getPositionY());
+        currRobot.setLocation(0.0,0.0);
         Point connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
-
-
-
-
-
-
+        return connectedCenter;
 
 
     }
@@ -185,16 +174,16 @@ public class caculate2D extends Algorithm{
      * @return {Disc} smallest disc containing all points in `P`
      */
 
-    public Disc miniDisc(ArrayList<Point> P){
+    public Disc miniDisc(ArrayList<Robot> P){
         Collections.shuffle(P);
-        Point p1 = P.get(0);
-        Point p2 = P.get(1);
+        Point p1 = P.get(0).getPosition();
+        Point p2 = P.get(1).getPosition();
         Disc D2 = new Disc(p1,p2);
 
         for(int i= 2;i<P.size();i++){
-            Point pi = P.get(i);
+            Point pi = P.get(i).getPosition();
             if(!D2.contains(pi)){
-                D2 =miniDiscWithPoint(new ArrayList<Point>(P.subList(0,i)),pi);
+                D2 =miniDiscWithPoint(new ArrayList<Robot>(P.subList(0,i)),pi);
             }
         }
         return D2;
@@ -209,14 +198,14 @@ public class caculate2D extends Algorithm{
      * @return {Disc} smallest enclosing disc for P with q on its boundary
      */
 
-    private Disc miniDiscWithPoint(ArrayList<Point> P, Point q){
-        Point p1 = P.get(0);
+    private Disc miniDiscWithPoint(ArrayList<Robot> P, Point q){
+        Point p1 = P.get(0).getPosition();
         Disc D1 = new Disc(p1,q);
 
         for(int i=1; i<P.size();i++){
-            Point pi = P.get(i);
+            Point pi = P.get(i).getPosition();
             if(!D1.contains(pi)){
-                D1 = miniDiscWith2Points(new ArrayList<Point>(P.subList(0,i)),pi,q);
+                D1 = miniDiscWith2Points(new ArrayList<Robot>(P.subList(0,i)),pi,q);
             }
 
         }
@@ -234,11 +223,11 @@ public class caculate2D extends Algorithm{
      * @param q2 point {x, y} on the boundary of the new disc
      * @return {Disc} smallest enclosing disc for P with q1 and q2 on its boundary
      */
-    private Disc miniDiscWith2Points(ArrayList<Point> P,Point q1,Point q2){
+    private Disc miniDiscWith2Points(ArrayList<Robot> P,Point q1,Point q2){
         Disc D0 = new Disc(q1,q2);
-        for (Point pk : P){
-            if(!D0.contains(pk)){
-                D0 = new Disc(q1,q2,pk);
+        for (Robot pk : P){
+            if(!D0.contains(pk.getPosition())){
+                D0 = new Disc(q1,q2,pk.getPosition());
             }
         }
 
@@ -257,7 +246,7 @@ public class caculate2D extends Algorithm{
      * @param  R
      */
 
-    public Point getConnectedCenter(int V,Point ci, Point Ri,ArrayList<Point> R){
+    public Point getConnectedCenter(double V,Point ci, Point Ri,ArrayList<Point> R){
         Vector Vgoal = new Vector(Ri,ci);
         if(Vgoal.getNorm()==0){
             return Ri;
@@ -285,6 +274,7 @@ public class caculate2D extends Algorithm{
 
     @Override
     public Point next() {
-        return null;
+
+        return generateOneRobot(state,range);
     }
 }

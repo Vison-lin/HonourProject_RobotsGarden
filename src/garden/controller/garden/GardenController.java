@@ -1,7 +1,6 @@
 package garden.controller.garden;
 
 import garden.model.Robot;
-import garden.model.Sensor;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +12,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * The controller of the garden.fxml
@@ -24,16 +26,9 @@ public class GardenController extends VBox {
      * The size (radius) of the robot that displays on the screen. The default value is 21.
      */
     private static double ROBOT_SIZE = 9;
-    /**
-     * The size of the screenSize.
-     * Note that the screen has fixed size, so we achieve the different resolutions (width) by multiple this rate
-     */
-//    private static double screenSizeMultiplierWidth = 10;
-    /**
-     * The size of the screenSize.
-     * Note that the screen has fixed size, so we achieve the different resolutions (height) by multiple this rate
-     */
-//    private static double screenSizeMultiplierHeight = 10;
+
+    private List<Robot> robots = Collections.synchronizedList(new ArrayList<>());//todo need it?
+
     /**
      * The garden instance
      */
@@ -52,6 +47,14 @@ public class GardenController extends VBox {
 
         robotsInitBooster();
 
+    }
+
+    public void updateGarden() {
+        garden.getChildren().removeAll(garden.getChildren());//remove all the element
+        for (Robot robot : robots) {
+            Circle graphicalDisplay = robot.getGraphicalDisplay();
+            garden.getChildren().add(graphicalDisplay);
+        }
     }
 
     /**
@@ -76,62 +79,49 @@ public class GardenController extends VBox {
     }
 
     /**
-     * Get the rate of the screen size
-     *
-     * @return the rate of the size
+     * get the list of robots.
+     * @return the list of the robots
      */
-//    public static double getScreenSizeMultiplierWidth() {
-//        return screenSizeMultiplierWidth;
-//    }
+    public List<Robot> getRobots() {
+        return robots;
+    }
 
     /**
-     * Set the rate of the screen size
-     *
-     * @return the rate of the size
+     * Set the list of robots.
+     * Note, one should avoid to use this method, instead, change the content of the robots directly.
+     * @param robots the new list of the robots
      */
-//    public static void setScreenSizeMultiplierWidth(double screenSizeMultiplierWidth) {
-//        GardenController.screenSizeMultiplierWidth = screenSizeMultiplierWidth;
-//    }
-
-    /**
-     * Get the rate of the screen size
-     *
-     * @return the rate of the size
-     */
-//    public static double getScreenSizeMultiplierHeight() {
-//        return screenSizeMultiplierHeight;
-//    }
-
-    /**
-     * Set the rate of the screen size
-     *
-     * @return the rate of the size
-     */
-//    public static void setScreenSizeMultiplierHeight(double screenSizeMultiplierHeight) {
-//        GardenController.screenSizeMultiplierHeight = screenSizeMultiplierHeight;
-//    }
+    public void setRobots(ArrayList<Robot> robots) {
+        this.robots = robots;
+    }
 
     /**
      * Init the robots: add on click to the pane(garden) so where ever click the pane, a new robots will be created.
      */
     private void robotsInitBooster() {
+        //set onClickListener for creating robots
         garden.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY) {// add listener for left click
                     Robot robot = robotGenerator(event);
                     Circle robotGraphicalDisplay = robot.getGraphicalDisplay();
+                    //set onClickListener for opening robot setting & displaying vision range
                     robotGraphicalDisplay.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
                             if (event.getButton() == MouseButton.SECONDARY) {// for each of the btn that has added event, add one right click listener for it.
                                 RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot);
+                            } else if (event.getButton() == MouseButton.MIDDLE) {
+                                Circle visionRange = new Circle(robot.getSensor().getVision(), Color.YELLOW);
+                                visionRange.setTranslateX(robotGraphicalDisplay.getTranslateX());
+                                visionRange.setTranslateY(robotGraphicalDisplay.getTranslateY());
+                                garden.getChildren().add(visionRange);
                             }
                         }
                     });
                     garden.getChildren().add(robotGraphicalDisplay);
-//                    System.out.println("The robot has been successfully created at the position x: " + event.getX() * screenSizeMultiplierWidth + " y: " + event.getY() * screenSizeMultiplierHeight + "!");
-
+                    robots.add(robot);//add the robot into the robots list
                     System.out.println("The robot has been successfully created at the position x: " + event.getX() + " y: " + event.getY() + "!");
                 }
             }
@@ -143,7 +133,7 @@ public class GardenController extends VBox {
      * @return return a Circle that represent the robot.
      */
     private Robot robotGenerator(MouseEvent event) {
-        Robot robot = new Robot(new Circle(ROBOT_SIZE, Color.BLACK), new Sensor());
+        Robot robot = new Robot(new Circle(ROBOT_SIZE, Color.BLACK), 21);
         robot.moveTo(event.getX(), event.getY());
         return robot;
     }

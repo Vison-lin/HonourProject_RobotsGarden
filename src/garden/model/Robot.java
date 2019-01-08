@@ -1,6 +1,10 @@
 package garden.model;
 
+import garden.core.Algorithm;
+import garden.core.llibrary.DefaultAlgorithm;
 import javafx.scene.shape.Circle;
+
+import java.awt.*;
 
 /**
  * Class that represent Robot object.
@@ -22,14 +26,39 @@ public class Robot {
     private Sensor sensor;
 
     /**
+     * The algorithm associate with this robot. Note that the default value is DefaultAlgorithm, which do nothing.
+     */
+    private Algorithm algorithm = new DefaultAlgorithm(this);
+
+    /**
      * Create a new robot object
      *
      * @param graphicalDisplay the Circle object which represent this robot on the screen
-     * @param sensor           the Sensor object which is the sensor of this robot
+     * @param vision           the vision of the robot. This value stores in the built-in sensor object.
      */
-    public Robot(Circle graphicalDisplay, Sensor sensor) {
+    public Robot(Circle graphicalDisplay, double vision) {
         this.graphicalDisplay = graphicalDisplay;
-        this.sensor = sensor;
+        this.sensor = new Sensor(vision, graphicalDisplay.getTranslateX(), graphicalDisplay.getTranslateY());
+    }
+
+    /**
+     * Move the robot to the new position
+     * Note that this is the same if you get the graphicalDisplay (Circle) first and then call setTranslateX(x) and setTranslateY(y) respectively.
+     *
+     * @param x the x coordinate of the new position
+     * @param y the y coordinate of the new position
+     */
+    public void moveTo(double x, double y) {
+        graphicalDisplay.setTranslateX(x);
+        graphicalDisplay.setTranslateY(y);
+    }
+
+    /**
+     * The robot (reference) will update after called this method.
+     */
+    public void next() {
+        Point point = algorithm.next();
+        moveTo(point.x, point.y);
     }
 
     /**
@@ -69,18 +98,6 @@ public class Robot {
     }
 
     /**
-     * Move the robot to the new position
-     * Note that this is the same if you get the graphicalDisplay (Circle) first and then call setTranslateX(x) and setTranslateY(y) respectively.
-     *
-     * @param x the x coordinate of the new position
-     * @param y the y coordinate of the new position
-     */
-    public void moveTo(double x, double y) {
-        graphicalDisplay.setTranslateX(x);
-        graphicalDisplay.setTranslateY(y);
-    }
-
-    /**
      * Get the x coordinate of robot's position
      * Note that this is the same if you get the graphicalDisplay (Circle) first and then call getTranslateX().
      *
@@ -100,4 +117,11 @@ public class Robot {
         return graphicalDisplay.getTranslateY();
     }
 
+    public Algorithm getAlgorithm() {
+        return algorithm;
+    }
+
+    public void setAlgorithm(Algorithm algorithm) {
+        this.algorithm = algorithm;
+    }
 }

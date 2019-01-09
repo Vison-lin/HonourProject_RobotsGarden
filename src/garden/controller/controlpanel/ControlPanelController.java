@@ -62,10 +62,10 @@ public class ControlPanelController extends VBox {
                 }
 
                 //run next
-                Iterator<Robot> robotIterator2 = localRobotsList.iterator();
+                Iterator<Robot> robotIterator2 = gardenController.getRobots().iterator();
                 while (robotIterator2.hasNext()) {
                     Robot curr = robotIterator2.next();
-                    curr.next(gardenController.getRobots());
+                    curr.next(localRobotsList);
                     if (gardenController.getSelectedRobots() != null && gardenController.getSelectedRobots().equals(curr)) {//display the selected robot's log
                         output.setText(curr.getLog().toString());
                     }

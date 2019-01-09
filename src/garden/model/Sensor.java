@@ -8,23 +8,30 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Sensor helps robots observe world around them.
+ * <br/>
+ * <br/>
+ * It is in charge of converting objects in global scale to local scale for robot's distributed computer to compute.
+ * <br/>
+ * <br/>
+ * For instance:
+ * <br/>
+ * It converts other robots' location in global coordinating system to it's own robot's local coordinating system.
+ * <br/>
+ * It also convert it's robot's local location to global location
+ */
 public class Sensor {
 
     private double vision;
-
-//    private double globalX;
-//
-//    private double globalY;
 
     private List<Robot> globalRobots;
 
     private Robot robot;
 
-    public Sensor(Robot robot, double vision, double globalX, double globalY) {
+    public Sensor(Robot robot, double vision) {
         this.robot = robot;
         this.vision = vision;
-//        this.globalX = globalX;
-//        this.globalY = globalY;
         this.globalRobots = new ArrayList<>();
     }
 
@@ -63,22 +70,6 @@ public class Sensor {
     public void setVision(double vision) {
         this.vision = vision;
     }
-
-//    public double getGlobalX() {
-//        return globalX;
-//    }
-//
-//    public void setGlobalX(double globalX) {
-//        this.globalX = globalX;
-//    }
-//
-//    public double getGlobalY() {
-//        return globalY;
-//    }
-//
-//    public void setGlobalY(double globalY) {
-//        this.globalY = globalY;
-//    }
 
     /**
      * Test if a given robot is within the vision
@@ -136,7 +127,7 @@ public class Sensor {
             point.setLocation(x, y);
             Point localPoint = convertToLocal(point);
             curr.getGraphicalDisplay().setTranslateX(localPoint.x);
-            curr.getGraphicalDisplay().setTranslateX(localPoint.y);
+            curr.getGraphicalDisplay().setTranslateY(localPoint.y);
         }
         return localRobotsList;//should use deep copy
     }

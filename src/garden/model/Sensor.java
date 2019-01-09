@@ -103,7 +103,7 @@ public class Sensor {
     public List<Robot> getAllVisibleRobotsInLocalScale(){
         ArrayList<Robot> localRobotsList = new ArrayList<>(); //special comment:when init, the localRobotsLisy has size 0 because the globalRobots will only be set when the "next" btn in ControlPanelController has been clicked
 
-        //deep copy: Ensure the modification, especially for location on the localRobotList will not affect the globalRobotsList
+        //deep copy (partially): Ensure the modification, especially for location on the localRobotList will not affect the globalRobotsList
         for (Robot robot : globalRobots) {
             Circle graphicalDisplay = new Circle(robot.getGraphicalDisplay().getRadius(), robot.getGraphicalDisplay().getFill());
             graphicalDisplay.setTranslateX(robot.getGraphicalDisplay().getTranslateX());

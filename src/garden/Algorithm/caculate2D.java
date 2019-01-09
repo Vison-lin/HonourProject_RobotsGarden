@@ -1,13 +1,10 @@
 package garden.Algorithm;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import garden.core.Algorithm;
 import garden.model.Robot;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -267,7 +264,7 @@ public class caculate2D extends Algorithm{
                 limit = num;
             }
         }
-        System.out.println("Limit is: "+limit);
+//        System.out.println("Limit is: "+limit);
         double D = Math.min(Vgoal.getNorm(),limit);
         return Vgoal.resize(D).getEnd();
 
@@ -276,11 +273,11 @@ public class caculate2D extends Algorithm{
 
     @Override
     public Point next(List<Robot> robotList) {
-//        this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
-        this.state = robotList;
-        System.out.println("Has visible size: "+state.size());
+        this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
+//        this.state = robotList;
+//        System.out.println("Has visible size: "+state.size());
         Point point = generateOneRobot(new ArrayList<>(state),range);
-        System.out.println("NEXT POSITION: X: " + point.getX()+", Y: "+ point.getY());
+//        System.out.println("NEXT POSITION: X: " + point.getX()+", Y: "+ point.getY());
         return point;
     }
 }

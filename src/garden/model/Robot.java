@@ -5,8 +5,6 @@ import garden.core.llibrary.DefaultAlgorithm;
 import javafx.scene.shape.Circle;
 
 import java.awt.*;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,6 +13,16 @@ import java.util.List;
  * A Robot should have a circle to represent itself in JavaFX and a Sensor to discover its surroundings.
  */
 public class Robot {
+
+    /**
+     * The name of the robot
+     */
+    private String tag;
+
+    /**
+     * The Log specific to this robot
+     */
+    private RobotLog log;
 
     /**
      * The representation of the robot.
@@ -35,13 +43,14 @@ public class Robot {
 
     /**
      * Create a new robot object
-     *
-     * @param graphicalDisplay the Circle object which represent this robot on the screen
+     *  @param graphicalDisplay the Circle object which represent this robot on the screen
      * @param vision           the vision of the robot. This value stores in the built-in sensor object.
+     * @param log
      */
-    public Robot(Circle graphicalDisplay, double vision) {
+    public Robot(Circle graphicalDisplay, double vision, RobotLog log) {
         this.graphicalDisplay = graphicalDisplay;
-        this.sensor = new Sensor(vision, graphicalDisplay.getTranslateX(), graphicalDisplay.getTranslateY());
+        this.log = log;
+        this.sensor = new Sensor(this, vision, graphicalDisplay.getTranslateX(), graphicalDisplay.getTranslateY());
     }
 
     /**
@@ -122,6 +131,11 @@ public class Robot {
         return graphicalDisplay.getTranslateY();
     }
 
+    /**
+     * Get the current position (Global)
+     *
+     * @return the x and y values of current position in a Point object where the first is x and the second is y.
+     */
     public Point getPosition(){
         Point point = new Point();
         point.setLocation(getPositionX(), getPositionY());
@@ -134,5 +148,21 @@ public class Robot {
 
     public void setAlgorithm(Algorithm algorithm) {
         this.algorithm = algorithm;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public RobotLog getLog() {
+        return log;
+    }
+
+    public void setLog(RobotLog log) {
+        this.log = log;
     }
 }

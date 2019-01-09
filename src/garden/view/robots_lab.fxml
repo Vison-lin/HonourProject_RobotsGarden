@@ -3,10 +3,10 @@
 <?import garden.controller.controlpanel.ControlPanelController?>
 <?import garden.controller.garden.GardenController?>
 <?import javafx.scene.layout.HBox?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.HBox"
-         xmlns="http://javafx.com/javafx/8.0.172-ea">
+<fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/8.0.121">
 
     <GardenController fx:id="gardenController"/>
-    <ControlPanelController fx:id="controlPanelController"/>
+    <ControlPanelController fx:id="controlPanelController" fillWidth="false" maxHeight="1.7976931348623157E308"
+                            maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"/>
 
 </fx:root>

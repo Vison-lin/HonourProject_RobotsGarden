@@ -1,6 +1,7 @@
 package garden.controller.garden;
 
 import garden.model.Robot;
+import garden.model.RobotLog;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +28,9 @@ public class GardenController extends VBox {
      */
     private static double ROBOT_SIZE = 9;
 
-    private List<Robot> robots = Collections.synchronizedList(new ArrayList<>());//todo need it?
+    private List<Robot> robots = Collections.synchronizedList(new ArrayList<>());
+
+    private Robot selectedRobots = null;
 
     /**
      * The garden instance
@@ -117,15 +120,20 @@ public class GardenController extends VBox {
                                 visionRange.setTranslateX(robotGraphicalDisplay.getTranslateX());
                                 visionRange.setTranslateY(robotGraphicalDisplay.getTranslateY());
                                 garden.getChildren().add(visionRange);
+                                selectedRobots = robot;
                             }
                         }
                     });
                     garden.getChildren().add(robotGraphicalDisplay);
+                    robot.getLog().addToLog("The robot has been successfully created at the position x: " + event.getX() + " y: " + event.getY() + "!");
                     robots.add(robot);//add the robot into the robots list
-                    System.out.println("The robot has been successfully created at the position x: " + event.getX() + " y: " + event.getY() + "!");
                 }
             }
         });
+    }
+
+    public Robot getSelectedRobots() {
+        return selectedRobots;
     }
 
     /**
@@ -133,7 +141,7 @@ public class GardenController extends VBox {
      * @return return a Circle that represent the robot.
      */
     private Robot robotGenerator(MouseEvent event) {
-        Robot robot = new Robot(new Circle(ROBOT_SIZE, Color.BLACK), 99);
+        Robot robot = new Robot(new Circle(ROBOT_SIZE, Color.BLACK), 0, new RobotLog("Robot Inited!"));
         robot.moveTo(event.getX(), event.getY());
         return robot;
     }

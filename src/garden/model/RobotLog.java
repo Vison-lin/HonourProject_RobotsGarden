@@ -35,7 +35,7 @@ public class RobotLog {
      * @param msg new message/log to be added
      */
     public void addToLog(String msg) {
-        log = log + "\n" + msg;
+        log = log + "\n" + msg + "\n";
     }
 
     /**

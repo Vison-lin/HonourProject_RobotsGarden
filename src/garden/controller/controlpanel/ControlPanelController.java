@@ -50,7 +50,7 @@ public class ControlPanelController extends VBox {
             public void handle(MouseEvent event) {
 
                 ArrayList<Robot> localRobotsList = new ArrayList<>();
-                //deep copy (partially): Ensure the modification, especially for location on the localRobotList will not affect the globalRobotsList
+                //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
                 for (Robot robot : gardenController.getRobots()) {
                     Circle graphicalDisplay = new Circle(robot.getGraphicalDisplay().getRadius(), robot.getGraphicalDisplay().getFill());
                     graphicalDisplay.setTranslateX(robot.getGraphicalDisplay().getTranslateX());

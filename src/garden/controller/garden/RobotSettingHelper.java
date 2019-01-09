@@ -1,15 +1,43 @@
 package garden.controller.garden;
 
-import garden.core.llibrary.FakedAlgorithm_UpdateColor;
 import garden.model.Robot;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
-public class RobotSettingHelper {
-    public RobotSettingHelper(Robot robot) {
+import java.io.IOException;
 
-        robot.setAlgorithm(new FakedAlgorithm_UpdateColor(robot));
-        robot.setTag(" -> " + Math.round(Math.random() * 100) + " <- ");
-        robot.getLog().addToLog("This robot has been assigned the algorithm: FAKRD ALG");
-        robot.getLog().addToLog("You've just opened the setting page, the robot with tag: " + robot.getTag() + "is at the position x: " + robot.getPositionX() + " y: " + robot.getPositionY() + "! The Gathering Alg will be assigned to this robot");
+class RobotSettingHelper extends BorderPane {
+
+    public RobotSettingHelper() {
+
+    }
+
+    RobotSettingHelper(Robot robot, Window primaryStage) {
+
+        final Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(primaryStage);
+        FXMLLoader fxmlLoader = null;
+        try {
+            fxmlLoader = new FXMLLoader(getClass().getResource("../../view/robot_setting_page.fxml"));
+            fxmlLoader.setRoot(this);
+            fxmlLoader.setController(this);
+            Parent parent = fxmlLoader.load();
+            Scene dialogScene = new Scene(parent, 800, 800);
+            dialog.setScene(dialogScene);
+            dialog.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //todo auto search class name
+    private void boostAlgorithmSelectionWindow() {
 
     }
 }

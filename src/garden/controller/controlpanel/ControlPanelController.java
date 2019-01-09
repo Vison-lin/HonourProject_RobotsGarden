@@ -46,12 +46,7 @@ public class ControlPanelController extends VBox {
         next.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                //update the robots' position for each robot's sensor
-                Iterator<Robot> robotIterator1 = gardenController.getRobots().iterator();
-                while (robotIterator1.hasNext()) {
-                    Robot curr = robotIterator1.next();
-                    curr.getSensor().setGlobalRobots(gardenController.getRobots());
-                }
+
                 //run next
                 Iterator<Robot> robotIterator2 = gardenController.getRobots().iterator();
                 while (robotIterator2.hasNext()) {
@@ -60,6 +55,12 @@ public class ControlPanelController extends VBox {
                     if (gardenController.getSelectedRobots() != null && gardenController.getSelectedRobots().equals(curr)) {//display the selected robot's log
                         output.setText(curr.getLog().toString());
                     }
+                }
+                //update the robots' position for each robot's sensor
+                Iterator<Robot> robotIterator1 = gardenController.getRobots().iterator();
+                while (robotIterator1.hasNext()) {
+                    Robot curr = robotIterator1.next();
+                    curr.getSensor().setGlobalRobots(gardenController.getRobots());
                 }
                 gardenController.updateGarden();
             }

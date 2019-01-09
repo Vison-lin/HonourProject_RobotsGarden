@@ -274,10 +274,13 @@ public class caculate2D extends Algorithm{
     @Override
     public Point next(List<Robot> robotList) {
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
+        for (Robot robot : state) {
+            System.out.println("NEXT POSITION: X: " + robot.getPositionX() + ", Y: " + robot.getPositionY());
+        }
 //        this.state = robotList;
 //        System.out.println("Has visible size: "+state.size());
         Point point = generateOneRobot(new ArrayList<>(state),range);
-//        System.out.println("NEXT POSITION: X: " + point.getX()+", Y: "+ point.getY());
+
         return point;
     }
 }

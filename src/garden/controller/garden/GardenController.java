@@ -32,6 +32,8 @@ public class GardenController extends VBox {
 
     private Robot selectedRobots = null;
 
+//    private Window scene;
+
     /**
      * The garden instance
      */
@@ -47,7 +49,8 @@ public class GardenController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+//        this.set
+//        scene = this.getScene().getWindow();
         robotsInitBooster();
 
     }
@@ -114,7 +117,7 @@ public class GardenController extends VBox {
                         @Override
                         public void handle(MouseEvent event) {
                             if (event.getButton() == MouseButton.SECONDARY) {// for each of the btn that has added event, add one right click listener for it.
-                                RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot);
+                                RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
                             } else if (event.getButton() == MouseButton.MIDDLE) {
                                 Circle visionRange = new Circle(robot.getSensor().getVision(), Color.YELLOW);
                                 visionRange.setTranslateX(robotGraphicalDisplay.getTranslateX());
@@ -141,7 +144,7 @@ public class GardenController extends VBox {
      * @return return a Circle that represent the robot.
      */
     private Robot robotGenerator(MouseEvent event) {
-        Robot robot = new Robot(new Circle(ROBOT_SIZE, Color.BLACK), 50, new RobotLog("Robot Inited!"));
+        Robot robot = new Robot(new Circle(ROBOT_SIZE, Color.BLACK), 150, new RobotLog("Robot Inited!"));
         robot.moveTo(event.getX(), event.getY());
         return robot;
     }

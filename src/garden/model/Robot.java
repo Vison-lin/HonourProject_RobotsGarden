@@ -50,7 +50,7 @@ public class Robot {
     public Robot(Circle graphicalDisplay, double vision, RobotLog log) {
         this.graphicalDisplay = graphicalDisplay;
         this.log = log;
-        this.sensor = new Sensor(this, vision, graphicalDisplay.getTranslateX(), graphicalDisplay.getTranslateY());
+        this.sensor = new Sensor(this, vision);
     }
 
     /**

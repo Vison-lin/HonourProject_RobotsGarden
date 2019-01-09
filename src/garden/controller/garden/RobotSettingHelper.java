@@ -1,9 +1,14 @@
 package garden.controller.garden;
 
+import garden.Algorithm.caculate2D;
 import garden.model.Robot;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -13,12 +18,13 @@ import java.io.IOException;
 
 class RobotSettingHelper extends BorderPane {
 
-    public RobotSettingHelper() {
+    @FXML
+    private Button setAlg;
 
-    }
+    private Robot robot;
 
     RobotSettingHelper(Robot robot, Window primaryStage) {
-
+        this.robot = robot;
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(primaryStage);
@@ -34,10 +40,16 @@ class RobotSettingHelper extends BorderPane {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        boostAlgorithmSelectionWindow();
     }
 
     //todo auto search class name
     private void boostAlgorithmSelectionWindow() {
-
+        setAlg.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                robot.setAlgorithm(new caculate2D(robot));
+            }
+        });
     }
 }

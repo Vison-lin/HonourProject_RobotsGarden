@@ -6,6 +6,6 @@
 <fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.BorderPane"
          xmlns="http://javafx.com/javafx/8.0.121">
     <center>
-        <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER"/>
+        <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" fx:id="setAlg"/>
     </center>
 </fx:root>

@@ -63,16 +63,13 @@ public class Robot {
     public void moveTo(double x, double y) {
         graphicalDisplay.setTranslateX(x);
         graphicalDisplay.setTranslateY(y);
-        //todo ??
-//        this.sensor.setGlobalX(x);
-//        this.sensor.setGlobalY(y);
     }
 
     /**
      * The robot (reference) will update after called this method.
      */
     public void next(List<Robot> robots) {
-        sensor.setGlobalRobots(robots);//set curr gobal robots to sensor
+        sensor.setGlobalRobots(robots);//set curr global robots to sensor
         Point point = algorithm.next(robots);
         Point globalPoint = this.sensor.convertToGlobal(point);
         moveTo(globalPoint.x, globalPoint.y);

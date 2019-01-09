@@ -25,7 +25,7 @@ public class DefaultAlgorithm extends Algorithm {
     @Override
     public Point next(List<Robot> robots) {
         Point point = new Point();
-        point.setLocation(this.getRobot().getPositionX(), this.getRobot().getPositionY());
+        point.setLocation(0, 0);//by default, not move, so move to 0, 0 in its local coordinate
         return  point;
     }
 }

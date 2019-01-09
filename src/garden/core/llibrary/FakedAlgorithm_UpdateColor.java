@@ -19,8 +19,8 @@ public class FakedAlgorithm_UpdateColor extends Algorithm {
     @Override
     public Point next(List<Robot> robots) {
         Point point = new Point();
-        point.setLocation(this.getRobot().getPositionX(), this.getRobot().getPositionY());
-        getRobot().getSensor().getAllVisibleRobotsInLocalScale();
+        point.setLocation(0, 0);
+        getRobot().getSensor().getAllVisibleRobotsInLocalScale();//In real algorithm, keep obtaining local watchable robots in each step.
         return point;
     }
 }

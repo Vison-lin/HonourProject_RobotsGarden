@@ -1,6 +1,8 @@
 package garden.model;
 
 
+import javafx.scene.shape.Circle;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,9 +12,9 @@ public class Sensor {
 
     private double vision;
 
-    private double globalX;
-
-    private double globalY;
+//    private double globalX;
+//
+//    private double globalY;
 
     private List<Robot> globalRobots;
 
@@ -21,16 +23,16 @@ public class Sensor {
     public Sensor(Robot robot, double vision, double globalX, double globalY) {
         this.robot = robot;
         this.vision = vision;
-        this.globalX = globalX;
-        this.globalY = globalY;
+//        this.globalX = globalX;
+//        this.globalY = globalY;
         this.globalRobots = new ArrayList<>();
     }
 
     public Point convertToGlobal(Point point) {
 
-        double x = point.getX() + globalX;
+        double x = point.getX() + robot.getPositionX();
 
-        double y = point.getY() + globalY;
+        double y = point.getY() + robot.getPositionY();
 
         Point result = new Point();
 
@@ -42,9 +44,9 @@ public class Sensor {
 
     public Point convertToLocal(Point point) {
 
-        double x = point.getX() - globalX;
+        double x = point.getX() - robot.getPositionX();
 
-        double y = point.getY() - globalY;
+        double y = point.getY() - robot.getPositionY();
 
         Point result = new Point();
 
@@ -62,30 +64,30 @@ public class Sensor {
         this.vision = vision;
     }
 
-    public double getGlobalX() {
-        return globalX;
-    }
-
-    public void setGlobalX(double globalX) {
-        this.globalX = globalX;
-    }
-
-    public double getGlobalY() {
-        return globalY;
-    }
-
-    public void setGlobalY(double globalY) {
-        this.globalY = globalY;
-    }
+//    public double getGlobalX() {
+//        return globalX;
+//    }
+//
+//    public void setGlobalX(double globalX) {
+//        this.globalX = globalX;
+//    }
+//
+//    public double getGlobalY() {
+//        return globalY;
+//    }
+//
+//    public void setGlobalY(double globalY) {
+//        this.globalY = globalY;
+//    }
 
     /**
      * Test if a given robot is within the vision
-     * @param robot the robot to test
+     * @param point the point that represent the global coordinate of the robot to test
      * @return
      */
-    public boolean isWithinVision(Robot robot){
-        robot.getLog().addToLog("The distance between these two robots is: " + distance(this.globalX, this.globalY, robot.getPositionX(), robot.getPositionY()) + ". Compare to its vision" + vision);
-        return distance(this.globalX, this.globalY, robot.getPositionX(), robot.getPositionY())<=vision;
+    public boolean isWithinVision(Point point) {
+        robot.getLog().addToLog("The distance between these two robots is: " + distance(point.getX(), point.getY(), 0, 0) + ". Compare to its vision" + vision);
+        return distance(point.getX(), point.getY(), 0, 0) <= vision;
     }
 
     private double distance(double r1x, double r1y, double r2x, double r2y){
@@ -99,15 +101,25 @@ public class Sensor {
      * @return
      */
     public List<Robot> getAllVisibleRobotsInLocalScale(){
-        //shallow copy
-        ArrayList<Robot> localRobotsList = new ArrayList<>(globalRobots); //special comment:when init, the localRobotsLisy has size 0 because the globalRobots will only be set when the "next" btn in ControlPanelController has been clicked
+        ArrayList<Robot> localRobotsList = new ArrayList<>(); //special comment:when init, the localRobotsLisy has size 0 because the globalRobots will only be set when the "next" btn in ControlPanelController has been clicked
+
+        //deep copy: Ensure the modification, especially for location on the localRobotList will not affect the globalRobotsList
+        for (Robot robot : globalRobots) {
+            Circle graphicalDisplay = new Circle(robot.getGraphicalDisplay().getRadius(), robot.getGraphicalDisplay().getFill());
+            graphicalDisplay.setTranslateX(robot.getGraphicalDisplay().getTranslateX());
+            graphicalDisplay.setTranslateY(robot.getGraphicalDisplay().getTranslateY());
+            Robot newRobotInstance = new Robot(graphicalDisplay, robot.getSensor().vision, robot.getLog());
+            newRobotInstance.setAlgorithm(robot.getAlgorithm());
+            newRobotInstance.setSensor(this);
+            localRobotsList.add(newRobotInstance);
+        }
 
         //remove all robots outside of the vision
         Iterator<Robot> iterator1 = localRobotsList.iterator();
         while (iterator1.hasNext()) {
             Robot curr = iterator1.next();
-            robot.getLog().addToLog("Now, robot " + robot.getTag() + "at position (" + this.getGlobalX() + ", " + this.getGlobalY() + ") is determining whether the robot " + curr.getTag() + "at position (" + curr.getPositionX() + ", " + curr.getPositionY() + ") is within its vision");
-            if (!isWithinVision(curr)) {
+            robot.getLog().addToLog("Now, robot " + robot.getTag() + "at position (" + this.robot.getPositionX() + ", " + this.robot.getPositionY() + ") is determining whether the robot " + curr.getTag() + "at position (" + curr.getPositionX() + ", " + curr.getPositionY() + ") is within its vision");
+            if (!isWithinVision(convertToLocal(curr.getPosition()))) {
                 iterator1.remove();
                 robot.getLog().addToLog("SO: The target robot " + curr.getTag() + "is not in its vision, REMOVED");
             } else {
@@ -126,7 +138,7 @@ public class Sensor {
             curr.getGraphicalDisplay().setTranslateX(localPoint.x);
             curr.getGraphicalDisplay().setTranslateX(localPoint.y);
         }
-        return localRobotsList;
+        return localRobotsList;//should use deep copy
     }
 
     public List<Robot> getGlobalRobots() {

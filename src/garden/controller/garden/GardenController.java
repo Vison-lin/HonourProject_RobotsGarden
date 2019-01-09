@@ -141,7 +141,7 @@ public class GardenController extends VBox {
      * @return return a Circle that represent the robot.
      */
     private Robot robotGenerator(MouseEvent event) {
-        Robot robot = new Robot(new Circle(ROBOT_SIZE, Color.BLACK), 0, new RobotLog("Robot Inited!"));
+        Robot robot = new Robot(new Circle(ROBOT_SIZE, Color.BLACK), 50, new RobotLog("Robot Inited!"));
         robot.moveTo(event.getX(), event.getY());
         return robot;
     }

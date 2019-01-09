@@ -63,6 +63,9 @@ public class Robot {
     public void moveTo(double x, double y) {
         graphicalDisplay.setTranslateX(x);
         graphicalDisplay.setTranslateY(y);
+        //todo ??
+//        this.sensor.setGlobalX(x);
+//        this.sensor.setGlobalY(y);
     }
 
     /**

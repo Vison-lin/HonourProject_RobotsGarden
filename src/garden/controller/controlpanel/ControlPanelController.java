@@ -70,13 +70,6 @@ public class ControlPanelController extends VBox {
                         output.setText(curr.getLog().toString());
                     }
                 }
-
-//                //update the robots' position for each robot's sensor
-//                Iterator<Robot> robotIterator1 = gardenController.getRobots().iterator();
-//                while (robotIterator1.hasNext()) {
-//                    Robot curr = robotIterator1.next();
-//                    curr.getSensor().setGlobalRobots(gardenController.getRobots());
-//                }
                 gardenController.updateGarden();
             }
         });

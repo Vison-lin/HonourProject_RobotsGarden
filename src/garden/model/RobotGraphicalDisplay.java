@@ -22,7 +22,7 @@ public class RobotGraphicalDisplay {
      * By default, the robot vision is invisible.
      */
     public RobotGraphicalDisplay() {
-        this.robotPosition = new Circle(9, Color.WHITE);
+        this.robotPosition = new Circle(3, Color.WHITE);
         this.robotBody = new Circle(33, Color.BLACK);
         this.robotVision = new Circle(90, Color.LIGHTBLUE);
         this.visionVisible = false;

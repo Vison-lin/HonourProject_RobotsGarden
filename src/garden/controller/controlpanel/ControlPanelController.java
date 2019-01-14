@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 public class ControlPanelController extends VBox {
 
@@ -21,6 +22,9 @@ public class ControlPanelController extends VBox {
 
     @FXML
     private Button clean;
+
+    @FXML
+    private Button randomCreateRobots;
 
     @FXML
     private Text output;
@@ -40,6 +44,7 @@ public class ControlPanelController extends VBox {
 
         nextBtnListener();
         cleanBtnListener();
+        randomCreateConnectedRobotsBtnListener();
 
     }
 
@@ -51,12 +56,6 @@ public class ControlPanelController extends VBox {
                 ArrayList<Robot> localRobotsList = new ArrayList<>();
                 //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
                 for (Robot robot : gardenController.getRobots()) {
-//                    Circle graphicalDisplay = new Circle(robot.getGraphicalDisplay().getRadius(), robot.getGraphicalDisplay().getFill());
-//                    graphicalDisplay.setTranslateX(robot.getGraphicalDisplay().getTranslateX());
-//                    graphicalDisplay.setTranslateY(robot.getGraphicalDisplay().getTranslateY());
-//                    Robot newRobotInstance = new Robot(graphicalDisplay, robot.getSensor().getVision(), robot.getLog());
-//                    newRobotInstance.setAlgorithm(robot.getAlgorithm());
-//                    newRobotInstance.setSensor(robot.getSensor());
                     Robot newRobotInstance = robot.deepCopy();
                     localRobotsList.add(newRobotInstance);
                 }
@@ -86,7 +85,65 @@ public class ControlPanelController extends VBox {
         });
     }
 
+    private void randomCreateConnectedRobotsBtnListener() {
+        randomCreateRobots.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                //clean the screen
+                gardenController.getRobots().removeAll(gardenController.getRobots());
+                Random random = new Random();
+
+                //init first one
+                double maxX = (int) getWidth() + 1;
+                double maxY = (int) getHeight() + 1;
+                int ctr = 0;
+                Robot initRobot = gardenController.robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY));
+
+                //create the rest
+                for (int i = 1; i < 50; i++) {
+                    double xBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionX() + initRobot.getVision(), maxX);
+                    double xBoundLow = validateWithinTheEnclosingSquare(initRobot.getPositionX() - initRobot.getVision(), maxX);
+                    double yBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionY() + initRobot.getVision(), maxY);
+                    double yBoundLow = validateWithinTheEnclosingSquare(initRobot.getPositionY() - initRobot.getVision(), maxY);
+//                    System.out.println(maxX+"|"+maxY+"|"+xBoundLow + "~" + xBoundUp +"|" +yBoundLow+"~"+yBoundUp);
+                    //check if is within the circle
+                    double distance = Double.POSITIVE_INFINITY;
+                    double currX = 0;
+                    double currY = 0;
+                    while (distance > initRobot.getVision()) {
+                        double x = initRobot.getPositionX();
+                        double y = initRobot.getPositionY();
+                        currX = random.nextInt((int) (xBoundUp - xBoundLow + 1)) + xBoundLow;
+                        currY = random.nextInt((int) (yBoundUp - yBoundLow + 1)) + yBoundLow;
+                        double differX = currX - x;
+                        double differY = currY - y;
+                        distance = Math.sqrt(Math.pow(differX, 2) + Math.pow(differY, 2));
+                    }
+                    initRobot = gardenController.robotGenerator(" =>" + ctr + "<= ", currX, currY);
+                }
+                gardenController.updateGarden();
+            }
+        });
+    }
+
     public void setGardenController(GardenController gardenController) {
         this.gardenController = gardenController;
     }
+
+    /**
+     * Validate if the point is within the square that encloses the circle.
+     *
+     * @param original the point
+     * @param bound    the radius
+     * @return validated value
+     */
+    private double validateWithinTheEnclosingSquare(double original, double bound) {
+        if (original >= bound) {
+            original = bound;
+        } else if (original <= 0) {
+            original = 0;
+        }
+        return original;
+    }
+
 }

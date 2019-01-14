@@ -21,16 +21,12 @@ import java.util.List;
  */
 public class Sensor {
 
-    private double vision;
-
     private List<Robot> globalRobots;
 
     private Robot robot;
 
-    public Sensor(Robot robot, double vision) {
+    public Sensor(Robot robot) {
         this.robot = robot;
-        System.out.println("x: " + robot.getPositionX());
-        this.vision = vision;
         this.globalRobots = new ArrayList<>();
     }
 
@@ -62,13 +58,6 @@ public class Sensor {
 
     }
 
-    public double getVision() {
-        return vision;
-    }
-
-    public void setVision(double vision) {
-        this.vision = vision;
-    }
 
     /**
      * Test if a given robot is within the vision
@@ -76,8 +65,8 @@ public class Sensor {
      * @return
      */
     public boolean isWithinVision(Point point) {
-        robot.getLog().addToLog("The distance between these two robots is: " + distance(point.getX(), point.getY()) + ". Compare to its vision" + vision);
-        return distance(point.getX(), point.getY()) <= vision;
+        robot.getLog().addToLog("The distance between these two robots is: " + distance(point.getX(), point.getY()) + ". Compare to its vision" + robot.getGraphicalDisplay().getRobotVision().getRadius());
+        return distance(point.getX(), point.getY()) <= robot.getGraphicalDisplay().getRobotVision().getRadius();
     }
 
     private double distance(double rx, double ry) {

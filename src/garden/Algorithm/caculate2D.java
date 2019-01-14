@@ -26,7 +26,7 @@ public class caculate2D extends Algorithm{
 //        this.state = state;
 //        this.range = range;
         this.state = new ArrayList<>(robot.getSensor().getAllVisibleRobotsInLocalScale());
-        this.range = robot.getSensor().getVision();
+        this.range = robot.getVision();
 
     }
 

@@ -5,6 +5,7 @@ import garden.controller.garden.GardenController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -26,5 +27,17 @@ public class RobotsLabController extends HBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        Stage stage = new Stage();
+        stage.setTitle("Hi");
+        resizeGardenWindow();
+    }
+
+    private void resizeGardenWindow() {
+        heightProperty().addListener((observable, oldValue, newValue) -> {
+            gardenController.minWidthProperty().bind(observable);
+            gardenController.minHeightProperty().bind(observable);
+            gardenController.getGarden().minWidthProperty().bind(observable);
+            gardenController.getGarden().minHeightProperty().bind(observable);
+        });
     }
 }

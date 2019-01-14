@@ -46,11 +46,10 @@ public class GardenController extends VBox {
         fxmlLoader.setController(this);
         try {
             fxmlLoader.load();
+            System.out.println(garden.prefHeightProperty().toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-//        this.set
-//        scene = this.getScene().getWindow();
         robotsInitBooster();
 
     }
@@ -126,22 +125,8 @@ public class GardenController extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY) {// add listener for left click
-                    Robot robot = robotGenerator(event);
-                    RobotGraphicalDisplay robotGraphicalDisplay = robot.getGraphicalDisplay();
-                    //set onClickListener for opening robot setting & displaying vision range
-                    robotGraphicalDisplay.getRobotPosition().setOnMouseClicked(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent event) {
-                            if (event.getButton() == MouseButton.SECONDARY) {// for each of the btn that has added event, add one right click listener for it.
-                                RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
-                            } else if (event.getButton() == MouseButton.MIDDLE) {
-                                robot.getGraphicalDisplay().toggleVisionVisible();
-                                updateGarden();
-                            }
-                        }
-                    });
+                    Robot robot = robotGenerator("New Robot", event.getX(), event.getY());
                     //adding to the graph
-                    robots.add(robot);//add the robot into the robots list
                     updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
                     robot.getLog().addToLog("The robot has been successfully created at the position x: " + event.getX() + " y: " + event.getY() + "!");
                 }
@@ -149,17 +134,39 @@ public class GardenController extends VBox {
         });
     }
 
-//    public Robot getSelectedRobots() {
-//        return selectedRobots;
-//    }
 
     /**
-     * !@param event Generate the robots based on the mouseEvent
-     * @return return a Circle that represent the robot.
+     * @param tag todo
+     * @param x
+     * @param y   for now, generate and register the listener
+     * @return
      */
-    private Robot robotGenerator(MouseEvent event) {
-        Robot robot = new Robot(new RobotGraphicalDisplay(), 150, new RobotLog("Robot Inited!"));
-        robot.moveTo(event.getX(), event.getY());
+    public Robot robotGenerator(String tag, double x, double y) {
+        Robot robot = new Robot(new RobotGraphicalDisplay(), new RobotLog("Robot Inited!"));
+        robot.moveTo(x, y);
+        robot.setTag(tag);
+        addOnClickListenerToRobot(robot);
+        robots.add(robot);//add the robot into the robots list
         return robot;
+    }
+
+    private void addOnClickListenerToRobot(Robot robot) {
+        RobotGraphicalDisplay robotGraphicalDisplay = robot.getGraphicalDisplay();
+        //set onClickListener for opening robot setting & displaying vision range
+        robotGraphicalDisplay.getRobotPosition().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getButton() == MouseButton.SECONDARY) {// for each of the btn that has added event, add one right click listener for it.
+                    RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
+                } else if (event.getButton() == MouseButton.MIDDLE) {
+                    robot.getGraphicalDisplay().toggleVisionVisible();
+                    updateGarden();
+                }
+            }
+        });
+    }
+
+    public Pane getGarden() {
+        return garden;
     }
 }

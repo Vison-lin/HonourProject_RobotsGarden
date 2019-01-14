@@ -41,15 +41,14 @@ public class Robot {
     private Algorithm algorithm = new DefaultAlgorithm(this);
 
     /**
-     * Create a new robot object
+     * Create a new robot object. It will be positioned in (0, 0)
      * @param graphicalDisplay the Circle object which represent this robot on the screen
-     * @param vision           the vision of the robot. This value stores in the built-in sensor object.
      * @param log
      */
-    public Robot(RobotGraphicalDisplay graphicalDisplay, double vision, RobotLog log) {
+    public Robot(RobotGraphicalDisplay graphicalDisplay, RobotLog log) {
         this.graphicalDisplay = graphicalDisplay;
         this.log = log;
-        this.sensor = new Sensor(this, vision);
+        this.sensor = new Sensor(this);
     }
 
     /**
@@ -170,11 +169,14 @@ public class Robot {
      */
     public Robot deepCopy() {
         RobotGraphicalDisplay newRobotGraphicalDisplay = this.graphicalDisplay.deepCopy();
-        Robot newRobot = new Robot(newRobotGraphicalDisplay, this.sensor.getVision(), this.log.deepCopy());
-        Sensor newSensor = new Sensor(newRobot, this.sensor.getVision());
+        Robot newRobot = new Robot(newRobotGraphicalDisplay, this.log.deepCopy());
+        Sensor newSensor = new Sensor(newRobot);
         newRobot.setSensor(newSensor);
         newRobot.setAlgorithm(this.algorithm);
         return newRobot;
     }
 
+    public double getVision() {
+        return this.getGraphicalDisplay().getRobotVision().getRadius();
+    }
 }

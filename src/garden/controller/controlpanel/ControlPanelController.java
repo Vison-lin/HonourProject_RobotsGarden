@@ -8,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -52,12 +51,13 @@ public class ControlPanelController extends VBox {
                 ArrayList<Robot> localRobotsList = new ArrayList<>();
                 //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
                 for (Robot robot : gardenController.getRobots()) {
-                    Circle graphicalDisplay = new Circle(robot.getGraphicalDisplay().getRadius(), robot.getGraphicalDisplay().getFill());
-                    graphicalDisplay.setTranslateX(robot.getGraphicalDisplay().getTranslateX());
-                    graphicalDisplay.setTranslateY(robot.getGraphicalDisplay().getTranslateY());
-                    Robot newRobotInstance = new Robot(graphicalDisplay, robot.getSensor().getVision(), robot.getLog());
-                    newRobotInstance.setAlgorithm(robot.getAlgorithm());
-                    newRobotInstance.setSensor(robot.getSensor());
+//                    Circle graphicalDisplay = new Circle(robot.getGraphicalDisplay().getRadius(), robot.getGraphicalDisplay().getFill());
+//                    graphicalDisplay.setTranslateX(robot.getGraphicalDisplay().getTranslateX());
+//                    graphicalDisplay.setTranslateY(robot.getGraphicalDisplay().getTranslateY());
+//                    Robot newRobotInstance = new Robot(graphicalDisplay, robot.getSensor().getVision(), robot.getLog());
+//                    newRobotInstance.setAlgorithm(robot.getAlgorithm());
+//                    newRobotInstance.setSensor(robot.getSensor());
+                    Robot newRobotInstance = robot.deepCopy();
                     localRobotsList.add(newRobotInstance);
                 }
 
@@ -65,10 +65,10 @@ public class ControlPanelController extends VBox {
                 Iterator<Robot> robotIterator2 = gardenController.getRobots().iterator();
                 while (robotIterator2.hasNext()) {
                     Robot curr = robotIterator2.next();
-                    curr.next(localRobotsList);
-                    if (gardenController.getSelectedRobots() != null && gardenController.getSelectedRobots().equals(curr)) {//display the selected robot's log
-                        output.setText(curr.getLog().toString());
-                    }
+                    curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
+//                    if (gardenController.getSelectedRobots() != null && gardenController.getSelectedRobots().equals(curr)) {//display the selected robot's log
+//                        output.setText(curr.getLog().toString());
+//                    }
                 }
                 gardenController.updateGarden();
             }

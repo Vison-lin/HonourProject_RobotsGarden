@@ -1,6 +1,7 @@
 package garden.controller.garden;
 
 import garden.model.Robot;
+import garden.model.RobotGraphicalDisplay;
 import garden.model.RobotLog;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -9,7 +10,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class GardenController extends VBox {
 
     private List<Robot> robots = Collections.synchronizedList(new ArrayList<>());
 
-    private Robot selectedRobots = null;
+//    private Robot selectedRobots = null;
 
 //    private Window scene;
 
@@ -57,10 +57,26 @@ public class GardenController extends VBox {
 
     public void updateGarden() {
         garden.getChildren().removeAll(garden.getChildren());//remove all the element
+        List<Circle> robotsPosition = new ArrayList<>();
+        List<Circle> robotsBody = new ArrayList<>();
+        List<Circle> robotsVision = new ArrayList<>();
         for (Robot robot : robots) {
-            Circle graphicalDisplay = robot.getGraphicalDisplay();
-            garden.getChildren().add(graphicalDisplay);
+            RobotGraphicalDisplay robotGraphicalDisplay = robot.getGraphicalDisplay();
+            Circle robotPosition = robotGraphicalDisplay.getRobotPosition();
+            Circle robotBody = robotGraphicalDisplay.getRobotBody();
+            Circle robotVision = robotGraphicalDisplay.getRobotVision();
+            if (robotGraphicalDisplay.isVisionVisible()) {
+                robotsVision.add(robotVision);
+            }
+            robotsBody.add(robotBody);
+            robotsPosition.add(robotPosition);
         }
+        //ensure the vision is always under the body
+        garden.getChildren().addAll(robotsVision);
+        //ensure the body is always under the position
+        garden.getChildren().addAll(robotsBody);
+        //ensure the position is always in front of anything
+        garden.getChildren().addAll(robotsPosition);
     }
 
     /**
@@ -111,40 +127,38 @@ public class GardenController extends VBox {
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY) {// add listener for left click
                     Robot robot = robotGenerator(event);
-                    Circle robotGraphicalDisplay = robot.getGraphicalDisplay();
+                    RobotGraphicalDisplay robotGraphicalDisplay = robot.getGraphicalDisplay();
                     //set onClickListener for opening robot setting & displaying vision range
-                    robotGraphicalDisplay.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    robotGraphicalDisplay.getRobotPosition().setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
                             if (event.getButton() == MouseButton.SECONDARY) {// for each of the btn that has added event, add one right click listener for it.
                                 RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
                             } else if (event.getButton() == MouseButton.MIDDLE) {
-                                Circle visionRange = new Circle(robot.getSensor().getVision(), Color.YELLOW);
-                                visionRange.setTranslateX(robotGraphicalDisplay.getTranslateX());
-                                visionRange.setTranslateY(robotGraphicalDisplay.getTranslateY());
-                                garden.getChildren().add(visionRange);
-                                selectedRobots = robot;
+                                robot.getGraphicalDisplay().toggleVisionVisible();
+                                updateGarden();
                             }
                         }
                     });
-                    garden.getChildren().add(robotGraphicalDisplay);
-                    robot.getLog().addToLog("The robot has been successfully created at the position x: " + event.getX() + " y: " + event.getY() + "!");
+                    //adding to the graph
                     robots.add(robot);//add the robot into the robots list
+                    updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
+                    robot.getLog().addToLog("The robot has been successfully created at the position x: " + event.getX() + " y: " + event.getY() + "!");
                 }
             }
         });
     }
 
-    public Robot getSelectedRobots() {
-        return selectedRobots;
-    }
+//    public Robot getSelectedRobots() {
+//        return selectedRobots;
+//    }
 
     /**
      * !@param event Generate the robots based on the mouseEvent
      * @return return a Circle that represent the robot.
      */
     private Robot robotGenerator(MouseEvent event) {
-        Robot robot = new Robot(new Circle(ROBOT_SIZE, Color.BLACK), 150, new RobotLog("Robot Inited!"));
+        Robot robot = new Robot(new RobotGraphicalDisplay(), 150, new RobotLog("Robot Inited!"));
         robot.moveTo(event.getX(), event.getY());
         return robot;
     }

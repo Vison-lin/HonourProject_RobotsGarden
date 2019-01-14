@@ -38,6 +38,12 @@ public class RobotLog {
         log = log + "\n" + msg + "\n";
     }
 
+    public RobotLog deepCopy() {
+        RobotLog newRobotLog = new RobotLog();
+        newRobotLog.setLog(this.log);
+        return newRobotLog;
+    }
+
     /**
      * Print the whole log for current robot
      *

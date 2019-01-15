@@ -12,11 +12,13 @@ import javafx.scene.text.Text;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.List;
+import java.util.*;
 
 public class ControlPanelController extends VBox {
+
+    @FXML
+    private Button prev;
 
     @FXML
     private Button next;
@@ -29,6 +31,10 @@ public class ControlPanelController extends VBox {
 
     @FXML
     private Text output;
+
+    private Stack<List<Robot>> robotStackPrev = new Stack<>();
+
+    private Stack<List<Robot>> robotStackNext = new Stack<>();
 
     private GardenController gardenController;
 
@@ -43,34 +49,54 @@ public class ControlPanelController extends VBox {
             throw new RuntimeException(e);
         }
 
+        prevBtnListener();
         nextBtnListener();
         cleanBtnListener();
         randomCreateConnectedRobotsBtnListener();
 
     }
 
+    private void prevBtnListener() {
+        prev.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (!robotStackPrev.empty()) {
+
+
+                    addDeepCopiedRobotList(robotStackNext, gardenController.getRobots());//store the current to the next
+                    gardenController.getRobots().removeAll(gardenController.getRobots());//clean the current
+                    gardenController.getRobots().addAll(robotStackPrev.pop());//restore the prev
+                    gardenController.updateGarden();
+
+                }
+            }
+        });
+    }
+
     private void nextBtnListener() {
         next.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                addDeepCopiedRobotList(robotStackPrev, gardenController.getRobots());//store the current to the prev
+                if (!robotStackNext.empty()) {
+                    gardenController.getRobots().removeAll(gardenController.getRobots());//clean the current
+                    gardenController.getRobots().addAll(robotStackNext.pop());
+                } else {
+                    ArrayList<Robot> localRobotsList = new ArrayList<>();
+                    //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
+                    for (Robot robot : gardenController.getRobots()) {
+                        Robot newRobotInstance = robot.deepCopy();
+                        localRobotsList.add(newRobotInstance);
+                    }
 
-                ArrayList<Robot> localRobotsList = new ArrayList<>();
-                //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
-                for (Robot robot : gardenController.getRobots()) {
-                    Robot newRobotInstance = robot.deepCopy();
-                    localRobotsList.add(newRobotInstance);
-                }
-
-                //run next
-                Iterator<Robot> robotIterator2 = gardenController.getRobots().iterator();
-                while (robotIterator2.hasNext()) {
-                    Robot curr = robotIterator2.next();
-                    Point newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
-                    newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
-                    curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
-//                    if (gardenController.getSelectedRobots() != null && gardenController.getSelectedRobots().equals(curr)) {//display the selected robot's log
-//                        output.setText(curr.getLog().toString());
-//////                    }
+                    //run next
+                    Iterator<Robot> robotIterator2 = gardenController.getRobots().iterator();
+                    while (robotIterator2.hasNext()) {
+                        Robot curr = robotIterator2.next();
+                        Point newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
+                        newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
+                        curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
+                    }
                 }
                 gardenController.updateGarden();
             }
@@ -108,7 +134,6 @@ public class ControlPanelController extends VBox {
                     double xBoundLow = validateWithinTheEnclosingSquare(initRobot.getPositionX() - initRobot.getVision(), maxX);
                     double yBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionY() + initRobot.getVision(), maxY);
                     double yBoundLow = validateWithinTheEnclosingSquare(initRobot.getPositionY() - initRobot.getVision(), maxY);
-//                    System.out.println(maxX+"|"+maxY+"|"+xBoundLow + "~" + xBoundUp +"|" +yBoundLow+"~"+yBoundUp);
                     //check if is within the circle
                     double distance = Double.POSITIVE_INFINITY;
                     double currX = 0;
@@ -166,6 +191,22 @@ public class ControlPanelController extends VBox {
             point.setLocation(point.getX(), gardenController.getGarden().getHeight());
         }
         return point;
+    }
+
+    /**
+     * Deep copy the robots list and add it to either robotStackPrev or robotStackNext
+     *
+     * @param robotStack either the robotStackPrev or the robotStackNext
+     * @param robotList  the robot list that needed to be deep copied and added
+     */
+    private void addDeepCopiedRobotList(Stack<List<Robot>> robotStack, List<Robot> robotList) {
+        Iterator<Robot> iterator = robotList.iterator();
+        List<Robot> deepCopied = new ArrayList<>();
+        while (iterator.hasNext()) {
+            Robot curr = iterator.next();
+            deepCopied.add(curr.deepCopy());
+        }
+        robotStack.add(deepCopied);
     }
 
 }

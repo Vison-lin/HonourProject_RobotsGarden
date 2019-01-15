@@ -75,7 +75,7 @@ public class Robot {
         sensor.setGlobalRobots(robots);//set curr global robots to sensor
         Point point = algorithm.next(robots);
         Point globalPoint = this.sensor.convertToGlobal(point);
-        return point;
+        return globalPoint;
     }
 
     /**

@@ -30,10 +30,6 @@ public class GardenController extends VBox {
 
     private List<Robot> robots = Collections.synchronizedList(new ArrayList<>());
 
-//    private Robot selectedRobots = null;
-
-//    private Window scene;
-
     /**
      * The garden instance
      */
@@ -142,12 +138,10 @@ public class GardenController extends VBox {
                     Robot robot = robotGenerator("New Robot", event.getX(), event.getY());
                     //adding to the graph
                     updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
-                    robot.getLog().addToLog("The robot has been successfully created at the position x: " + event.getX() + " y: " + event.getY() + "!");
                 }
             }
         });
     }
-
 
     /**
      * @param tag todo

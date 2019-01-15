@@ -6,6 +6,7 @@
 <fx:root xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="500.0" type="javafx.scene.layout.VBox"
          xmlns="http://javafx.com/javafx/8.0.172-ea">
     <children>
+        <Button fx:id="prev" mnemonicParsing="false" text="PREV"/>
         <Button fx:id="next" mnemonicParsing="false" text="NEXT"/>
         <Button fx:id="clean" mnemonicParsing="false" text="CLEAN"/>
         <Button mnemonicParsing="false" text="AssignDefalutAlg" fx:id="assignDefalutAlg"/>

@@ -28,7 +28,7 @@ class RobotSettingHelper extends BorderPane {
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(primaryStage);
-        FXMLLoader fxmlLoader = null;
+        FXMLLoader fxmlLoader;
         try {
             fxmlLoader = new FXMLLoader(getClass().getResource("../../view/robot_setting_page.fxml"));
             fxmlLoader.setRoot(this);

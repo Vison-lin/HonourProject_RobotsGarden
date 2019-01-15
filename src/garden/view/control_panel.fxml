@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
 <fx:root xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="500.0" type="javafx.scene.layout.VBox"
          xmlns="http://javafx.com/javafx/8.0.172-ea">
     <children>
@@ -12,6 +11,5 @@
         <Button mnemonicParsing="false" text="AssignDefalutAlg" fx:id="assignDefalutAlg"/>
         <Button mnemonicParsing="false" text="AssignGatheringAlg" fx:id="assignGatheringAlg"/>
         <Button mnemonicParsing="false" text="Random Create Connected Robots 30" fx:id="randomCreateRobots"/>
-        <Text fx:id="output" strokeType="OUTSIDE" strokeWidth="0.0" text="output" wrappingWidth="500.2060546875"/>
     </children>
 </fx:root>

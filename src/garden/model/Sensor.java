@@ -65,7 +65,6 @@ public class Sensor {
      * @return
      */
     public boolean isWithinVision(Point point) {
-        robot.getLog().addToLog("The distance between these two robots is: " + distance(point.getX(), point.getY()) + ". Compare to its vision" + robot.getGraphicalDisplay().getRobotVision().getRadius());
         return distance(point.getX(), point.getY()) <= robot.getGraphicalDisplay().getRobotVision().getRadius();
     }
 
@@ -98,12 +97,8 @@ public class Sensor {
         Iterator<Robot> iterator1 = localRobotsList.iterator();
         while (iterator1.hasNext()) {
             Robot curr = iterator1.next();
-            robot.getLog().addToLog("Now, robot " + robot.getTag() + "at position (" + this.robot.getPositionX() + ", " + this.robot.getPositionY() + ") is determining whether the robot " + curr.getTag() + "at position (" + curr.getPositionX() + ", " + curr.getPositionY() + ") is within its vision");
             if (!isWithinVision(convertToLocal(curr.getPosition()))) {
                 iterator1.remove();
-                robot.getLog().addToLog("SO: The target robot " + curr.getTag() + "is not in its vision, REMOVED");
-            } else {
-                robot.getLog().addToLog("S0: The target robot " + curr.getTag() + "is in its vision, KEEP");
             }
         }
 

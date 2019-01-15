@@ -1,8 +1,8 @@
 package garden.controller.garden;
 
+import garden.Algorithm.caculate2D;
 import garden.model.Robot;
 import garden.model.RobotGraphicalDisplay;
-import garden.model.RobotLog;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -150,11 +150,12 @@ public class GardenController extends VBox {
      * @return
      */
     public Robot robotGenerator(String tag, double x, double y) {
-        Robot robot = new Robot(new RobotGraphicalDisplay(), new RobotLog("Robot Inited!"));
+        Robot robot = new Robot(new RobotGraphicalDisplay());
         robot.moveTo(x, y);
         robot.setTag(tag);
         addOnClickListenerToRobot(robot);
         robots.add(robot);//add the robot into the robots list
+        robot.setAlgorithm(new caculate2D(robot));
         return robot;
     }
 

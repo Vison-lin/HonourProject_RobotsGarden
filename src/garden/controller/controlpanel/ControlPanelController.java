@@ -8,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.awt.*;
 import java.io.IOException;
@@ -28,9 +27,6 @@ public class ControlPanelController extends VBox {
 
     @FXML
     private Button randomCreateRobots;
-
-    @FXML
-    private Text output;
 
     private Stack<List<Robot>> robotStackPrev = new Stack<>();
 
@@ -109,7 +105,9 @@ public class ControlPanelController extends VBox {
             public void handle(MouseEvent event) {
                 gardenController.getRobots().clear();
                 gardenController.updateGarden();
-                output.setText("");
+                //clean prev and next
+                robotStackPrev.clear();
+                robotStackNext.clear();
             }
         });
     }
@@ -129,7 +127,7 @@ public class ControlPanelController extends VBox {
                 Robot initRobot = gardenController.robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY));
 
                 //create the rest
-                for (int i = 1; i < 50; i++) {
+                for (int i = 1; i < 5; i++) {
                     double xBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionX() + initRobot.getVision(), maxX);
                     double xBoundLow = validateWithinTheEnclosingSquare(initRobot.getPositionX() - initRobot.getVision(), maxX);
                     double yBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionY() + initRobot.getVision(), maxY);

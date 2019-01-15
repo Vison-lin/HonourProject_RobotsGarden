@@ -19,11 +19,6 @@ public class Robot {
     private String tag;
 
     /**
-     * The Log specific to this robot
-     */
-    private RobotLog log;
-
-    /**
      * The representation of the robot.
      * A robot is represented as a circle in the screen
      */
@@ -43,11 +38,9 @@ public class Robot {
     /**
      * Create a new robot object. It will be positioned in (0, 0)
      * @param graphicalDisplay the Circle object which represent this robot on the screen
-     * @param log
      */
-    public Robot(RobotGraphicalDisplay graphicalDisplay, RobotLog log) {
+    public Robot(RobotGraphicalDisplay graphicalDisplay) {
         this.graphicalDisplay = graphicalDisplay;
-        this.log = log;
         this.sensor = new Sensor(this);
     }
 
@@ -161,14 +154,6 @@ public class Robot {
         this.tag = tag;
     }
 
-    public RobotLog getLog() {
-        return log;
-    }
-
-    public void setLog(RobotLog log) {
-        this.log = log;
-    }
-
     /**
      * Deep copy the robot object. Note that it does not deep copy neither the algorithm that assigned to this robot nor the global robot list that passed into the sensor.
      *
@@ -176,7 +161,7 @@ public class Robot {
      */
     public Robot deepCopy() {
         RobotGraphicalDisplay newRobotGraphicalDisplay = this.graphicalDisplay.deepCopy();
-        Robot newRobot = new Robot(newRobotGraphicalDisplay, this.log.deepCopy());
+        Robot newRobot = new Robot(newRobotGraphicalDisplay);
         Sensor newSensor = new Sensor(newRobot);
         newRobot.setSensor(newSensor);
         newRobot.setAlgorithm(this.algorithm);

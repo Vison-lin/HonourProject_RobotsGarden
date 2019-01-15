@@ -62,13 +62,20 @@ public class Robot {
     }
 
     /**
-     * The robot (reference) will update after called this method.
+     *
+     * The robot (reference) will run the algorithm and return the new position that it should go next.
+     * <br/>
+     * <br/>
+     * Note that the robot will not move to the new location unless the moveTo method has been called.
+     *
+     * @param robots the list of global robots. In most cases, this is the snapshot of the current global robots. And all the robots should have the same snapshot at the same stage.
+     * @return the new location that the robot is going to move.
      */
-    public void next(List<Robot> robots) {
+    public Point next(List<Robot> robots) {
         sensor.setGlobalRobots(robots);//set curr global robots to sensor
         Point point = algorithm.next(robots);
         Point globalPoint = this.sensor.convertToGlobal(point);
-        moveTo(globalPoint.x, globalPoint.y);
+        return point;
     }
 
     /**

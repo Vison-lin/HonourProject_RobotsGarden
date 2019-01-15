@@ -22,15 +22,23 @@ public abstract class Algorithm {
         this.robot = robot;
     }
 
+
     /**
      * CORE METHOD:
+     * <br/>
+     * <br/>
+     * Return a point object that represents the next position of the robot in LOCAL COORDINATE SYSTEM.
+     * <br/>
+     * <br/>
+     * Put the computed new location in LOCAL COORDINATE SYSTEM as the return object. Do not convert the final location into the global coordinate system, which will be done by robot.
+     * <br/>
+     * <br/>
+     * This method will be called in the robot's next() method, which will be called in each iteration (each time user click next button).
      *
-     * Return a point object that represents the next position of the robot in LOCAL COORDINATE SYSTEM
-     *
-     * Put the computed new location in LOCAL COORDINATE SYSTEM as the return object
-     * @return
+     * @param localRobotList the list that contains all the visible robots for this robots.
+     * @return the next position that the robot is going to go.
      */
-    public abstract Point next(List<Robot> robotList);
+    public abstract Point next(List<Robot> localRobotList);
 
     public Robot getRobot() {
         return robot;

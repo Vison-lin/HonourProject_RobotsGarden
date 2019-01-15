@@ -10,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -64,10 +65,12 @@ public class ControlPanelController extends VBox {
                 Iterator<Robot> robotIterator2 = gardenController.getRobots().iterator();
                 while (robotIterator2.hasNext()) {
                     Robot curr = robotIterator2.next();
-                    curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
+                    Point newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
+                    newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
+                    curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
 //                    if (gardenController.getSelectedRobots() != null && gardenController.getSelectedRobots().equals(curr)) {//display the selected robot's log
 //                        output.setText(curr.getLog().toString());
-//                    }
+//////                    }
                 }
                 gardenController.updateGarden();
             }
@@ -144,6 +147,25 @@ public class ControlPanelController extends VBox {
             original = 0;
         }
         return original;
+    }
+
+    private Point boundaryCheck(Point point) {
+        //negative check
+        if (point.getX() < 0) {
+            point.setLocation(0, point.getY());
+        }
+        if (point.getY() < 0) {
+            point.setLocation(point.getX(), 0);
+        }
+
+        //boundary check
+        if (point.getX() > gardenController.getGarden().getWidth()) {
+            point.setLocation(gardenController.getGarden().getWidth(), point.getY());
+        }
+        if (point.getY() > gardenController.getGarden().getHeight()) {
+            point.setLocation(point.getX(), gardenController.getGarden().getHeight());
+        }
+        return point;
     }
 
 }

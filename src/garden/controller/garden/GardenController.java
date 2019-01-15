@@ -46,7 +46,6 @@ public class GardenController extends VBox {
         fxmlLoader.setController(this);
         try {
             fxmlLoader.load();
-            System.out.println(garden.prefHeightProperty().toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -57,23 +56,38 @@ public class GardenController extends VBox {
     public void updateGarden() {
         garden.getChildren().removeAll(garden.getChildren());//remove all the element
         List<Circle> robotsPosition = new ArrayList<>();
-        List<Circle> robotsBody = new ArrayList<>();
+        List<Circle> robotsBodyAndBorder = new ArrayList<>();
+//        List<Circle> robotsBody = new ArrayList<>();
+//        List<Circle> robotsBorder = new ArrayList<>();
         List<Circle> robotsVision = new ArrayList<>();
         for (Robot robot : robots) {
             RobotGraphicalDisplay robotGraphicalDisplay = robot.getGraphicalDisplay();
             Circle robotPosition = robotGraphicalDisplay.getRobotPosition();
             Circle robotBody = robotGraphicalDisplay.getRobotBody();
+            Circle robotBorder = robotGraphicalDisplay.getRobotBorder();
             Circle robotVision = robotGraphicalDisplay.getRobotVision();
             if (robotGraphicalDisplay.isVisionVisible()) {
                 robotsVision.add(robotVision);
             }
-            robotsBody.add(robotBody);
+            robotsBodyAndBorder.add(robotBorder);
+            robotsBodyAndBorder.add(robotBody);
+//            robotsBody.add(robotBody);
+//            robotsBorder.add(robotBorder);
             robotsPosition.add(robotPosition);
         }
-        //ensure the vision is always under the body
+        //ensure the vision is always under the border
         garden.getChildren().addAll(robotsVision);
+
+
+        //todo how to display?
+//        //ensure the border is always under the body
+//        garden.getChildren().addAll(robotsBorder);
+//        //ensure the body is always under the position
+//        garden.getChildren().addAll(robotsBody);
         //ensure the body is always under the position
-        garden.getChildren().addAll(robotsBody);
+        garden.getChildren().addAll(robotsBodyAndBorder);
+
+
         //ensure the position is always in front of anything
         garden.getChildren().addAll(robotsPosition);
     }
@@ -153,7 +167,7 @@ public class GardenController extends VBox {
     private void addOnClickListenerToRobot(Robot robot) {
         RobotGraphicalDisplay robotGraphicalDisplay = robot.getGraphicalDisplay();
         //set onClickListener for opening robot setting & displaying vision range
-        robotGraphicalDisplay.getRobotPosition().setOnMouseClicked(new EventHandler<MouseEvent>() {
+        robotGraphicalDisplay.getRobotBody().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.SECONDARY) {// for each of the btn that has added event, add one right click listener for it.

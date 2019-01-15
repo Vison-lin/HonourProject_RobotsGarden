@@ -8,6 +8,7 @@ public class RobotGraphicalDisplay {
     private Circle robotPosition;
     private Circle robotBody;
     private Circle robotVision;
+    private Circle robotBorder;
     private boolean visionVisible;
 
     /**
@@ -24,6 +25,7 @@ public class RobotGraphicalDisplay {
     public RobotGraphicalDisplay() {
         this.robotPosition = new Circle(3, Color.WHITE);
         this.robotBody = new Circle(33, Color.BLACK);
+        this.robotBorder = new Circle(34, Color.WHITE);
         this.robotVision = new Circle(90, Color.LIGHTBLUE);
         this.visionVisible = false;
     }
@@ -33,10 +35,11 @@ public class RobotGraphicalDisplay {
      *
      * @param robotPosition the precise position of the robot.
      * @param robotBody     the body of the robot. This should be set as having exact the same position as the robotPosition.
+     * @param robotBorder   the border of the robot. This should be set as having 1 more radius than robotBody.
      * @param robotVision   the vision range of the robot. This should be set as having exact the same position as the robotPosition.
      * @param visionVisible the visibility of the robot vision.
      */
-    public RobotGraphicalDisplay(Circle robotPosition, Circle robotBody, Circle robotVision, boolean visionVisible) {
+    public RobotGraphicalDisplay(Circle robotPosition, Circle robotBody, Circle robotBorder, Circle robotVision, boolean visionVisible) {
         if (robotBody == null || robotVision == null || robotPosition == null) {
             throw new IllegalArgumentException("All the arguments cannot be null!");
         }
@@ -46,12 +49,13 @@ public class RobotGraphicalDisplay {
         }
         this.robotPosition = robotPosition;
         this.robotBody = robotBody;
+        this.robotBorder = robotBorder;
         this.robotVision = robotVision;
         this.visionVisible = visionVisible;
     }
 
     /**
-     * ALWAYS ADD ANY ON_CLICK_LISTENER to this.
+     * Since it represents the precise position of the robot, it is too small to click. So it is <strong>NOT RECOMMEND</strong> TO ADD ANY ON_CLICK_LISTENER to this. Use robotBody instead.
      *
      * @return the robot precise position.
      */
@@ -64,7 +68,7 @@ public class RobotGraphicalDisplay {
     }
 
     /**
-     * DO NOT ADD ANY ON_CLICK_LISTENER to this.
+     * Since it represents the robot body, it is RECOMMEND TO ADD ON_CLICK_LISTENER to this.
      *
      * @return the graphical display that represent the robot's body
      */
@@ -77,7 +81,6 @@ public class RobotGraphicalDisplay {
     }
 
     /**
-     * DO NOT ADD ANY ON_CLICK_LISTENER to this.
      *
      * @return the graphical display that represent the robot's vision
      */
@@ -117,6 +120,9 @@ public class RobotGraphicalDisplay {
 
         this.robotVision.setTranslateX(x);
         this.robotVision.setTranslateY(y);
+
+        this.robotBorder.setTranslateX(x);
+        this.robotBorder.setTranslateY(y);
     }
 
     /**
@@ -150,22 +156,40 @@ public class RobotGraphicalDisplay {
         newRobotBody.setTranslateY(this.robotBody.getTranslateY());
         deepCopyFillHelper(newRobotBody, red2, green2, blue2, opacity2);
 
+        //deep copy robotBorder
+        Circle newRobotBorder = new Circle(this.robotBorder.getRadius());
+        double red3 = ((Color) this.robotBorder.getFill()).getRed();
+        double green3 = ((Color) this.robotBorder.getFill()).getGreen();
+        double blue3 = ((Color) this.robotBorder.getFill()).getBlue();
+        double opacity3 = ((Color) this.robotBorder.getFill()).getOpacity();
+        newRobotBorder.setTranslateX(this.robotBorder.getTranslateY());
+        newRobotBorder.setTranslateY(this.robotBorder.getTranslateY());
+        deepCopyFillHelper(newRobotBorder, red3, green3, blue3, opacity3);
+
         //deep copy robotVision
         Circle newRobotVision = new Circle(this.robotVision.getRadius());
-        double red3 = ((Color) this.robotVision.getFill()).getRed();
-        double green3 = ((Color) this.robotVision.getFill()).getGreen();
-        double blue3 = ((Color) this.robotVision.getFill()).getBlue();
-        double opacity3 = ((Color) this.robotVision.getFill()).getOpacity();
+        double red4 = ((Color) this.robotVision.getFill()).getRed();
+        double green4 = ((Color) this.robotVision.getFill()).getGreen();
+        double blue4 = ((Color) this.robotVision.getFill()).getBlue();
+        double opacity4 = ((Color) this.robotVision.getFill()).getOpacity();
         newRobotVision.setTranslateX(this.robotVision.getTranslateY());
         newRobotVision.setTranslateY(this.robotVision.getTranslateY());
-        deepCopyFillHelper(newRobotVision, red3, green3, blue3, opacity3);
+        deepCopyFillHelper(newRobotVision, red4, green4, blue4, opacity4);
 
-        return new RobotGraphicalDisplay(newRobotPosition, newRobotBody, newRobotVision, this.visionVisible);
+        return new RobotGraphicalDisplay(newRobotPosition, newRobotBody, newRobotBorder, newRobotVision, this.visionVisible);
 
     }
 
     private void deepCopyFillHelper(Circle newRobotPosition, double red2, double green2, double blue2, double opacity2) {
         Color color2 = new Color(red2, green2, blue2, opacity2);
         newRobotPosition.setFill(color2);
+    }
+
+    public Circle getRobotBorder() {
+        return robotBorder;
+    }
+
+    public void setRobotBorder(Circle robotBorder) {
+        this.robotBorder = robotBorder;
     }
 }

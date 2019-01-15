@@ -10,6 +10,17 @@ import java.util.List;
 
 public class AlgorithmLoadingHelper {
 
+    /**
+     * Read all the files name from the folder /src/garden/algorithms, and return a list of String that represent those algorithms' class name
+     * <br/>
+     * <br/>
+     * In order to be able to display on the control panel, <strong>all the algorithms have to be placed under path: /src/garden/algorithms</strong>.
+     * <br/>
+     * <br/>
+     * In order to prevent any non-algorithm class been displayed on the screen, <strong>all other files, such as the algorithm helpers, have to be placed under /src/garden/algorithms/src</strong>. It is recommended to create a sub package for each algorithm.
+     *
+     * @return list of string that represents all the algorithms placed in the folder /src/garden/algorithms
+     */
     public List<String> getAlgorithmList() {
 
         ArrayList<String> algorithmList = new ArrayList<>();
@@ -41,16 +52,8 @@ public class AlgorithmLoadingHelper {
     public void assignAlgorithmToRobot(Robot robot, String algorithm) {
         AlgorithmClassLoader.setSelectedAlgorithm(algorithm);
         try {
-            robot.setAlgorithm(AlgorithmClassLoader.getAllAlgorithm(robot));
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
+            robot.setAlgorithm(AlgorithmClassLoader.assignRobotWithSelectedAlgorithm(robot));
+        } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();
         }
     }

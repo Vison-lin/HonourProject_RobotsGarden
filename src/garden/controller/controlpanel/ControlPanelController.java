@@ -168,9 +168,15 @@ public class ControlPanelController extends VBox {
         robot.moveTo(x, y);
         robot.setTag(tag);
         //set the algorithm
+
         //todo: faked
         String fakedSelectedAlgorithm = "caculate2D";
         selectedAlgorithm = fakedSelectedAlgorithm;
+//        Iterator<String> iterator = algorithmLoadingHelper.getAlgorithmList().iterator();
+//        while (iterator.hasNext()){
+//            System.out.println(iterator.next());
+//        }
+
 
         algorithmLoadingHelper.assignAlgorithmToRobot(robot, selectedAlgorithm);
 
@@ -185,7 +191,6 @@ public class ControlPanelController extends VBox {
 
     /**
      * get the list of robots.
-     *
      * @return the list of the robots
      */
     public List<Robot> getRobots() {
@@ -195,7 +200,6 @@ public class ControlPanelController extends VBox {
     /**
      * Set the list of robots.
      * Note, one should avoid to use this method, instead, change the content of the robots directly.
-     *
      * @param robots the new list of the robots
      */
     public void setRobots(ArrayList<Robot> robots) {

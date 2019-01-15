@@ -142,7 +142,7 @@ public class RobotGraphicalDisplay {
         double green1 = ((Color) this.robotPosition.getFill()).getGreen();
         double blue1 = ((Color) this.robotPosition.getFill()).getBlue();
         double opacity1 = ((Color) this.robotPosition.getFill()).getOpacity();
-        newRobotPosition.setTranslateX(this.robotPosition.getTranslateY());
+        newRobotPosition.setTranslateX(this.robotPosition.getTranslateX());
         newRobotPosition.setTranslateY(this.robotPosition.getTranslateY());
         deepCopyFillHelper(newRobotPosition, red1, green1, blue1, opacity1);
 
@@ -152,7 +152,7 @@ public class RobotGraphicalDisplay {
         double green2 = ((Color) this.robotBody.getFill()).getGreen();
         double blue2 = ((Color) this.robotBody.getFill()).getBlue();
         double opacity2 = ((Color) this.robotBody.getFill()).getOpacity();
-        newRobotBody.setTranslateX(this.robotBody.getTranslateY());
+        newRobotBody.setTranslateX(this.robotBody.getTranslateX());
         newRobotBody.setTranslateY(this.robotBody.getTranslateY());
         deepCopyFillHelper(newRobotBody, red2, green2, blue2, opacity2);
 
@@ -162,7 +162,7 @@ public class RobotGraphicalDisplay {
         double green3 = ((Color) this.robotBorder.getFill()).getGreen();
         double blue3 = ((Color) this.robotBorder.getFill()).getBlue();
         double opacity3 = ((Color) this.robotBorder.getFill()).getOpacity();
-        newRobotBorder.setTranslateX(this.robotBorder.getTranslateY());
+        newRobotBorder.setTranslateX(this.robotBorder.getTranslateX());
         newRobotBorder.setTranslateY(this.robotBorder.getTranslateY());
         deepCopyFillHelper(newRobotBorder, red3, green3, blue3, opacity3);
 
@@ -172,7 +172,7 @@ public class RobotGraphicalDisplay {
         double green4 = ((Color) this.robotVision.getFill()).getGreen();
         double blue4 = ((Color) this.robotVision.getFill()).getBlue();
         double opacity4 = ((Color) this.robotVision.getFill()).getOpacity();
-        newRobotVision.setTranslateX(this.robotVision.getTranslateY());
+        newRobotVision.setTranslateX(this.robotVision.getTranslateX());
         newRobotVision.setTranslateY(this.robotVision.getTranslateY());
         deepCopyFillHelper(newRobotVision, red4, green4, blue4, opacity4);
 

@@ -1,6 +1,6 @@
 package garden.controller.garden;
 
-import garden.Algorithm.caculate2D;
+import garden.controller.controlpanel.ControlPanelController;
 import garden.model.Robot;
 import garden.model.RobotGraphicalDisplay;
 import javafx.event.EventHandler;
@@ -14,7 +14,6 @@ import javafx.scene.shape.Circle;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,7 +27,7 @@ public class GardenController extends VBox {
      */
     private static double ROBOT_SIZE = 9;
 
-    private List<Robot> robots = Collections.synchronizedList(new ArrayList<>());
+    private ControlPanelController controlPanelController;
 
     /**
      * The garden instance
@@ -56,7 +55,7 @@ public class GardenController extends VBox {
 //        List<Circle> robotsBody = new ArrayList<>();
 //        List<Circle> robotsBorder = new ArrayList<>();
         List<Circle> robotsVision = new ArrayList<>();
-        for (Robot robot : robots) {
+        for (Robot robot : controlPanelController.getRobots()) {
             RobotGraphicalDisplay robotGraphicalDisplay = robot.getGraphicalDisplay();
             Circle robotPosition = robotGraphicalDisplay.getRobotPosition();
             Circle robotBody = robotGraphicalDisplay.getRobotBody();
@@ -110,23 +109,6 @@ public class GardenController extends VBox {
     }
 
     /**
-     * get the list of robots.
-     * @return the list of the robots
-     */
-    public List<Robot> getRobots() {
-        return robots;
-    }
-
-    /**
-     * Set the list of robots.
-     * Note, one should avoid to use this method, instead, change the content of the robots directly.
-     * @param robots the new list of the robots
-     */
-    public void setRobots(ArrayList<Robot> robots) {
-        this.robots = robots;
-    }
-
-    /**
      * Init the robots: add on click to the pane(garden) so where ever click the pane, a new robots will be created.
      */
     private void robotsInitBooster() {
@@ -135,7 +117,7 @@ public class GardenController extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY) {// add listener for left click
-                    Robot robot = robotGenerator("New Robot", event.getX(), event.getY());
+                    controlPanelController.robotGenerator("New Robot", event.getX(), event.getY());
                     //adding to the graph
                     updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
                 }
@@ -144,19 +126,13 @@ public class GardenController extends VBox {
     }
 
     /**
-     * @param tag todo
-     * @param x
-     * @param y   for now, generate and register the listener
-     * @return
+     *
+     * Add the generated Robot to garden and assign necessary listener to it.
+     *
+     * @param robot the robot object need to add to the garden pane.
      */
-    public Robot robotGenerator(String tag, double x, double y) {
-        Robot robot = new Robot(new RobotGraphicalDisplay());
-        robot.moveTo(x, y);
-        robot.setTag(tag);
+    public void addGeneratedRobotToGarden(Robot robot) {
         addOnClickListenerToRobot(robot);
-        robots.add(robot);//add the robot into the robots list
-        robot.setAlgorithm(new caculate2D(robot));
-        return robot;
     }
 
     private void addOnClickListenerToRobot(Robot robot) {
@@ -177,5 +153,9 @@ public class GardenController extends VBox {
 
     public Pane getGarden() {
         return garden;
+    }
+
+    public void setControlPanelController(ControlPanelController controlPanelController) {
+        this.controlPanelController = controlPanelController;
     }
 }

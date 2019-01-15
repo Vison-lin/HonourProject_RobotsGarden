@@ -2,6 +2,7 @@ package garden.controller.controlpanel;
 
 import garden.controller.garden.GardenController;
 import garden.model.Robot;
+import garden.model.RobotGraphicalDisplay;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,11 +29,17 @@ public class ControlPanelController extends VBox {
     @FXML
     private Button randomCreateRobots;
 
+    AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
+
+    private List<Robot> robots = Collections.synchronizedList(new ArrayList<>());
+
     private Stack<List<Robot>> robotStackPrev = new Stack<>();
 
     private Stack<List<Robot>> robotStackNext = new Stack<>();
 
     private GardenController gardenController;
+
+    private String selectedAlgorithm;
 
     public ControlPanelController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../view/control_panel.fxml"));
@@ -57,13 +64,10 @@ public class ControlPanelController extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 if (!robotStackPrev.empty()) {
-
-
-                    addDeepCopiedRobotList(robotStackNext, gardenController.getRobots());//store the current to the next
-                    gardenController.getRobots().removeAll(gardenController.getRobots());//clean the current
-                    gardenController.getRobots().addAll(robotStackPrev.pop());//restore the prev
+                    addDeepCopiedRobotList(robotStackNext, robots);//store the current to the next
+                    robots.removeAll(robots);//clean the current
+                    robots.addAll(robotStackPrev.pop());//restore the prev
                     gardenController.updateGarden();
-
                 }
             }
         });
@@ -73,20 +77,20 @@ public class ControlPanelController extends VBox {
         next.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                addDeepCopiedRobotList(robotStackPrev, gardenController.getRobots());//store the current to the prev
+                addDeepCopiedRobotList(robotStackPrev, robots);//store the current to the prev
                 if (!robotStackNext.empty()) {
-                    gardenController.getRobots().removeAll(gardenController.getRobots());//clean the current
-                    gardenController.getRobots().addAll(robotStackNext.pop());
+                    robots.removeAll(robots);//clean the current
+                    robots.addAll(robotStackNext.pop());
                 } else {
                     ArrayList<Robot> localRobotsList = new ArrayList<>();
                     //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
-                    for (Robot robot : gardenController.getRobots()) {
+                    for (Robot robot : robots) {
                         Robot newRobotInstance = robot.deepCopy();
                         localRobotsList.add(newRobotInstance);
                     }
 
                     //run next
-                    Iterator<Robot> robotIterator2 = gardenController.getRobots().iterator();
+                    Iterator<Robot> robotIterator2 = robots.iterator();
                     while (robotIterator2.hasNext()) {
                         Robot curr = robotIterator2.next();
                         Point newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
@@ -103,7 +107,8 @@ public class ControlPanelController extends VBox {
         clean.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                gardenController.getRobots().clear();
+                AlgorithmLoadingHelper helper = new AlgorithmLoadingHelper();
+                robots.clear();
                 gardenController.updateGarden();
                 //clean prev and next
                 robotStackPrev.clear();
@@ -117,14 +122,14 @@ public class ControlPanelController extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 //clean the screen
-                gardenController.getRobots().removeAll(gardenController.getRobots());
+                robots.removeAll(robots);
                 Random random = new Random();
 
                 //init first one
                 double maxX = (int) getWidth() + 1;
                 double maxY = (int) getHeight() + 1;
                 int ctr = 0;
-                Robot initRobot = gardenController.robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY));
+                Robot initRobot = robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY));
 
                 //create the rest
                 for (int i = 1; i < 5; i++) {
@@ -145,15 +150,56 @@ public class ControlPanelController extends VBox {
                         double differY = currY - y;
                         distance = Math.sqrt(Math.pow(differX, 2) + Math.pow(differY, 2));
                     }
-                    initRobot = gardenController.robotGenerator(" =>" + ctr + "<= ", currX, currY);
+                    initRobot = robotGenerator(" =>" + ctr + "<= ", currX, currY);
                 }
                 gardenController.updateGarden();
             }
         });
     }
 
+    /**
+     * @param tag todo
+     * @param x
+     * @param y   for now, generate
+     * @return
+     */
+    public Robot robotGenerator(String tag, double x, double y) {
+        Robot robot = new Robot(new RobotGraphicalDisplay());
+        robot.moveTo(x, y);
+        robot.setTag(tag);
+        //set the algorithm
+        //todo: faked
+        String fakedSelectedAlgorithm = "caculate2D";
+        selectedAlgorithm = fakedSelectedAlgorithm;
+
+        algorithmLoadingHelper.assignAlgorithmToRobot(robot, selectedAlgorithm);
+
+        robots.add(robot);//add the robot into the robots list
+        gardenController.addGeneratedRobotToGarden(robot);
+        return robot;
+    }
+
     public void setGardenController(GardenController gardenController) {
         this.gardenController = gardenController;
+    }
+
+    /**
+     * get the list of robots.
+     *
+     * @return the list of the robots
+     */
+    public List<Robot> getRobots() {
+        return robots;
+    }
+
+    /**
+     * Set the list of robots.
+     * Note, one should avoid to use this method, instead, change the content of the robots directly.
+     *
+     * @param robots the new list of the robots
+     */
+    public void setRobots(ArrayList<Robot> robots) {
+        this.robots = robots;
     }
 
     /**

@@ -1,6 +1,6 @@
 package garden.controller.garden;
 
-import garden.Algorithm.caculate2D;
+import garden.algorithms.caculate2D;
 import garden.model.Robot;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;

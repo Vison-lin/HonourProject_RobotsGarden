@@ -1,7 +1,7 @@
 package garden.model;
 
 import garden.core.Algorithm;
-import garden.core.llibrary.DefaultAlgorithm;
+import garden.core.library.DefaultAlgorithm;
 
 import java.awt.*;
 import java.util.List;

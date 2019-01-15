@@ -1,4 +1,4 @@
-package garden.core.llibrary;
+package garden.algorithms;
 
 import garden.core.Algorithm;
 import garden.model.Robot;

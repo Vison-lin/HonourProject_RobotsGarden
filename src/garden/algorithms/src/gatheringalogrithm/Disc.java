@@ -1,4 +1,4 @@
-package garden.Algorithm;
+package garden.algorithms.src.caculate2D;
 
 import java.awt.*;
 
@@ -58,7 +58,7 @@ public class Disc {
      */
     public Boolean contains (Point p){
         double rSquared = Math.pow((p.getX()-this.center.getX()),2)+Math.pow((p.getY()-this.center.getY()),2);
-        boolean result  = rSquared <= this.rSquared;;
+        boolean result = rSquared <= this.rSquared;
         return  result;
     }
 

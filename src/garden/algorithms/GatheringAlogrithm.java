@@ -1,5 +1,7 @@
-package garden.Algorithm;
+package garden.algorithms;
 
+import garden.algorithms.src.caculate2D.Disc;
+import garden.algorithms.src.caculate2D.Vector;
 import garden.core.Algorithm;
 import garden.model.Robot;
 
@@ -26,8 +28,7 @@ public class caculate2D extends Algorithm{
 //        this.state = state;
 //        this.range = range;
         this.state = new ArrayList<>(robot.getSensor().getAllVisibleRobotsInLocalScale());
-        this.range = robot.getSensor().getVision();
-        System.out.println("Global X:"+robot.getPositionX()+"   "+"Global Y:"+ robot.getPositionY());
+        this.range = robot.getVision();
 
     }
 

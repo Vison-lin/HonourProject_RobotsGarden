@@ -1,4 +1,4 @@
-package garden.core.llibrary;
+package garden.algorithms;
 
 import garden.core.Algorithm;
 import garden.model.Robot;
@@ -7,6 +7,7 @@ import java.awt.*;
 import java.util.List;
 
 public class FakedAlgorithm_UpdateColor extends Algorithm {
+
     /**
      * Create a new Algorithm class with the associated robot.
      *
@@ -14,6 +15,7 @@ public class FakedAlgorithm_UpdateColor extends Algorithm {
      */
     public FakedAlgorithm_UpdateColor(Robot robot) {
         super(robot);
+        System.out.println("WOW! AMAZING!!!");
     }
 
     @Override

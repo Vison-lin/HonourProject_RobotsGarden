@@ -1,6 +1,6 @@
 package garden.controller.garden;
 
-import garden.Algorithm.caculate2D;
+import garden.algorithms.caculate2D;
 import garden.model.Robot;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -28,7 +28,7 @@ class RobotSettingHelper extends BorderPane {
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(primaryStage);
-        FXMLLoader fxmlLoader = null;
+        FXMLLoader fxmlLoader;
         try {
             fxmlLoader = new FXMLLoader(getClass().getResource("../../view/robot_setting_page.fxml"));
             fxmlLoader.setRoot(this);

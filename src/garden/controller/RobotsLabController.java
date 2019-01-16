@@ -23,8 +23,19 @@ public class RobotsLabController extends HBox {
             fxmlLoader.load();
             //passing gardenController into controlPanelController
             controlPanelController.setGardenController(gardenController);
+            gardenController.setControlPanelController(controlPanelController);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        resizeGardenWindow();
+    }
+
+    private void resizeGardenWindow() {
+        heightProperty().addListener((observable, oldValue, newValue) -> {
+            gardenController.minWidthProperty().bind(observable);
+            gardenController.minHeightProperty().bind(observable);
+            gardenController.getGarden().minWidthProperty().bind(observable);
+            gardenController.getGarden().minHeightProperty().bind(observable);
+        });
     }
 }

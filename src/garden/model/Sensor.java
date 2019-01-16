@@ -1,8 +1,6 @@
 package garden.model;
 
 
-import javafx.scene.shape.Circle;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,15 +21,12 @@ import java.util.List;
  */
 public class Sensor {
 
-    private double vision;
-
     private List<Robot> globalRobots;
 
     private Robot robot;
 
-    public Sensor(Robot robot, double vision) {
+    public Sensor(Robot robot) {
         this.robot = robot;
-        this.vision = vision;
         this.globalRobots = new ArrayList<>();
     }
 
@@ -63,13 +58,6 @@ public class Sensor {
 
     }
 
-    public double getVision() {
-        return vision;
-    }
-
-    public void setVision(double vision) {
-        this.vision = vision;
-    }
 
     /**
      * Test if a given robot is within the vision
@@ -77,13 +65,12 @@ public class Sensor {
      * @return
      */
     public boolean isWithinVision(Point point) {
-        robot.getLog().addToLog("The distance between these two robots is: " + distance(point.getX(), point.getY(), 0, 0) + ". Compare to its vision" + vision);
-        return distance(point.getX(), point.getY(), 0, 0) <= vision;
+        return distance(point.getX(), point.getY()) <= robot.getGraphicalDisplay().getRobotVision().getRadius();
     }
 
-    private double distance(double r1x, double r1y, double r2x, double r2y){
-        double diffx = r2x - r1x;
-        double diffy = r2y - r1y;
+    private double distance(double rx, double ry) {
+        double diffx = (double) 0 - rx;
+        double diffy = (double) 0 - ry;
         return Math.sqrt(Math.pow(diffx, 2) + Math.pow(diffy, 2));
     }
 
@@ -96,12 +83,13 @@ public class Sensor {
 
         //deep copy (partially): Ensure the modification, especially for location on the localRobotList will not affect the globalRobotsList
         for (Robot robot : globalRobots) {
-            Circle graphicalDisplay = new Circle(robot.getGraphicalDisplay().getRadius(), robot.getGraphicalDisplay().getFill());
-            graphicalDisplay.setTranslateX(robot.getGraphicalDisplay().getTranslateX());
-            graphicalDisplay.setTranslateY(robot.getGraphicalDisplay().getTranslateY());
-            Robot newRobotInstance = new Robot(graphicalDisplay, robot.getSensor().vision, robot.getLog());
-            newRobotInstance.setAlgorithm(robot.getAlgorithm());
-            newRobotInstance.setSensor(this);
+//            Circle graphicalDisplay = new Circle(robot.getGraphicalDisplay().getRadius(), robot.getGraphicalDisplay().getFill());
+//            graphicalDisplay.setTranslateX(robot.getGraphicalDisplay().getTranslateX());
+//            graphicalDisplay.setTranslateY(robot.getGraphicalDisplay().getTranslateY());
+//            Robot newRobotInstance = new Robot(graphicalDisplay, robot.getSensor().vision, robot.getLog());
+//            newRobotInstance.setAlgorithm(robot.getAlgorithm());
+//            newRobotInstance.setSensor(this);
+            Robot newRobotInstance = robot.deepCopy();
             localRobotsList.add(newRobotInstance);
         }
 
@@ -109,25 +97,23 @@ public class Sensor {
         Iterator<Robot> iterator1 = localRobotsList.iterator();
         while (iterator1.hasNext()) {
             Robot curr = iterator1.next();
-            robot.getLog().addToLog("Now, robot " + robot.getTag() + "at position (" + this.robot.getPositionX() + ", " + this.robot.getPositionY() + ") is determining whether the robot " + curr.getTag() + "at position (" + curr.getPositionX() + ", " + curr.getPositionY() + ") is within its vision");
             if (!isWithinVision(convertToLocal(curr.getPosition()))) {
                 iterator1.remove();
-                robot.getLog().addToLog("SO: The target robot " + curr.getTag() + "is not in its vision, REMOVED");
-            } else {
-                robot.getLog().addToLog("S0: The target robot " + curr.getTag() + "is in its vision, KEEP");
             }
         }
 
         Iterator<Robot> iterator2 = localRobotsList.iterator();
         while (iterator2.hasNext()) {
             Robot curr = iterator2.next();
-            double x = curr.getGraphicalDisplay().getTranslateX();
-            double y = curr.getGraphicalDisplay().getTranslateY();
+            double x = curr.getPositionX();
+            double y = curr.getPositionY();
             Point point = new Point();
             point.setLocation(x, y);
             Point localPoint = convertToLocal(point);
-            curr.getGraphicalDisplay().setTranslateX(localPoint.x);
-            curr.getGraphicalDisplay().setTranslateY(localPoint.y);
+            System.out.println(localPoint.getX() + ", " + localPoint.getY());
+            curr.moveTo(localPoint.getX(), localPoint.getY());
+//            curr.getGraphicalDisplay().setTranslateX(localPoint.x);
+//            curr.getGraphicalDisplay().setTranslateY(localPoint.y);
         }
         return localRobotsList;//should use deep copy
     }

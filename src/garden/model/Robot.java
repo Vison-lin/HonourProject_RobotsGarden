@@ -1,8 +1,7 @@
 package garden.model;
 
 import garden.core.Algorithm;
-import garden.core.llibrary.DefaultAlgorithm;
-import javafx.scene.shape.Circle;
+import garden.core.library.DefaultAlgorithm;
 
 import java.awt.*;
 import java.util.List;
@@ -20,15 +19,10 @@ public class Robot {
     private String tag;
 
     /**
-     * The Log specific to this robot
-     */
-    private RobotLog log;
-
-    /**
      * The representation of the robot.
      * A robot is represented as a circle in the screen
      */
-    private Circle graphicalDisplay;
+    private RobotGraphicalDisplay graphicalDisplay;
 
     /**
      * The sensor of the robot.
@@ -42,37 +36,39 @@ public class Robot {
     private Algorithm algorithm = new DefaultAlgorithm(this);
 
     /**
-     * Create a new robot object
-     *  @param graphicalDisplay the Circle object which represent this robot on the screen
-     * @param vision           the vision of the robot. This value stores in the built-in sensor object.
-     * @param log
+     * Create a new robot object. It will be positioned in (0, 0)
+     * @param graphicalDisplay the Circle object which represent this robot on the screen
      */
-    public Robot(Circle graphicalDisplay, double vision, RobotLog log) {
+    public Robot(RobotGraphicalDisplay graphicalDisplay) {
         this.graphicalDisplay = graphicalDisplay;
-        this.log = log;
-        this.sensor = new Sensor(this, vision);
+        this.sensor = new Sensor(this);
     }
 
     /**
-     * Move the robot to the new position
-     * Note that this is the same if you get the graphicalDisplay (Circle) first and then call setTranslateX(x) and setTranslateY(y) respectively.
+     * Move the robot (its location, vision, and body) to the new position
      *
      * @param x the x coordinate of the new position
      * @param y the y coordinate of the new position
      */
     public void moveTo(double x, double y) {
-        graphicalDisplay.setTranslateX(x);
-        graphicalDisplay.setTranslateY(y);
+        graphicalDisplay.moveTo(x, y);
     }
 
     /**
-     * The robot (reference) will update after called this method.
+     *
+     * The robot (reference) will run the algorithm and return the new position that it should go next.
+     * <br/>
+     * <br/>
+     * Note that the robot will not move to the new location unless the moveTo method has been called.
+     *
+     * @param robots the list of global robots. In most cases, this is the snapshot of the current global robots. And all the robots should have the same snapshot at the same stage.
+     * @return the new location that the robot is going to move.
      */
-    public void next(List<Robot> robots) {
+    public Point next(List<Robot> robots) {
         sensor.setGlobalRobots(robots);//set curr global robots to sensor
         Point point = algorithm.next(robots);
         Point globalPoint = this.sensor.convertToGlobal(point);
-        moveTo(globalPoint.x, globalPoint.y);
+        return globalPoint;
     }
 
     /**
@@ -80,7 +76,7 @@ public class Robot {
      *
      * @return return the robot's representation (Circle)
      */
-    public Circle getGraphicalDisplay() {
+    public RobotGraphicalDisplay getGraphicalDisplay() {
         return graphicalDisplay;
     }
 
@@ -89,7 +85,7 @@ public class Robot {
      *
      * @param graphicalDisplay the new representation of the robot
      */
-    public void setGraphicalDisplay(Circle graphicalDisplay) {
+    public void setGraphicalDisplay(RobotGraphicalDisplay graphicalDisplay) {
         this.graphicalDisplay = graphicalDisplay;
     }
 
@@ -118,7 +114,7 @@ public class Robot {
      * @return the x of the robot's position
      */
     public double getPositionX() {
-        return graphicalDisplay.getTranslateX();
+        return graphicalDisplay.getRobotPosition().getTranslateX();
     }
 
     /**
@@ -128,7 +124,7 @@ public class Robot {
      * @return the y of the robot's position
      */
     public double getPositionY() {
-        return graphicalDisplay.getTranslateY();
+        return graphicalDisplay.getRobotPosition().getTranslateY();
     }
 
     /**
@@ -158,11 +154,21 @@ public class Robot {
         this.tag = tag;
     }
 
-    public RobotLog getLog() {
-        return log;
+    /**
+     * Deep copy the robot object. Note that it does not deep copy neither the algorithm that assigned to this robot nor the global robot list that passed into the sensor.
+     *
+     * @return the new deepCopied Robot Object.
+     */
+    public Robot deepCopy() {
+        RobotGraphicalDisplay newRobotGraphicalDisplay = this.graphicalDisplay.deepCopy();
+        Robot newRobot = new Robot(newRobotGraphicalDisplay);
+        Sensor newSensor = new Sensor(newRobot);
+        newRobot.setSensor(newSensor);
+        newRobot.setAlgorithm(this.algorithm);
+        return newRobot;
     }
 
-    public void setLog(RobotLog log) {
-        this.log = log;
+    public double getVision() {
+        return this.getGraphicalDisplay().getRobotVision().getRadius();
     }
 }

@@ -13,17 +13,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-//        Parent root = FXMLLoader.load(getClass().getResource("view/robots_lab.fxml"));
-//        primaryStage.setTitle("Hello World");
-//        primaryStage.setScene(new Scene(root, 300, 275));
-//        primaryStage.show();
         RobotsLabController robotsLabController = new RobotsLabController();
-//        robotsLabController.setText("Hello!");
-
         primaryStage.setScene(new Scene(robotsLabController));
-        primaryStage.setTitle("Custom Control");
-        primaryStage.setWidth(1000);
-        primaryStage.setHeight(500);
         primaryStage.show();
     }
 }

@@ -48,7 +48,6 @@ public class ControlPanelController extends VBox {
         next.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-
                 ArrayList<Robot> localRobotsList = new ArrayList<>();
                 //deep copy (partially): Ensure the modification, especially for location on the localRobotList will not affect the globalRobotsList
                 for (Robot robot : gardenController.getRobots()) {

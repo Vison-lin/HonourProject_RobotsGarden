@@ -27,6 +27,7 @@ public class caculate2D extends Algorithm{
 //        this.range = range;
         this.state = new ArrayList<>(robot.getSensor().getAllVisibleRobotsInLocalScale());
         this.range = robot.getSensor().getVision();
+        System.out.println("Global X:"+robot.getPositionX()+"   "+"Global Y:"+ robot.getPositionY());
 
     }
 
@@ -82,11 +83,13 @@ public class caculate2D extends Algorithm{
     public Point generateOneRobot (ArrayList<Robot>visibles , double range){
         Point result = new Point();
         ArrayList newState = new ArrayList();
+        visibles = getUniqueRobots(visibles);
         if (visibles.size()<2){
             result.setLocation(0.0,0.0);
             return result;
         }
         Disc C = miniDisc(visibles);
+        System.out.println("center: "+C.getCenter());
         ArrayList rs = new ArrayList();
         for(Robot p:visibles){
             if(p.getPositionX()!=0.0|| p.getPositionY()!= 0.0){
@@ -177,7 +180,7 @@ public class caculate2D extends Algorithm{
         Point p1 = P.get(0).getPosition();
         Point p2 = P.get(1).getPosition();
         Disc D2 = new Disc(p1,p2);
-
+        System.out.println("1:success");
         for(int i= 2;i<P.size();i++){
             Point pi = P.get(i).getPosition();
             if(!D2.contains(pi)){
@@ -199,7 +202,7 @@ public class caculate2D extends Algorithm{
     private Disc miniDiscWithPoint(ArrayList<Robot> P, Point q){
         Point p1 = P.get(0).getPosition();
         Disc D1 = new Disc(p1,q);
-
+        System.out.println("2:suceess");
         for(int i=1; i<P.size();i++){
             Point pi = P.get(i).getPosition();
             if(!D1.contains(pi)){
@@ -223,6 +226,7 @@ public class caculate2D extends Algorithm{
      */
     private Disc miniDiscWith2Points(ArrayList<Robot> P,Point q1,Point q2){
         Disc D0 = new Disc(q1,q2);
+        System.out.println("3:suceess");
         for (Robot pk : P){
             if(!D0.contains(pk.getPosition())){
                 D0 = new Disc(q1,q2,pk.getPosition());
@@ -246,6 +250,7 @@ public class caculate2D extends Algorithm{
 
     public Point getConnectedCenter(double V,Point ci, Point Ri,ArrayList<Robot> R){
         Vector Vgoal = new Vector(Ri,ci);
+        System.out.println("norm: "+Vgoal.getNorm());
         if(Vgoal.getNorm()==0){
             return Ri;
         }
@@ -254,17 +259,22 @@ public class caculate2D extends Algorithm{
         for(Robot Rj:R){
             Vector Vrirj = new Vector(Ri,Rj.getPosition());
             double dj = Vrirj.getNorm();
-            ArrayList cosAndsin = Vrirj.getCosAndSin(Vgoal);
-            double lj = (dj/2*(double)cosAndsin.get(0))+Math.sqrt((V/2)*(V/2)-Math.pow((dj/2*(double)cosAndsin.get(1)),2));
-             test.add(lj);
+            ArrayList<Double> cosAndsin = Vrirj.getCosAndSin(Vgoal);
+            double lj = (dj/2*cosAndsin.get(0))+Math.sqrt((V/2)*(V/2)-Math.pow((dj/2*cosAndsin.get(1)),2));
+            if(lj!=Double.NaN) {
+                test.add(lj);
+            }
         }
         double limit = test.get(0);
+
         for(double num:test){
+            System.out.println("D: "+num);
             if(num<limit){
                 limit = num;
             }
         }
 //        System.out.println("Limit is: "+limit);
+
         double D = Math.min(Vgoal.getNorm(),limit);
         return Vgoal.resize(D).getEnd();
 
@@ -274,12 +284,15 @@ public class caculate2D extends Algorithm{
     @Override
     public Point next(List<Robot> robotList) {
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
+        System.out.println("=====================================");
+        int count = 1;
         for (Robot robot : state) {
-            System.out.println("NEXT POSITION: X: " + robot.getPositionX() + ", Y: " + robot.getPositionY());
+            System.out.println("X: " + robot.getPositionX() + ", Y: " + robot.getPositionY()+" ,Point: "+count++);
         }
 //        this.state = robotList;
 //        System.out.println("Has visible size: "+state.size());
         Point point = generateOneRobot(new ArrayList<>(state),range);
+        System.out.println("rsX: "+ point.getX()+" rsY: "+point.getY());
 
         return point;
     }

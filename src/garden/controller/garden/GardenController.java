@@ -1,5 +1,6 @@
 package garden.controller.garden;
 
+import garden.Algorithm.caculate2D;
 import garden.model.Robot;
 import garden.model.RobotLog;
 import javafx.event.EventHandler;
@@ -112,6 +113,8 @@ public class GardenController extends VBox {
                 if (event.getButton() == MouseButton.PRIMARY) {// add listener for left click
                     Robot robot = robotGenerator(event);
                     Circle robotGraphicalDisplay = robot.getGraphicalDisplay();
+                    robot.setAlgorithm(new caculate2D(robot));
+
                     //set onClickListener for opening robot setting & displaying vision range
                     robotGraphicalDisplay.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
@@ -144,7 +147,7 @@ public class GardenController extends VBox {
      * @return return a Circle that represent the robot.
      */
     private Robot robotGenerator(MouseEvent event) {
-        Robot robot = new Robot(new Circle(ROBOT_SIZE, Color.BLACK), 150, new RobotLog("Robot Inited!"));
+        Robot robot = new Robot(new Circle(ROBOT_SIZE, Color.BLACK), 100, new RobotLog("Robot Inited!"));
         robot.moveTo(event.getX(), event.getY());
         return robot;
     }

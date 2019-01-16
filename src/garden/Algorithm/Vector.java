@@ -32,8 +32,8 @@ public class Vector {
     public Vector(Point p1,Point p2){
         this.start = p1;
         this.end  = p2;
-        this.deltaX = p1.getX()-p2.getX();
-        this.deltaY = p1.getY() - p2.getY();
+        this.deltaX = p2.getX() - p1.getX();
+        this.deltaY = p2.getY() - p1.getY();
         this.norm = Math.sqrt(Math.pow(this.deltaX,2)+Math.pow(this.deltaY,2));
 
     }
@@ -52,7 +52,7 @@ public class Vector {
      *
      * @param  otherVec the other vector
      */
-    public ArrayList getCosAndSin(Vector otherVec){
+    public ArrayList<Double> getCosAndSin(Vector otherVec){
         double cos = scalarProduct(otherVec)/(this.norm*otherVec.norm);
         double sin;
         if ((Math.sqrt(1-cos*cos))==Double.NaN){

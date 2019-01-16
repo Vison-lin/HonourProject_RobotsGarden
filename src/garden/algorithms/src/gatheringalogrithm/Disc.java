@@ -1,4 +1,4 @@
-package garden.algorithms.src.caculate2D;
+package garden.algorithms.src.gatheringalogrithm;
 
 import java.awt.*;
 

@@ -1,7 +1,7 @@
 package garden.algorithms;
 
-import garden.algorithms.src.caculate2D.Disc;
-import garden.algorithms.src.caculate2D.Vector;
+import garden.algorithms.src.gatheringalogrithm.Disc;
+import garden.algorithms.src.gatheringalogrithm.Vector;
 import garden.core.Algorithm;
 import garden.model.Robot;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class caculate2D extends Algorithm{
+public class GatheringAlogrithm extends Algorithm{
 
 
     private int iter;
@@ -21,7 +21,7 @@ public class caculate2D extends Algorithm{
 
     private double range;
 
-    public caculate2D(Robot robot){
+    public GatheringAlogrithm(Robot robot){
         super(robot);
 //        this.iter = iter;
 //        this.todo = todo;

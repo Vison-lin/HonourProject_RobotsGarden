@@ -24,9 +24,9 @@ public class RobotGraphicalDisplay {
      */
     public RobotGraphicalDisplay() {
         this.robotPosition = new Circle(3, Color.WHITE);
-        this.robotBody = new Circle(33, Color.BLACK);
-        this.robotBorder = new Circle(34, Color.WHITE);
-        this.robotVision = new Circle(90, Color.LIGHTBLUE);
+        this.robotBody = new Circle(10, Color.BLACK);
+        this.robotBorder = new Circle(11, Color.WHITE);
+        this.robotVision = new Circle(100, Color.LIGHTBLUE);
         this.visionVisible = false;
     }
 

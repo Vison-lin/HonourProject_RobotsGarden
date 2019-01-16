@@ -1,6 +1,6 @@
 package garden.controller.garden;
 
-import garden.algorithms.caculate2D;
+import garden.algorithms.GatheringAlogrithm;
 import garden.model.Robot;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -48,7 +48,7 @@ class RobotSettingHelper extends BorderPane {
         setAlg.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                robot.setAlgorithm(new caculate2D(robot));
+                robot.setAlgorithm(new GatheringAlogrithm(robot));
             }
         });
     }

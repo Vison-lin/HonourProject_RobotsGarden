@@ -141,9 +141,9 @@ public class GardenController extends VBox {
         robotGraphicalDisplay.getRobotBody().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.getButton() == MouseButton.SECONDARY) {// for each of the btn that has added event, add one right click listener for it.
+                if (event.getButton() == MouseButton.MIDDLE) {// for each of the btn that has added event, add one right click listener for it.
                     RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
-                } else if (event.getButton() == MouseButton.MIDDLE) {
+                } else if (event.getButton() == MouseButton.SECONDARY) {
                     robot.getGraphicalDisplay().toggleVisionVisible();
                     updateGarden();
                 }

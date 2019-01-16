@@ -132,7 +132,7 @@ public class ControlPanelController extends VBox {
                 Robot initRobot = robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY));
 
                 //create the rest
-                for (int i = 1; i < 5; i++) {
+                for (int i = 1; i < 150; i++) {
                     double xBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionX() + initRobot.getVision(), maxX);
                     double xBoundLow = validateWithinTheEnclosingSquare(initRobot.getPositionX() - initRobot.getVision(), maxX);
                     double yBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionY() + initRobot.getVision(), maxY);
@@ -170,7 +170,7 @@ public class ControlPanelController extends VBox {
         //set the algorithm
 
         //todo: faked
-        String fakedSelectedAlgorithm = "caculate2D";
+        String fakedSelectedAlgorithm = "GatheringAlogrithm";
         selectedAlgorithm = fakedSelectedAlgorithm;
 //        Iterator<String> iterator = algorithmLoadingHelper.getAlgorithmList().iterator();
 //        while (iterator.hasNext()){

@@ -15,7 +15,7 @@ public class FakedAlgorithm_UpdateColor extends Algorithm {
      */
     public FakedAlgorithm_UpdateColor(Robot robot) {
         super(robot);
-        System.out.println("WOW! AMAZING!!!");
+//        System.out.println("WOW! AMAZING!!!");
     }
 
     @Override

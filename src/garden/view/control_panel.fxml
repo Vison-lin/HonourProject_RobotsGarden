@@ -8,8 +8,10 @@
         <Button fx:id="prev" mnemonicParsing="false" text="PREV"/>
         <Button fx:id="next" mnemonicParsing="false" text="NEXT"/>
         <Button fx:id="clean" mnemonicParsing="false" text="CLEAN"/>
-        <Button mnemonicParsing="false" text="AssignDefalutAlg" fx:id="assignDefalutAlg"/>
-        <Button mnemonicParsing="false" text="AssignGatheringAlg" fx:id="assignGatheringAlg"/>
-        <Button mnemonicParsing="false" text="Random Create Connected Robots 30" fx:id="randomCreateRobots"/>
+        <Button fx:id="assignDefalutAlg" mnemonicParsing="false" text="AssignDefalutAlg"/>
+        <Button fx:id="assignGatheringAlg" mnemonicParsing="false" text="AssignGatheringAlg"/>
+        <Button fx:id="randomCreateRobots" mnemonicParsing="false" text="Random Create Connected Robots 30"/>
+        <ComboBox prefWidth="150.0"/>
+        <ChoiceBox prefWidth="150.0"/>
     </children>
 </fx:root>

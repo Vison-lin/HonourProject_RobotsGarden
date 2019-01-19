@@ -110,7 +110,7 @@ public class Sensor {
             Point point = new Point();
             point.setLocation(x, y);
             Point localPoint = convertToLocal(point);
-            System.out.println(localPoint.getX() + ", " + localPoint.getY());
+//            System.out.println(localPoint.getX() + ", " + localPoint.getY());
             curr.moveTo(localPoint.getX(), localPoint.getY());
 //            curr.getGraphicalDisplay().setTranslateX(localPoint.x);
 //            curr.getGraphicalDisplay().setTranslateY(localPoint.y);

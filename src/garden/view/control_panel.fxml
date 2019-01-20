@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <fx:root xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="500.0" type="javafx.scene.layout.VBox"
          xmlns="http://javafx.com/javafx/8.0.172-ea">
     <children>
-        <HBox prefHeight="25.0" prefWidth="500.0">
+        <VBox prefHeight="60.0" prefWidth="471.0">
             <children>
-                <Button fx:id="prev" mnemonicParsing="false" text="PREV"/>
-                <Button fx:id="next" mnemonicParsing="false" text="NEXT"/>
-                <Button fx:id="clean" mnemonicParsing="false" text="CLEAN"/>
-                <Button fx:id="randomCreateRobots" mnemonicParsing="false" text="Random Create Connected Robots 30"/>
+                <HBox prefHeight="25.0" prefWidth="500.0">
+                    <children>
+                        <Button fx:id="prev" mnemonicParsing="false" text="PREV"/>
+                        <Button fx:id="next" mnemonicParsing="false" text="NEXT"/>
+                        <Button fx:id="clean" mnemonicParsing="false" text="CLEAN"/>
+                    </children>
+                </HBox>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="auto run in"/>
+                        <TextField fx:id="autoRunTimeInterval"/>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ms"/>
+                        <Button fx:id="autoRun" mnemonicParsing="false" text="Auto Run"/>
+                    </children>
+                </HBox>
             </children>
-        </HBox>
+        </VBox>
         <VBox prefHeight="100.0" prefWidth="200.0">
             <children>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select an algorithm that you want to assign: "/>
                 <ComboBox fx:id="algorithmSelection" maxHeight="1.7976931348623157E308"
                           maxWidth="1.7976931348623157E308"/>
+                <Button fx:id="randomCreateRobots" mnemonicParsing="false" text="Random Create Connected Robots 30"/>
             </children>
         </VBox>
     </children>

@@ -15,7 +15,7 @@ public class FakedAlgorithm_UpdateColor extends Algorithm {
      */
     public FakedAlgorithm_UpdateColor(Robot robot) {
         super(robot);
-        System.out.println("WOW! AMAZING!!!");
+//        System.out.println("WOW! AMAZING!!!");
     }
 
     @Override
@@ -24,5 +24,15 @@ public class FakedAlgorithm_UpdateColor extends Algorithm {
         point.setLocation(0, 0);
         getRobot().getSensor().getAllVisibleRobotsInLocalScale();//In real algorithm, keep obtaining local watchable robots in each step.
         return point;
+    }
+
+    @Override
+    public String algorithmName() {
+        return "FAKED";
+    }
+
+    @Override
+    public String algorithmDescription() {
+        return "???!!!___";
     }
 }

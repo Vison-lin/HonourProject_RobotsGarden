@@ -2,6 +2,8 @@ package garden.controller.controlpanel;
 
 import garden.core.AlgorithmClassLoader;
 import garden.model.Robot;
+import garden.model.RobotGraphicalDisplay;
+import javafx.util.Pair;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -19,27 +21,34 @@ public class AlgorithmLoadingHelper {
      * <br/>
      * In order to prevent any non-algorithm class been displayed on the screen, <strong>all other files, such as the algorithm helpers, have to be placed under /src/garden/algorithms/src</strong>. It is recommended to create a sub package for each algorithm.
      *
-     * @return list of string that represents all the algorithms placed in the folder /src/garden/algorithms
+     * @return list of Pairs with type <String, String> where the first one (Key) represents the algorithm's displaying name, and the second one (Value) is the file name of the algorithm. Note all the algorithm have to be placed under folder /src/garden/algorithms.
      */
-    public List<String> getAlgorithmList() {
+    public List<Pair<String, String>> getAlgorithmList() throws IllegalStateException, InvocationTargetException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
-        ArrayList<String> algorithmList = new ArrayList<>();
+        ArrayList<Pair<String, String>> algorithmList = new ArrayList<>();
 
         String basePath = new File("").getAbsolutePath();
-        basePath = basePath + "/src/garden/algorithms";
+        String algPath = basePath + "/src/garden/algorithms";
 
-        File folder = new File(basePath);
-        File[] files = folder.listFiles();
+        File algFolder = new File(algPath);
+        File[] algFiles = algFolder.listFiles();
 
-        for (int i = 0; i < files.length; i++) {
-            if (files[i].isFile()) {//load files only
-                String algFileName = files[i].getName();
+        Robot temp = new Robot(new RobotGraphicalDisplay());//temp created robot just for calling the method algorithmName();
+        for (int i = 0; i < algFiles.length; i++) {
+            if (algFiles[i].isFile()) {//load files only
+                String algFileName = algFiles[i].getName();
                 if (algFileName.length() > 5) {
                     String algName = algFileName.substring(0, algFileName.length() - 5);//delete .java postfix
-                    algorithmList.add(algName);
+                    String nameOfAlg = AlgorithmClassLoader.getSelectedAssignedAlgorithm(algName, temp).algorithmName();
+                    algorithmList.add(new Pair<>(nameOfAlg, algName));
                 }
             }
         }
+
+        if (algorithmList.size() == 0) {
+            throw new IllegalStateException("No Algorithm Found: You have to have at least one algorithm to run the program. All the algorithms must extend garden.core.Algorithm and have to be placed under /src/garden/algorithms folder.");
+        }
+
         return algorithmList;
     }
 
@@ -52,7 +61,7 @@ public class AlgorithmLoadingHelper {
     public void assignAlgorithmToRobot(Robot robot, String algorithm) {
         AlgorithmClassLoader.setSelectedAlgorithm(algorithm);
         try {
-            robot.setAlgorithm(AlgorithmClassLoader.assignRobotWithSelectedAlgorithm(robot));
+            robot.setAlgorithm(AlgorithmClassLoader.getSelectedAssignedAlgorithm(robot));
         } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             e.printStackTrace();
         }

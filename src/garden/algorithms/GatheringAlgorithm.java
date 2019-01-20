@@ -297,4 +297,14 @@ public class GatheringAlgorithm extends Algorithm{
 
         return point;
     }
+
+    @Override
+    public String algorithmName() {
+        return "Gathering Algorithm";
+    }
+
+    @Override
+    public String algorithmDescription() {
+        return "Robot will try to go to the position that has most other robots";
+    }
 }

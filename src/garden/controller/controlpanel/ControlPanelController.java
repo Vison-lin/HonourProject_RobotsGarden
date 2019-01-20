@@ -3,15 +3,24 @@ package garden.controller.controlpanel;
 import garden.controller.garden.GardenController;
 import garden.model.Robot;
 import garden.model.RobotGraphicalDisplay;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.util.Pair;
+import javafx.util.StringConverter;
 
 import java.awt.*;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.*;
 
@@ -29,6 +38,12 @@ public class ControlPanelController extends VBox {
     @FXML
     private Button randomCreateRobots;
 
+    @FXML
+    private ComboBox<Pair<String, String>> algorithmSelection;
+
+    @FXML
+    private Button autoRun;
+
     AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
 
     private List<Robot> robots = Collections.synchronizedList(new ArrayList<>());
@@ -40,6 +55,11 @@ public class ControlPanelController extends VBox {
     private GardenController gardenController;
 
     private String selectedAlgorithm;
+
+    private boolean isRunning = false;
+
+    @FXML
+    private TextField autoRunTimeInterval;
 
     public ControlPanelController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../view/control_panel.fxml"));
@@ -56,6 +76,66 @@ public class ControlPanelController extends VBox {
         nextBtnListener();
         cleanBtnListener();
         randomCreateConnectedRobotsBtnListener();
+        autoRunListener();
+        try {
+            algorithmSelectionInit();
+        } catch (InstantiationException | InvocationTargetException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();//todo handle it and display it on the screen.!!!
+        }
+        algorithmSelectionListener();
+
+    }
+
+    private void autoRunListener() {
+        autoRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (isRunning) {//if is already auto running, stop it
+                    isRunning = false;
+                } else {
+                    isRunning = true;
+                    Task task = new Task<Void>() {//create a new task
+                        @Override
+                        protected Void call() throws InterruptedException {
+                            while (isRunning) {
+                                Platform.runLater(ControlPanelController.this::nextAction);//update in UI thread
+                                Thread.sleep(Integer.valueOf(autoRunTimeInterval.getText()));//todo detect input
+                            }
+                            return null;
+                        }
+                    };
+                    new Thread(task).start();
+                }
+            }
+        });
+    }
+
+    private void nextAction() {
+        addDeepCopiedRobotList(robotStackPrev, robots);//store the current to the prev
+        if (!robotStackNext.empty()) {
+            robots.removeAll(robots);//clean the current
+            robots.addAll(robotStackNext.pop());
+        } else {
+            ArrayList<Robot> localRobotsList = new ArrayList<>();
+            //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
+            for (Robot robot : robots) {
+                Robot newRobotInstance = robot.deepCopy();
+                localRobotsList.add(newRobotInstance);
+            }
+
+            //run next
+            Iterator<Robot> robotIterator2 = robots.iterator();
+            while (robotIterator2.hasNext()) {
+                Robot curr = robotIterator2.next();
+                Point newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
+                newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
+                curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
+            }
+        }
+
+        gardenController.updateGarden();
 
     }
 
@@ -77,28 +157,7 @@ public class ControlPanelController extends VBox {
         next.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                addDeepCopiedRobotList(robotStackPrev, robots);//store the current to the prev
-                if (!robotStackNext.empty()) {
-                    robots.removeAll(robots);//clean the current
-                    robots.addAll(robotStackNext.pop());
-                } else {
-                    ArrayList<Robot> localRobotsList = new ArrayList<>();
-                    //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
-                    for (Robot robot : robots) {
-                        Robot newRobotInstance = robot.deepCopy();
-                        localRobotsList.add(newRobotInstance);
-                    }
-
-                    //run next
-                    Iterator<Robot> robotIterator2 = robots.iterator();
-                    while (robotIterator2.hasNext()) {
-                        Robot curr = robotIterator2.next();
-                        Point newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
-                        newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
-                        curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
-                    }
-                }
-                gardenController.updateGarden();
+                nextAction();
             }
         });
     }
@@ -126,8 +185,8 @@ public class ControlPanelController extends VBox {
                 Random random = new Random();
 
                 //init first one
-                double maxX = (int) getWidth() + 1;
-                double maxY = (int) getHeight() + 1;
+                double maxX = (int) gardenController.getWidth() + 1;
+                double maxY = (int) gardenController.getHeight() + 1;
                 int ctr = 0;
                 Robot initRobot = robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY));
 
@@ -157,6 +216,31 @@ public class ControlPanelController extends VBox {
         });
     }
 
+    private void algorithmSelectionInit() throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        ObservableList<Pair<String, String>> value = FXCollections.observableArrayList();
+        List<Pair<String, String>> allAlgInfo = algorithmLoadingHelper.getAlgorithmList();
+        value.addAll(allAlgInfo);
+        algorithmSelection.setItems(value);
+        algorithmSelection.getSelectionModel().select(0);
+        algorithmSelection.setConverter(new StringConverter<Pair<String, String>>() {
+            @Override
+            public String toString(Pair<String, String> object) {
+                return object.getKey();
+            }
+
+            @Override
+            public Pair<String, String> fromString(String string) {
+                return null;
+            }
+        });
+    }
+
+    private void algorithmSelectionListener() {
+        algorithmSelection.valueProperty().addListener(
+                (obs, oldVal, newVal) -> selectedAlgorithm = newVal.getValue()
+        );
+    }
+
     /**
      * @param tag todo
      * @param x
@@ -165,19 +249,8 @@ public class ControlPanelController extends VBox {
      */
     public Robot robotGenerator(String tag, double x, double y) {
         Robot robot = new Robot(new RobotGraphicalDisplay());
-        System.out.println("X: "+x+", Y: "+y);
         robot.moveTo(x, y);
         robot.setTag(tag);
-        //set the algorithm
-
-        //todo: faked
-        String fakedSelectedAlgorithm = "GatheringAlgorithm";
-        selectedAlgorithm = fakedSelectedAlgorithm;
-//        Iterator<String> iterator = algorithmLoadingHelper.getAlgorithmList().iterator();
-//        while (iterator.hasNext()){
-//            System.out.println(iterator.next());
-//        }
-
 
         algorithmLoadingHelper.assignAlgorithmToRobot(robot, selectedAlgorithm);
 

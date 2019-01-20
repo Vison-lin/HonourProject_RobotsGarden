@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.layout.BorderPane?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.BorderPane"
-         xmlns="http://javafx.com/javafx/8.0.121">
+
+<fx:root type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <center>
-        <Button mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" fx:id="setAlg"/>
+        <Button fx:id="setAlg" mnemonicParsing="false" text="Button" BorderPane.alignment="CENTER" />
     </center>
+   <top>
+      <ColorPicker fx:id="colorPicker" BorderPane.alignment="CENTER" />
+   </top>
 </fx:root>

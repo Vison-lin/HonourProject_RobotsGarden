@@ -1,4 +1,4 @@
-package garden.algorithms.src.gatheringalogrithm;
+package garden.algorithms.src.gatheringalgorithm;
 
 import java.awt.*;
 import java.util.ArrayList;

@@ -1,13 +1,15 @@
 package garden.controller.garden;
 
-import garden.algorithms.GatheringAlogrithm;
+import garden.algorithms.GatheringAlgorithm;
 import garden.model.Robot;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
@@ -20,6 +22,8 @@ class RobotSettingHelper extends BorderPane {
 
     @FXML
     private Button setAlg;
+
+    private ColorPicker colorPicker;
 
     private Robot robot;
 
@@ -34,13 +38,14 @@ class RobotSettingHelper extends BorderPane {
             fxmlLoader.setRoot(this);
             fxmlLoader.setController(this);
             Parent parent = fxmlLoader.load();
-            Scene dialogScene = new Scene(parent, 800, 800);
+            Scene dialogScene = new Scene(parent, 200, 400);
             dialog.setScene(dialogScene);
             dialog.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        boostAlgorithmSelectionWindow();
+       // boostAlgorithmSelectionWindow();
+        colorPickerListener();
     }
 
     //todo auto search class name
@@ -48,8 +53,23 @@ class RobotSettingHelper extends BorderPane {
         setAlg.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                robot.setAlgorithm(new GatheringAlogrithm(robot));
+                System.out.println("!!");
+                robot.setAlgorithm(new GatheringAlgorithm(robot));
             }
         });
     }
+
+    private void colorPickerListener(){
+        colorPicker.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println(colorPicker.getValue());
+            }
+        });
+
+
+
+    }
+
+
 }

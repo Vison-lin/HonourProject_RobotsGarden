@@ -1,7 +1,7 @@
 package garden.algorithms;
 
-import garden.algorithms.src.gatheringalogrithm.Disc;
-import garden.algorithms.src.gatheringalogrithm.Vector;
+import garden.algorithms.src.gatheringalgorithm.Disc;
+import garden.algorithms.src.gatheringalgorithm.Vector;
 import garden.core.Algorithm;
 import garden.model.Robot;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GatheringAlogrithm extends Algorithm{
+public class GatheringAlgorithm extends Algorithm{
 
 
     private int iter;
@@ -21,7 +21,7 @@ public class GatheringAlogrithm extends Algorithm{
 
     private double range;
 
-    public GatheringAlogrithm(Robot robot){
+    public GatheringAlgorithm(Robot robot){
         super(robot);
 //        this.iter = iter;
 //        this.todo = todo;
@@ -90,7 +90,7 @@ public class GatheringAlogrithm extends Algorithm{
             return result;
         }
         Disc C = miniDisc(visibles);
-        System.out.println("center: "+C.getCenter());
+//        System.out.println("center: "+C.getCenter());
         ArrayList rs = new ArrayList();
         for(Robot p:visibles){
             if(p.getPositionX()!=0.0|| p.getPositionY()!= 0.0){
@@ -181,7 +181,7 @@ public class GatheringAlogrithm extends Algorithm{
         Point p1 = P.get(0).getPosition();
         Point p2 = P.get(1).getPosition();
         Disc D2 = new Disc(p1,p2);
-        System.out.println("1:success");
+//        System.out.println("1:success");
         for(int i= 2;i<P.size();i++){
             Point pi = P.get(i).getPosition();
             if(!D2.contains(pi)){
@@ -203,7 +203,7 @@ public class GatheringAlogrithm extends Algorithm{
     private Disc miniDiscWithPoint(ArrayList<Robot> P, Point q){
         Point p1 = P.get(0).getPosition();
         Disc D1 = new Disc(p1,q);
-        System.out.println("2:suceess");
+//        System.out.println("2:suceess");
         for(int i=1; i<P.size();i++){
             Point pi = P.get(i).getPosition();
             if(!D1.contains(pi)){
@@ -227,7 +227,7 @@ public class GatheringAlogrithm extends Algorithm{
      */
     private Disc miniDiscWith2Points(ArrayList<Robot> P,Point q1,Point q2){
         Disc D0 = new Disc(q1,q2);
-        System.out.println("3:suceess");
+//        System.out.println("3:suceess");
         for (Robot pk : P){
             if(!D0.contains(pk.getPosition())){
                 D0 = new Disc(q1,q2,pk.getPosition());
@@ -251,7 +251,7 @@ public class GatheringAlogrithm extends Algorithm{
 
     public Point getConnectedCenter(double V,Point ci, Point Ri,ArrayList<Robot> R){
         Vector Vgoal = new Vector(Ri,ci);
-        System.out.println("norm: "+Vgoal.getNorm());
+//        System.out.println("norm: "+Vgoal.getNorm());
         if(Vgoal.getNorm()==0){
             return Ri;
         }
@@ -269,7 +269,7 @@ public class GatheringAlogrithm extends Algorithm{
         double limit = test.get(0);
 
         for(double num:test){
-            System.out.println("D: "+num);
+//            System.out.println("D: "+num);
             if(num<limit){
                 limit = num;
             }
@@ -285,15 +285,15 @@ public class GatheringAlogrithm extends Algorithm{
     @Override
     public Point next(List<Robot> robotList) {
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
-        System.out.println("=====================================");
+//        System.out.println("=====================================");
         int count = 1;
-        for (Robot robot : state) {
-            System.out.println("X: " + robot.getPositionX() + ", Y: " + robot.getPositionY()+" ,Point: "+count++);
-        }
+//        for (Robot robot : state) {
+//            System.out.println("X: " + robot.getPositionX() + ", Y: " + robot.getPositionY()+" ,Point: "+count++);
+//        }
 //        this.state = robotList;
 //        System.out.println("Has visible size: "+state.size());
         Point point = generateOneRobot(new ArrayList<>(state),range);
-        System.out.println("rsX: "+ point.getX()+" rsY: "+point.getY());
+      //  System.out.println("rsX: "+ point.getX()+" rsY: "+point.getY());
 
         return point;
     }

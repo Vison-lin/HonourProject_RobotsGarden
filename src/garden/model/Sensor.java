@@ -28,6 +28,7 @@ public class Sensor {
     public Sensor(Robot robot) {
         this.robot = robot;
         this.globalRobots = new ArrayList<>();
+
     }
 
     public Point convertToGlobal(Point point) {
@@ -110,7 +111,7 @@ public class Sensor {
             Point point = new Point();
             point.setLocation(x, y);
             Point localPoint = convertToLocal(point);
-            System.out.println(localPoint.getX() + ", " + localPoint.getY());
+//            System.out.println(localPoint.getX() + ", " + localPoint.getY());
             curr.moveTo(localPoint.getX(), localPoint.getY());
 //            curr.getGraphicalDisplay().setTranslateX(localPoint.x);
 //            curr.getGraphicalDisplay().setTranslateY(localPoint.y);

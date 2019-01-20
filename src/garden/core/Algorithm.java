@@ -13,12 +13,15 @@ public abstract class Algorithm {
      */
     private Robot robot;
 
+    protected Algorithm() {
+    }
+
     /**
      * Create a new Algorithm class with the associated robot.
      *
      * @param robot The robot instance that this algorithm deal with
      */
-    public Algorithm(Robot robot) {
+    protected Algorithm(Robot robot) {
         this.robot = robot;
     }
 
@@ -39,6 +42,20 @@ public abstract class Algorithm {
      * @return the next position that the robot is going to go.
      */
     public abstract Point next(List<Robot> localRobotList);
+
+    /**
+     * The name of the algorithm that needs to be displayed on the screen
+     *
+     * @return the name of the algorithm
+     */
+    public abstract String algorithmName();
+
+    /**
+     * The description of the algorithm that needs to be displayed on the screen
+     *
+     * @return the description of the algorithm
+     */
+    public abstract String algorithmDescription();
 
     public Robot getRobot() {
         return robot;

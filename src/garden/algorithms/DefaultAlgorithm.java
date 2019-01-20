@@ -1,4 +1,4 @@
-package garden.core.library;
+package garden.algorithms;
 
 import garden.core.Algorithm;
 import garden.model.Robot;
@@ -30,5 +30,15 @@ public class DefaultAlgorithm extends Algorithm {
         Point point = new Point();
         point.setLocation(0, 0);//by default, not move, so move to 0, 0 in its local coordinate
         return  point;
+    }
+
+    @Override
+    public String algorithmName() {
+        return "Default Algorithm";
+    }
+
+    @Override
+    public String algorithmDescription() {
+        return "The Default Algorithm: Robot do nothing.";
     }
 }

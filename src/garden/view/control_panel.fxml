@@ -11,7 +11,6 @@
         <Button fx:id="assignDefalutAlg" mnemonicParsing="false" text="AssignDefalutAlg"/>
         <Button fx:id="assignGatheringAlg" mnemonicParsing="false" text="AssignGatheringAlg"/>
         <Button fx:id="randomCreateRobots" mnemonicParsing="false" text="Random Create Connected Robots 30"/>
-        <ComboBox prefWidth="150.0"/>
-        <ChoiceBox prefWidth="150.0"/>
+        <ComboBox fx:id="algorithmSelection" prefWidth="150.0"/>
     </children>
 </fx:root>

@@ -46,4 +46,14 @@ public class RandomAlgorithm extends Algorithm {
         return point;
 
     }
+
+    @Override
+    public String algorithmName() {
+        return "Random Algorithm";
+    }
+
+    @Override
+    public String algorithmDescription() {
+        return "Robot will go to a random position that is within its vision";
+    }
 }

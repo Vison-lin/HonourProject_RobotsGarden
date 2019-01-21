@@ -22,10 +22,13 @@ import javafx.util.Pair;
 import javafx.util.StringConverter;
 
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 
 public class ControlPanelController extends VBox {
 
@@ -288,6 +291,7 @@ public class ControlPanelController extends VBox {
         value.addAll(allAlgInfo);
         algorithmSelection.setItems(value);
         algorithmSelection.getSelectionModel().select(0);
+        selectedAlgorithm = algorithmSelection.getSelectionModel().getSelectedItem().getValue();//assign the first algorithm as the default selected item
         algorithmSelection.setConverter(new StringConverter<Pair<String, String>>() {
             @Override
             public String toString(Pair<String, String> object) {

@@ -7,14 +7,17 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 
@@ -44,6 +47,9 @@ public class ControlPanelController extends VBox {
     @FXML
     private Button autoRun;
 
+    @FXML
+    private ColorPicker colorPicker;
+
     AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
 
     private List<Robot> robots = Collections.synchronizedList(new ArrayList<>());
@@ -58,8 +64,15 @@ public class ControlPanelController extends VBox {
 
     private boolean isRunning = false;
 
+    public static String robotColor = null;
+
     @FXML
     private TextField autoRunTimeInterval;
+
+    @FXML
+    private TextField inputVision;
+
+    public static String robotVision = null;
 
     public ControlPanelController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../view/control_panel.fxml"));
@@ -72,11 +85,13 @@ public class ControlPanelController extends VBox {
             throw new RuntimeException(e);
         }
 
+        inputVisionListner();
         prevBtnListener();
         nextBtnListener();
         cleanBtnListener();
         randomCreateConnectedRobotsBtnListener();
         autoRunListener();
+        colorPickerListener();
         try {
             algorithmSelectionInit();
         } catch (InstantiationException | InvocationTargetException | ClassNotFoundException e) {
@@ -111,6 +126,20 @@ public class ControlPanelController extends VBox {
             }
         });
     }
+
+    private void inputVisionListner(){
+        inputVision.setText("100");
+        inputVision.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                robotVision = inputVision.getText();
+            }
+        });
+
+
+
+    }
+
 
     private void nextAction() {
         addDeepCopiedRobotList(robotStackPrev, robots);//store the current to the prev
@@ -169,6 +198,10 @@ public class ControlPanelController extends VBox {
                 AlgorithmLoadingHelper helper = new AlgorithmLoadingHelper();
                 robots.clear();
                 gardenController.updateGarden();
+                inputVision.setText("100");
+                robotVision = "100";
+                colorPicker.setValue(Color.BLACK);
+                robotColor = ""+Color.BLACK;
                 //clean prev and next
                 robotStackPrev.clear();
                 robotStackNext.clear();
@@ -241,6 +274,19 @@ public class ControlPanelController extends VBox {
         );
     }
 
+    private void colorPickerListener() {
+        colorPicker.setValue(Color.BLACK);
+        colorPicker.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                robotColor = ""+colorPicker.getValue();
+            }
+        });
+    }
+
+
+
+
     /**
      * @param tag todo
      * @param x
@@ -248,7 +294,7 @@ public class ControlPanelController extends VBox {
      * @return
      */
     public Robot robotGenerator(String tag, double x, double y) {
-        Robot robot = new Robot(new RobotGraphicalDisplay());
+        Robot robot = new Robot(new RobotGraphicalDisplay(robotColor,robotVision));
         robot.moveTo(x, y);
         robot.setTag(tag);
 

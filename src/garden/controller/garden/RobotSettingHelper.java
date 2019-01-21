@@ -23,8 +23,6 @@ class RobotSettingHelper extends BorderPane {
     @FXML
     private Button setAlg;
 
-    private ColorPicker colorPicker;
-
     private Robot robot;
 
     RobotSettingHelper(Robot robot, Window primaryStage) {
@@ -44,8 +42,8 @@ class RobotSettingHelper extends BorderPane {
         } catch (IOException e) {
             e.printStackTrace();
         }
-       // boostAlgorithmSelectionWindow();
-        colorPickerListener();
+       boostAlgorithmSelectionWindow();
+
     }
 
     //todo auto search class name
@@ -59,17 +57,8 @@ class RobotSettingHelper extends BorderPane {
         });
     }
 
-    private void colorPickerListener(){
-        colorPicker.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println(colorPicker.getValue());
-            }
-        });
 
 
-
-    }
 
 
 }

@@ -6,6 +6,7 @@ import garden.model.RobotGraphicalDisplay;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Side;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -144,7 +145,8 @@ public class GardenController extends VBox {
                 if (event.getButton() == MouseButton.MIDDLE) {// for each of the btn that has added event, add one right click listener for it.
                     RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
                 } else if (event.getButton() == MouseButton.SECONDARY) {
-                    robot.getGraphicalDisplay().toggleVisionVisible();
+                    RobotHelper menu = new RobotHelper(robot,controlPanelController.robotColor,controlPanelController.robotVision);
+                    menu.show(robotGraphicalDisplay.getRobotBody(),Side.BOTTOM,0,0);
                     updateGarden();
                 }
             }

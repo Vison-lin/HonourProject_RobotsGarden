@@ -31,6 +31,31 @@ public class RobotGraphicalDisplay {
     }
 
     /**
+     * init with customized color and vision:
+     * <br/>
+     * For robot position: the default radius is 1, and the color is white
+     * <br/>
+     * For robot body: the default radius is 3, and the color is black
+     * <br/>
+     * For robot vision: the default radius is 9, and the color is light blue
+     * <br/>
+     * By default, the robot vision is invisible.
+     */
+    public RobotGraphicalDisplay(String color,String vision) {
+        this.robotPosition = new Circle(3, Color.WHITE);
+        this.robotBody = new Circle(10, Color.BLACK);
+        if(color!=null){
+            this.robotBody = new Circle(10, Color.valueOf(color));
+        }
+        this.robotBorder = new Circle(11, Color.WHITE);
+        this.robotVision = new Circle(100, Color.LIGHTBLUE);
+        if(vision!=null){
+            this.robotVision = new Circle(Integer.valueOf(vision),Color.LIGHTBLUE);
+        }
+        this.visionVisible = false;
+    }
+
+    /**
      * Init with the customized parameters
      *
      * @param robotPosition the precise position of the robot.
@@ -88,8 +113,8 @@ public class RobotGraphicalDisplay {
         return robotVision;
     }
 
-    public void setRobotVision(Circle robotVision) {
-        this.robotVision = robotVision;
+    public void setRobotVision(int robotVision) {
+        this.robotVision.setRadius(robotVision);
     }
 
     /**
@@ -124,6 +149,16 @@ public class RobotGraphicalDisplay {
         this.robotBorder.setTranslateX(x);
         this.robotBorder.setTranslateY(y);
     }
+    /**
+     *  Change the color of robot body
+     *
+     *  @param color the new color value
+     */
+
+    public void setColor(String color){
+        this.robotBody.setFill(Color.valueOf(color));
+    }
+
 
     /**
      * toggle the visibility of the robot's vision.

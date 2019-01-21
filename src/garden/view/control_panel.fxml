@@ -44,5 +44,6 @@
             <TextField fx:id="inputVision" />
          </children>
       </VBox>
+      <Button fx:id="SaveButton" mnemonicParsing="false" text="Save" />
     </children>
 </fx:root>

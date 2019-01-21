@@ -22,7 +22,7 @@ import javafx.util.Pair;
 import javafx.util.StringConverter;
 
 import java.awt.*;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.*;
@@ -46,6 +46,9 @@ public class ControlPanelController extends VBox {
 
     @FXML
     private Button autoRun;
+
+    @FXML
+    private Button SaveButton;
 
     @FXML
     private ColorPicker colorPicker;
@@ -92,6 +95,7 @@ public class ControlPanelController extends VBox {
         randomCreateConnectedRobotsBtnListener();
         autoRunListener();
         colorPickerListener();
+        saveListener();
         try {
             algorithmSelectionInit();
         } catch (InstantiationException | InvocationTargetException | ClassNotFoundException e) {
@@ -126,6 +130,35 @@ public class ControlPanelController extends VBox {
             }
         });
     }
+
+    private void saveListener(){
+        SaveButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(robots.size()!=0){
+                File f = new File("C:/Users/user/Desktop/a.txt");
+                try {
+                    FileOutputStream fop = new FileOutputStream(f);
+                    OutputStreamWriter writer = new OutputStreamWriter(fop);
+                    for(Robot robot:robots){
+
+                        writer.append("Tag: "+robot.getTag()+", Algorithm: ??, "+"robotVision: "+(int)robot.getVision());
+                        writer.append("\r\n");
+
+                    }
+                    writer.close();
+                    fop.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            }
+        });
+
+
+    }
+
+
 
     private void inputVisionListner(){
         inputVision.setText("100");

@@ -3,9 +3,9 @@ package garden.controller.garden;
 import garden.model.Robot;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 
 
 public class RobotHelper extends ContextMenu {
@@ -22,9 +22,11 @@ public class RobotHelper extends ContextMenu {
     private MenuItem setColor;
     private MenuItem showVision;
     private MenuItem setVision;
+    private GardenController gardenController;
 
-    public RobotHelper(Robot robot, String robotColor,String robotVision)
+    public RobotHelper(GardenController gardenController, Robot robot, String robotColor, String robotVision)
     {
+        this.gardenController = gardenController;
         this.robot = robot;
         this.robotColor = robotColor;
         this.robotVision = robotVision;
@@ -48,7 +50,7 @@ public class RobotHelper extends ContextMenu {
             @Override
             public void handle(ActionEvent event) {
                 robot.getGraphicalDisplay().setColor(robotColor);
-
+                //no need to call update because it changed the node directly.
             }
         });
     }
@@ -58,7 +60,7 @@ public class RobotHelper extends ContextMenu {
             @Override
             public void handle(ActionEvent event) {
                 robot.getGraphicalDisplay().toggleVisionVisible();
-
+                gardenController.updateGarden();
             }
         });
     }
@@ -67,8 +69,9 @@ public class RobotHelper extends ContextMenu {
         setVision.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                System.out.println(robotVision);
                 robot.getGraphicalDisplay().setRobotVision(Integer.valueOf(robotVision));
-
+                gardenController.updateGarden();
             }
         });
     }

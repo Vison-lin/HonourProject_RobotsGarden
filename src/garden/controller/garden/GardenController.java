@@ -30,6 +30,8 @@ public class GardenController extends VBox {
 
     private ControlPanelController controlPanelController;
 
+    private GardenController gardenController = this;
+
     /**
      * The garden instance
      */
@@ -145,7 +147,7 @@ public class GardenController extends VBox {
                 if (event.getButton() == MouseButton.MIDDLE) {// for each of the btn that has added event, add one right click listener for it.
                     RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
                 } else if (event.getButton() == MouseButton.SECONDARY) {
-                    RobotHelper menu = new RobotHelper(robot,controlPanelController.robotColor,controlPanelController.robotVision);
+                    RobotHelper menu = new RobotHelper(gardenController, robot, ControlPanelController.robotColor, ControlPanelController.robotVision);
                     menu.show(robotGraphicalDisplay.getRobotBody(),Side.BOTTOM,0,0);
                     updateGarden();
                 }

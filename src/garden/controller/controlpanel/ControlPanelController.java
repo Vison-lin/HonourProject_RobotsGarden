@@ -18,6 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 
@@ -56,6 +58,10 @@ public class ControlPanelController extends VBox {
     @FXML
     private ColorPicker colorPicker;
 
+    private static final String AUTO_RUN_BTN_TO_START = "Start Auto Run";
+    private static final String AUTO_RUN_BTN_TO_STOP = "STOP";
+    private static final double DEFAULT_ROBOT_VISION = 100;
+
     AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
 
     private List<Robot> robots = Collections.synchronizedList(new ArrayList<>());
@@ -77,8 +83,9 @@ public class ControlPanelController extends VBox {
 
     @FXML
     private TextField inputVision;
-
-    public static String robotVision = null;
+    @FXML
+    private Text warning;
+    private double selectedRobotVision;
 
     public ControlPanelController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../view/control_panel.fxml"));
@@ -90,7 +97,7 @@ public class ControlPanelController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+        initNodesText();
         inputVisionListner();
         prevBtnListener();
         nextBtnListener();
@@ -110,24 +117,38 @@ public class ControlPanelController extends VBox {
 
     }
 
+    private void initNodesText() {
+        autoRun.setText(AUTO_RUN_BTN_TO_START);
+        inputVision.setText("100");
+        selectedRobotVision = DEFAULT_ROBOT_VISION;
+    }
+
     private void autoRunListener() {
         autoRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (isRunning) {//if is already auto running, stop it
                     isRunning = false;
+                    autoRun.setText(AUTO_RUN_BTN_TO_START);
                 } else {
                     isRunning = true;
                     Task task = new Task<Void>() {//create a new task
                         @Override
                         protected Void call() throws InterruptedException {
                             while (isRunning) {
-                                Platform.runLater(ControlPanelController.this::nextAction);//update in UI thread
-                                Thread.sleep(Integer.valueOf(autoRunTimeInterval.getText()));//todo detect input
+                                try {
+                                    int timeInterval = Integer.valueOf(autoRunTimeInterval.getText());
+                                    Platform.runLater(ControlPanelController.this::nextAction);//update in UI thread
+                                    Thread.sleep(timeInterval);
+                                } catch (NumberFormatException e) {
+                                    warning.setText("Invalid Input! The ms must be an integer!");
+                                    isRunning = false;
+                                }
                             }
                             return null;
                         }
                     };
+                    autoRun.setText(AUTO_RUN_BTN_TO_STOP);//todo disable other Btn
                     new Thread(task).start();
                 }
             }
@@ -145,7 +166,7 @@ public class ControlPanelController extends VBox {
                     OutputStreamWriter writer = new OutputStreamWriter(fop);
                     for(Robot robot:robots){
 
-                        writer.append("Tag: "+robot.getTag()+", Algorithm: ??, "+"robotVision: "+(int)robot.getVision());
+                        writer.append("Tag: " + robot.getTag() + ", Algorithm: ??, " + "selectedRobotVision: " + (int) robot.getVision());
                         writer.append("\r\n");
 
                     }
@@ -164,11 +185,15 @@ public class ControlPanelController extends VBox {
 
 
     private void inputVisionListner(){
-        inputVision.setText("100");
         inputVision.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                robotVision = inputVision.getText();
+                try {
+                    selectedRobotVision = Integer.valueOf(inputVision.getText());//todo must press return to trigger, beeter way? use int or double?
+                } catch (NumberFormatException e) {
+                    warning.setText("Robot Vision must be an int");
+                }
+
             }
         });
 
@@ -235,7 +260,7 @@ public class ControlPanelController extends VBox {
                 robots.clear();
                 gardenController.updateGarden();
                 inputVision.setText("100");
-                robotVision = "100";
+                selectedRobotVision = DEFAULT_ROBOT_VISION;
                 colorPicker.setValue(Color.BLACK);
                 robotColor = ""+Color.BLACK;
                 //clean prev and next
@@ -331,7 +356,12 @@ public class ControlPanelController extends VBox {
      * @return
      */
     public Robot robotGenerator(String tag, double x, double y) {
-        Robot robot = new Robot(new RobotGraphicalDisplay(robotColor,robotVision));
+        Circle robotPosition = new Circle(3, Color.WHITE);
+        Circle robotBody = new Circle(10, Color.BLACK);
+        Circle robotBorder = new Circle(11, Color.WHITE);
+        Circle robotVision = new Circle(selectedRobotVision, Color.LIGHTBLUE);
+        RobotGraphicalDisplay robotGraphicalDisplay = new RobotGraphicalDisplay(robotPosition, robotBody, robotBorder, robotVision, false);
+        Robot robot = new Robot(robotGraphicalDisplay);
         robot.moveTo(x, y);
         robot.setTag(tag);
 
@@ -414,4 +444,11 @@ public class ControlPanelController extends VBox {
         robotStack.add(deepCopied);
     }
 
+    public double getSelectedRobotVision() {
+        return selectedRobotVision;
+    }
+
+    public void setSelectedRobotVision(double selectedRobotVision) {
+        this.selectedRobotVision = selectedRobotVision;
+    }
 }

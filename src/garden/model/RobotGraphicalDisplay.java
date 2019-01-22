@@ -31,31 +31,6 @@ public class RobotGraphicalDisplay {
     }
 
     /**
-     * init with customized color and vision:
-     * <br/>
-     * For robot position: the default radius is 1, and the color is white
-     * <br/>
-     * For robot body: the default radius is 3, and the color is black
-     * <br/>
-     * For robot vision: the default radius is 9, and the color is light blue
-     * <br/>
-     * By default, the robot vision is invisible.
-     */
-    public RobotGraphicalDisplay(String color,String vision) {
-        this.robotPosition = new Circle(3, Color.WHITE);
-        this.robotBody = new Circle(10, Color.BLACK);
-        if(color!=null){
-            this.robotBody = new Circle(10, Color.valueOf(color));
-        }
-        this.robotBorder = new Circle(11, Color.WHITE);
-        this.robotVision = new Circle(100, Color.LIGHTBLUE);
-        if(vision!=null){
-            this.robotVision = new Circle(Integer.valueOf(vision),Color.LIGHTBLUE);
-        }
-        this.visionVisible = false;
-    }
-
-    /**
      * Init with the customized parameters
      *
      * @param robotPosition the precise position of the robot.
@@ -70,7 +45,7 @@ public class RobotGraphicalDisplay {
         }
         if ((robotPosition.getTranslateX() != robotBody.getTranslateX()) || (robotPosition.getTranslateX() != robotVision.getTranslateX()) ||
                 (robotPosition.getTranslateY() != robotBody.getTranslateY()) || (robotPosition.getTranslateY() != robotVision.getTranslateY())) {
-            throw new IllegalArgumentException("The robotPosition does not have the same position as set for robotBody or robotVision. ALL three of them must always be in the same location");
+            throw new IllegalArgumentException("The robotPosition does not have the same position as set for robotBody or selectedRobotVision. ALL three of them must always be in the same location");
         }
         this.robotPosition = robotPosition;
         this.robotBody = robotBody;
@@ -113,7 +88,7 @@ public class RobotGraphicalDisplay {
         return robotVision;
     }
 
-    public void setRobotVision(int robotVision) {
+    public void setRobotVision(double robotVision) {
         this.robotVision.setRadius(robotVision);
     }
 
@@ -131,7 +106,7 @@ public class RobotGraphicalDisplay {
     }
 
     /**
-     * Move robotBody, robotPosition, and robotVision to the same position at the same time
+     * Move robotBody, robotPosition, and selectedRobotVision to the same position at the same time
      *
      * @param x the new x
      * @param y the new y
@@ -201,7 +176,7 @@ public class RobotGraphicalDisplay {
         newRobotBorder.setTranslateY(this.robotBorder.getTranslateY());
         deepCopyFillHelper(newRobotBorder, red3, green3, blue3, opacity3);
 
-        //deep copy robotVision
+        //deep copy selectedRobotVision
         Circle newRobotVision = new Circle(this.robotVision.getRadius());
         double red4 = ((Color) this.robotVision.getFill()).getRed();
         double green4 = ((Color) this.robotVision.getFill()).getGreen();

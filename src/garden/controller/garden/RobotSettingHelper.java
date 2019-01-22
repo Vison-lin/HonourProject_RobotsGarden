@@ -1,6 +1,5 @@
 package garden.controller.garden;
 
-import garden.algorithms.GatheringAlgorithm;
 import garden.model.Robot;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,8 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -24,6 +23,9 @@ class RobotSettingHelper extends BorderPane {
     private Button setAlg;
 
     private Robot robot;
+
+    @FXML
+    private ColorPicker colorPicker;
 
     RobotSettingHelper(Robot robot, Window primaryStage) {
         this.robot = robot;
@@ -48,11 +50,20 @@ class RobotSettingHelper extends BorderPane {
 
     //todo auto search class name
     private void boostAlgorithmSelectionWindow() {
-        setAlg.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//        setAlg.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                System.out.println("!!");
+////                robot.setAlgorithm(new GatheringAlgorithm(robot));
+//                robot.getGraphicalDisplay().
+//            }
+//        });
+        colorPicker.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(MouseEvent event) {
-                System.out.println("!!");
-                robot.setAlgorithm(new GatheringAlgorithm(robot));
+            public void handle(ActionEvent event) {
+
+                System.out.println("!!!!!!!");
+                colorPicker.setValue(Color.RED);
             }
         });
     }

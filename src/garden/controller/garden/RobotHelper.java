@@ -17,14 +17,14 @@ public class RobotHelper extends ContextMenu {
 
     private String robotColor;
 
-    private String robotVision;
+    private double robotVision;
 
     private MenuItem setColor;
     private MenuItem showVision;
     private MenuItem setVision;
     private GardenController gardenController;
 
-    public RobotHelper(GardenController gardenController, Robot robot, String robotColor, String robotVision)
+    public RobotHelper(GardenController gardenController, Robot robot, String robotColor, double robotVision)
     {
         this.gardenController = gardenController;
         this.robot = robot;
@@ -70,7 +70,7 @@ public class RobotHelper extends ContextMenu {
             @Override
             public void handle(ActionEvent event) {
                 System.out.println(robotVision);
-                robot.getGraphicalDisplay().setRobotVision(Integer.valueOf(robotVision));
+                robot.getGraphicalDisplay().setRobotVision(robotVision);
                 gardenController.updateGarden();
             }
         });

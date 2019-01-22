@@ -62,7 +62,7 @@ public class ControlPanelController extends VBox {
     private static final String AUTO_RUN_BTN_TO_STOP = "STOP";
     private static final double DEFAULT_ROBOT_VISION = 100;
 
-    AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
+    private AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
 
     private List<Robot> robots = Collections.synchronizedList(new ArrayList<>());
 
@@ -85,7 +85,11 @@ public class ControlPanelController extends VBox {
     private TextField inputVision;
     @FXML
     private Text warning;
+
     private double selectedRobotVision;
+
+    @FXML
+    private TextField numberOfAutoCreatedRobots;
 
     public ControlPanelController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../view/control_panel.fxml"));
@@ -274,38 +278,45 @@ public class ControlPanelController extends VBox {
         randomCreateRobots.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                //clean the screen
-                robots.removeAll(robots);
-                Random random = new Random();
 
-                //init first one
-                double maxX = (int) gardenController.getWidth() + 1;
-                double maxY = (int) gardenController.getHeight() + 1;
-                int ctr = 0;
-                Robot initRobot = robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY));
+                try {
+                    int numOfNewRobots = Integer.valueOf(numberOfAutoCreatedRobots.getText());
 
-                //create the rest
-                for (int i = 1; i < 15; i++) {
-                    double xBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionX() + initRobot.getVision(), maxX);
-                    double xBoundLow = validateWithinTheEnclosingSquare(initRobot.getPositionX() - initRobot.getVision(), maxX);
-                    double yBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionY() + initRobot.getVision(), maxY);
-                    double yBoundLow = validateWithinTheEnclosingSquare(initRobot.getPositionY() - initRobot.getVision(), maxY);
-                    //check if is within the circle
-                    double distance = Double.POSITIVE_INFINITY;
-                    double currX = 0;
-                    double currY = 0;
-                    while (distance > initRobot.getVision()) {
-                        double x = initRobot.getPositionX();
-                        double y = initRobot.getPositionY();
-                        currX = random.nextInt((int) (xBoundUp - xBoundLow + 1)) + xBoundLow;
-                        currY = random.nextInt((int) (yBoundUp - yBoundLow + 1)) + yBoundLow;
-                        double differX = currX - x;
-                        double differY = currY - y;
-                        distance = Math.sqrt(Math.pow(differX, 2) + Math.pow(differY, 2));
+                    //clean the screen
+                    robots.removeAll(robots);
+                    Random random = new Random();
+
+                    //init first one
+                    double maxX = (int) gardenController.getWidth() + 1;
+                    double maxY = (int) gardenController.getHeight() + 1;
+                    int ctr = 0;
+                    Robot initRobot = robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY));
+
+                    //create the rest
+                    for (int i = 1; i < numOfNewRobots; i++) {
+                        double xBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionX() + initRobot.getVision(), maxX);
+                        double xBoundLow = validateWithinTheEnclosingSquare(initRobot.getPositionX() - initRobot.getVision(), maxX);
+                        double yBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionY() + initRobot.getVision(), maxY);
+                        double yBoundLow = validateWithinTheEnclosingSquare(initRobot.getPositionY() - initRobot.getVision(), maxY);
+                        //check if is within the circle
+                        double distance = Double.POSITIVE_INFINITY;
+                        double currX = 0;
+                        double currY = 0;
+                        while (distance > initRobot.getVision()) {
+                            double x = initRobot.getPositionX();
+                            double y = initRobot.getPositionY();
+                            currX = random.nextInt((int) (xBoundUp - xBoundLow + 1)) + xBoundLow;
+                            currY = random.nextInt((int) (yBoundUp - yBoundLow + 1)) + yBoundLow;
+                            double differX = currX - x;
+                            double differY = currY - y;
+                            distance = Math.sqrt(Math.pow(differX, 2) + Math.pow(differY, 2));
+                        }
+                        initRobot = robotGenerator(" =>" + ctr + "<= ", currX, currY);
                     }
-                    initRobot = robotGenerator(" =>" + ctr + "<= ", currX, currY);
+                    gardenController.updateGarden();
+                } catch (NumberFormatException e) {
+                    warning.setText("The Number of Random Created Robots Must Be an Integer!!!");
                 }
-                gardenController.updateGarden();
             }
         });
     }

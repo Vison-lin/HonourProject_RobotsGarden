@@ -27,7 +27,7 @@ public class RobotsLabController extends HBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        resizeGardenWindow();
+//        resizeGardenWindow();
     }
 
     private void resizeGardenWindow() {

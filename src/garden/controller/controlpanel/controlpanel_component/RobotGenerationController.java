@@ -42,7 +42,7 @@ public class RobotGenerationController extends VBox {
 
     private double selectedRobotVision;
 
-    private Paint selectedRobotColor;
+    private Paint selectedRobotColor = Color.BLACK;
 
     private List<Robot> robots;
 

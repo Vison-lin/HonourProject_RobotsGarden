@@ -52,8 +52,6 @@ public class AutoGenerationController extends VBox {
                 try {
                     int numOfNewRobots = Integer.valueOf(numberOfAutoCreatedRobots.getText());
 
-                    //clean the screen
-                    robots.removeAll(robots);
                     Random random = new Random();
 
                     //init first one

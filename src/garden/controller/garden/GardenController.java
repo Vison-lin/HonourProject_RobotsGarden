@@ -1,6 +1,7 @@
 package garden.controller.garden;
 
 import garden.controller.controlpanel.ControlPanelController;
+import garden.controller.controlpanel.controlpanel_component.RobotGenerationController;
 import garden.model.Robot;
 import garden.model.RobotGraphicalDisplay;
 import javafx.event.EventHandler;
@@ -11,6 +12,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.io.IOException;
@@ -120,7 +122,11 @@ public class GardenController extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY) {// add listener for left click
-                    controlPanelController.robotGenerator("New Robot", event.getX(), event.getY());
+                    Circle robotPosition = new Circle(3, Color.WHITE);
+                    Circle robotBody = new Circle(10, Color.BLACK);
+                    Circle robotBorder = new Circle(11, Color.WHITE);
+                    Circle robotVision = new Circle(RobotGenerationController.DEFAULT_ROBOT_VISION, Color.LIGHTBLUE);
+                    controlPanelController.getRobotGenerationController().robotGenerator("New Robot", event.getX(), event.getY(), robotPosition, robotBody, robotBorder, robotVision);
                     //adding to the graph
                     updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
                 }
@@ -147,7 +153,7 @@ public class GardenController extends VBox {
                 if (event.getButton() == MouseButton.MIDDLE) {// for each of the btn that has added event, add one right click listener for it.
                     RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
                 } else if (event.getButton() == MouseButton.SECONDARY) {
-                    RobotHelper menu = new RobotHelper(gardenController, robot, ControlPanelController.robotColor, controlPanelController.getSelectedRobotVision());
+                    RobotHelper menu = new RobotHelper(gardenController, robot, controlPanelController.getRobotGenerationController().getSelectedRobotColor(), controlPanelController.getSelectedRobotVision());
                     menu.show(robotGraphicalDisplay.getRobotBody(),Side.BOTTOM,0,0);
                     updateGarden();
                 }

@@ -1,6 +1,7 @@
 package garden.model;
 
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 public class RobotGraphicalDisplay {
@@ -130,8 +131,8 @@ public class RobotGraphicalDisplay {
      *  @param color the new color value
      */
 
-    public void setColor(String color){
-        this.robotBody.setFill(Color.valueOf(color));
+    public void setColor(Paint color) {
+        this.robotBody.setFill(color);
     }
 
 

@@ -22,17 +22,16 @@ public class GatheringAlgorithm extends Algorithm{
     private double range;
 
     private Robot robot;
-    public GatheringAlgorithm(Robot robot){
-        super(robot);
+
     public GatheringAlgorithm() {
         super();
 //        this.iter = iter;
 //        this.todo = todo;
 //        this.state = state;
 //        this.range = range;
-        this.robot = robot;
-        this.state = new ArrayList<>(robot.getSensor().getAllVisibleRobotsInLocalScale());
-        this.range = robot.getVision();
+       // this.robot = robot;
+       // this.state = new ArrayList<>(robot.getSensor().getAllVisibleRobotsInLocalScale());
+       // this.range = robot.getVision();
 
     }
 
@@ -297,6 +296,7 @@ public class GatheringAlgorithm extends Algorithm{
     public Point next(List<Robot> robotList) {
 //        System.out.println(getRobot().getSensor().getGlobalRobots().size());
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
+        this.range = state.get(0).getVision();
 //        System.out.println("=====================================");
         int count = 1;
 //        for (Robot robot : state) {

@@ -2,6 +2,7 @@ package garden.model;
 
 import garden.algorithms.DefaultAlgorithm;
 import garden.core.Algorithm;
+import garden.core.AlgorithmClassLoader;
 
 import java.awt.*;
 import java.util.List;
@@ -33,7 +34,7 @@ public class Robot {
     /**
      * The algorithm associate with this robot. Note that the default value is DefaultAlgorithm, which do nothing.
      */
-    private Algorithm algorithm = new DefaultAlgorithm(this);
+    private Algorithm algorithm;
 
     /**
      * Create a new robot object. It will be positioned in (0, 0)
@@ -42,6 +43,8 @@ public class Robot {
     public Robot(RobotGraphicalDisplay graphicalDisplay) {
         this.graphicalDisplay = graphicalDisplay;
         this.sensor = new Sensor(this);
+        this.algorithm = new DefaultAlgorithm();
+        algorithm.setRobot(this);
     }
 
     /**
@@ -144,6 +147,9 @@ public class Robot {
 
     public void setAlgorithm(Algorithm algorithm) {
         this.algorithm = algorithm;
+//        if (this.algorithm.getRobot() == null) {
+        this.algorithm.setRobot(this);
+//        }
     }
 
     public String getTag() {
@@ -159,12 +165,16 @@ public class Robot {
      *
      * @return the new deepCopied Robot Object.
      */
-    public Robot deepCopy() {
+    public Robot deepCopy() throws ClassNotFoundException {
         RobotGraphicalDisplay newRobotGraphicalDisplay = this.graphicalDisplay.deepCopy();
         Robot newRobot = new Robot(newRobotGraphicalDisplay);
         Sensor newSensor = new Sensor(newRobot);
         newRobot.setSensor(newSensor);
-        newRobot.setAlgorithm(this.algorithm);
+        //deep copy algorithm: create a new algorithm instance and return it.
+        Algorithm algorithm;
+        algorithm = AlgorithmClassLoader.getAlgorithmInstanceByName(this.algorithm.getClass().getSimpleName());
+        algorithm.setRobot(newRobot);
+        newRobot.setAlgorithm(algorithm);
         return newRobot;
     }
 

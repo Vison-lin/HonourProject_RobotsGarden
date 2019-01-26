@@ -24,6 +24,8 @@ public class GatheringAlgorithm extends Algorithm{
     private Robot robot;
     public GatheringAlgorithm(Robot robot){
         super(robot);
+    public GatheringAlgorithm() {
+        super();
 //        this.iter = iter;
 //        this.todo = todo;
 //        this.state = state;
@@ -293,6 +295,7 @@ public class GatheringAlgorithm extends Algorithm{
 
     @Override
     public Point next(List<Robot> robotList) {
+//        System.out.println(getRobot().getSensor().getGlobalRobots().size());
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
 //        System.out.println("=====================================");
         int count = 1;
@@ -316,4 +319,5 @@ public class GatheringAlgorithm extends Algorithm{
     public String algorithmDescription() {
         return "Robot will try to go to the position that has most other robots";
     }
+
 }

@@ -62,7 +62,7 @@ class RobotSettingHelper extends BorderPane {
             @Override
             public void handle(ActionEvent event) {
 
-                System.out.println("!!!!!!!");
+//                System.out.println("!!!!!!!");
                 colorPicker.setValue(Color.RED);
             }
         });

@@ -1,8 +1,8 @@
 package garden.controller.controlpanel;
 
+import garden.core.Algorithm;
 import garden.core.AlgorithmClassLoader;
 import garden.model.Robot;
-import garden.model.RobotGraphicalDisplay;
 import javafx.util.Pair;
 
 import java.io.File;
@@ -23,7 +23,7 @@ public class AlgorithmLoadingHelper {
      *
      * @return list of Pairs with type <String, String> where the first one (Key) represents the algorithm's displaying name, and the second one (Value) is the file name of the algorithm. Note all the algorithm have to be placed under folder /src/garden/algorithms.
      */
-    public List<Pair<String, String>> getAlgorithmList() throws IllegalStateException, InvocationTargetException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public List<Pair<String, String>> getAlgorithmList() throws IllegalStateException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         ArrayList<Pair<String, String>> algorithmList = new ArrayList<>();
 
@@ -33,13 +33,12 @@ public class AlgorithmLoadingHelper {
         File algFolder = new File(algPath);
         File[] algFiles = algFolder.listFiles();
 
-        Robot temp = new Robot(new RobotGraphicalDisplay());//temp created robot just for calling the method algorithmName();
         for (int i = 0; i < algFiles.length; i++) {
             if (algFiles[i].isFile()) {//load files only
                 String algFileName = algFiles[i].getName();
                 if (algFileName.length() > 5) {
                     String algName = algFileName.substring(0, algFileName.length() - 5);//delete .java postfix
-                    String nameOfAlg = AlgorithmClassLoader.getSelectedAssignedAlgorithm(algName, temp).algorithmName();
+                    String nameOfAlg = AlgorithmClassLoader.getAlgorithmInstanceByName(algName).algorithmName();
                     algorithmList.add(new Pair<>(nameOfAlg, algName));
                 }
             }
@@ -56,13 +55,14 @@ public class AlgorithmLoadingHelper {
      * This method will assign the given robot with the given algorithm in String
      *
      * @param robot     the robot instance that needs to apply the algorithm
-     * @param algorithm the name of the algorithm that needs to apply to the robot
+     * @param algorithmName the name of the algorithm that needs to apply to the robot
      */
-    public void assignAlgorithmToRobot(Robot robot, String algorithm) {
-        AlgorithmClassLoader.setSelectedAlgorithm(algorithm);
+    public void assignAlgorithmToRobot(Robot robot, String algorithmName) {
         try {
-            robot.setAlgorithm(AlgorithmClassLoader.getSelectedAssignedAlgorithm(robot));
-        } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
+            Algorithm algorithm = AlgorithmClassLoader.getAlgorithmInstanceByName(algorithmName);
+            algorithm.setRobot(robot);
+            robot.setAlgorithm(algorithm);
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" prefHeight="60.0" prefWidth="471.0" type="javafx.scene.layout.VBox"
+         xmlns="http://javafx.com/javafx/8.0.172-ea">
+
+    <VBox prefHeight="100.0" prefWidth="200.0">
+        <children>
+            <Button fx:id="randomCreateRobots" mnemonicParsing="false" text="Random Create Connected Robots"/>
+            <TextField fx:id="numberOfAutoCreatedRobots"/>
+        </children>
+    </VBox>
+
+</fx:root>

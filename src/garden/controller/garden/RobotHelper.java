@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.paint.Paint;
 
 
 public class RobotHelper extends ContextMenu {
@@ -15,7 +16,7 @@ public class RobotHelper extends ContextMenu {
 
     private Robot robot;
 
-    private String robotColor;
+    private Paint robotColor;
 
     private double robotVision;
 
@@ -24,7 +25,7 @@ public class RobotHelper extends ContextMenu {
     private MenuItem setVision;
     private GardenController gardenController;
 
-    public RobotHelper(GardenController gardenController, Robot robot, String robotColor, double robotVision)
+    public RobotHelper(GardenController gardenController, Robot robot, Paint robotColor, double robotVision)
     {
         this.gardenController = gardenController;
         this.robot = robot;

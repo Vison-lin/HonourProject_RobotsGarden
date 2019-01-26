@@ -84,13 +84,13 @@ public class Sensor {
 
         //deep copy (partially): Ensure the modification, especially for location on the localRobotList will not affect the globalRobotsList
         for (Robot robot : globalRobots) {
-//            Circle graphicalDisplay = new Circle(robot.getGraphicalDisplay().getRadius(), robot.getGraphicalDisplay().getFill());
-//            graphicalDisplay.setTranslateX(robot.getGraphicalDisplay().getTranslateX());
-//            graphicalDisplay.setTranslateY(robot.getGraphicalDisplay().getTranslateY());
-//            Robot newRobotInstance = new Robot(graphicalDisplay, robot.getSensor().vision, robot.getLog());
-//            newRobotInstance.setAlgorithm(robot.getAlgorithm());
-//            newRobotInstance.setSensor(this);
-            Robot newRobotInstance = robot.deepCopy();
+            Robot newRobotInstance = null;
+            try {
+                newRobotInstance = robot.deepCopy();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                System.exit(0);
+            }
             localRobotsList.add(newRobotInstance);
         }
 

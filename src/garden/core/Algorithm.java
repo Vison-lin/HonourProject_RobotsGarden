@@ -13,18 +13,8 @@ public abstract class Algorithm {
      */
     private Robot robot;
 
-    protected Algorithm() {
+    public Algorithm() {
     }
-
-    /**
-     * Create a new Algorithm class with the associated robot.
-     *
-     * @param robot The robot instance that this algorithm deal with
-     */
-    protected Algorithm(Robot robot) {
-        this.robot = robot;
-    }
-
 
     /**
      * CORE METHOD:

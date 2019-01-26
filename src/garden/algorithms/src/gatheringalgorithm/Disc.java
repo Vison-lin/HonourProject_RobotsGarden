@@ -107,13 +107,6 @@ public class Disc {
         double y0 = (c*a1-a*a2)/theta;
         double rSquared = Math.pow(p1.getX()-x0, 2)+Math.pow(p1.getY()-y0, 2);
 
-
-
-
-
-
-
-
         discResult rs = new discResult(x0,y0,rSquared);
 
         return rs;
@@ -128,5 +121,7 @@ public class Disc {
         return center;
     }
 
-
+    public double getrSquared() {
+        return rSquared;
+    }
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GatheringAlgorithm extends Algorithm{
+public class GatheringGoToSec extends Algorithm{
 
 
     private int iter;
@@ -22,7 +22,7 @@ public class GatheringAlgorithm extends Algorithm{
     private double range;
 
     private Robot robot;
-    public GatheringAlgorithm(Robot robot){
+    public GatheringGoToSec(Robot robot){
         super(robot);
 //        this.iter = iter;
 //        this.todo = todo;
@@ -36,53 +36,6 @@ public class GatheringAlgorithm extends Algorithm{
 
 
 
-
-
-//    public Boolean generate( ArrayList<Robot> state, int range){
-//        if(todo==0){
-//            return true;
-//        }
-//
-//        //ArrayList<Robot> uniques = getUniqueRobots(state);
-//        ArrayList newState = new ArrayList();
-//        for(Robot robot:state){
-//            ArrayList<Point> visibles = findRobotsVisible(robot,uniques,range);
-//            //Todo robot need faulty type.
-//            if(visibles.size()<2){
-//                newState.add(robot);
-//                continue;
-//            }
-//            Disc C = miniDisc(visibles);
-//            ArrayList rs = new ArrayList();
-//            for(Point p:visibles){
-//                if(p.getX()!=robot.getPositionX()|| p.getY()!= robot.getPositionY()){
-//                    rs.add(p);
-//                }
-//            }
-//            Point currRobot  = new Point();
-//            currRobot.setLocation(robot.getPositionX(),robot.getPositionY());
-//            Point connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
-//            //Todo disscussion
-//
-//
-//
-//
-//        }
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//       return generate(iter+1,todo-1,newState,range);
-//    }
-
     public Point generateOneRobot (ArrayList<Robot>visibles , double range){
         Point result = new Point();
         ArrayList newState = new ArrayList();
@@ -92,10 +45,7 @@ public class GatheringAlgorithm extends Algorithm{
             return result;
         }
         Disc C = miniDisc(visibles);
-        System.out.println("r: "+C.getrSquared());
-        System.out.println("Robot:"+robot.getPosition());
-        System.out.println("center:"+ C.getCenter());
-        System.out.println("center Global:"+robot.getSensor().convertToGlobal(C.getCenter()));
+
         ArrayList rs = new ArrayList();
         for(Robot p:visibles){
             if(p.getPositionX()!=0.0|| p.getPositionY()!= 0.0){
@@ -105,8 +55,10 @@ public class GatheringAlgorithm extends Algorithm{
         Point currRobot  = new Point();
         currRobot.setLocation(0.0,0.0);
         Point connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
-        System.out.println("Final:" +connectedCenter);
-        System.out.println("Final Global:"+robot.getSensor().convertToGlobal(connectedCenter));
+
+
+
+
         return connectedCenter;
 
 
@@ -173,7 +125,7 @@ public class GatheringAlgorithm extends Algorithm{
             }
         }
 
-      return visible;
+        return visible;
     }
 
     /**
@@ -234,16 +186,15 @@ public class GatheringAlgorithm extends Algorithm{
      */
     private Disc miniDiscWith2Points(ArrayList<Robot> P,Point q1,Point q2){
         Disc D0 = new Disc(q1,q2);
-        //System.out.println("3:suceess");
+//        System.out.println("3:suceess");
         for (Robot pk : P){
             if(!D0.contains(pk.getPosition())){
-                System.out.println("3:suceess");
                 D0 = new Disc(q1,q2,pk.getPosition());
             }
         }
 
 
-    return D0;
+        return D0;
     }
 
 
@@ -277,7 +228,7 @@ public class GatheringAlgorithm extends Algorithm{
         double limit = test.get(0);
 
         for(double num:test){
-           System.out.println("Ds: "+num);
+            System.out.println("Ds: "+num);
             if(num<limit){
                 limit = num;
             }
@@ -285,7 +236,7 @@ public class GatheringAlgorithm extends Algorithm{
 //        System.out.println("Limit is: "+limit);
 
         double D = Math.min(Vgoal.getNorm(),limit);
-        System.out.println("D: "+D*D);
+
         return Vgoal.resize(D).getEnd();
 
     }
@@ -302,14 +253,14 @@ public class GatheringAlgorithm extends Algorithm{
 //        this.state = robotList;
 //        System.out.println("Has visible size: "+state.size());
         Point point = generateOneRobot(new ArrayList<>(state),range);
-      //  System.out.println("rsX: "+ point.getX()+" rsY: "+point.getY());
+        //  System.out.println("rsX: "+ point.getX()+" rsY: "+point.getY());
 
         return point;
     }
 
     @Override
     public String algorithmName() {
-        return "Gathering Algorithm";
+        return "GatheringGoToSEC";
     }
 
     @Override

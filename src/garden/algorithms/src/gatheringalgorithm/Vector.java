@@ -29,6 +29,7 @@ public class Vector {
      */
     private double norm;
 
+
     public Vector(Point p1,Point p2){
         this.start = p1;
         this.end  = p2;
@@ -88,6 +89,7 @@ public class Vector {
     public double getNorm(){
         return this.norm;
     }
+
 
     public Point getEnd(){
         return this.end;

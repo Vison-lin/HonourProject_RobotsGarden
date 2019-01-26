@@ -29,8 +29,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class ControlPanelController extends VBox {
 
@@ -59,7 +59,9 @@ public class ControlPanelController extends VBox {
     private ColorPicker colorPicker;
 
     private static final String AUTO_RUN_BTN_TO_START = "Start Auto Run";
+
     private static final String AUTO_RUN_BTN_TO_STOP = "STOP";
+
     private static final double DEFAULT_ROBOT_VISION = 100;
 
     private AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
@@ -123,7 +125,7 @@ public class ControlPanelController extends VBox {
 
     private void initNodesText() {
         autoRun.setText(AUTO_RUN_BTN_TO_START);
-        inputVision.setText("100");
+        inputVision.setText(DEFAULT_ROBOT_VISION + "");
         selectedRobotVision = DEFAULT_ROBOT_VISION;
     }
 

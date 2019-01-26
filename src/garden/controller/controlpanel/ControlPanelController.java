@@ -217,7 +217,13 @@ public class ControlPanelController extends VBox {
             ArrayList<Robot> localRobotsList = new ArrayList<>();
             //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
             for (Robot robot : robots) {
-                Robot newRobotInstance = robot.deepCopy();
+                Robot newRobotInstance = null;
+                try {
+                    newRobotInstance = robot.deepCopy();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                    System.exit(0);
+                }
                 localRobotsList.add(newRobotInstance);
             }
 
@@ -452,7 +458,12 @@ public class ControlPanelController extends VBox {
         List<Robot> deepCopied = new ArrayList<>();
         while (iterator.hasNext()) {
             Robot curr = iterator.next();
-            deepCopied.add(curr.deepCopy());
+            try {
+                deepCopied.add(curr.deepCopy());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                System.exit(0);
+            }
         }
         robotStack.add(deepCopied);
     }

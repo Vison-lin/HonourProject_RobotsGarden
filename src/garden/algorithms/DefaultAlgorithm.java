@@ -10,14 +10,6 @@ import java.util.List;
  * This represent the default behavior of each robot -- Do nothing: robot will stay where they are in each step. All the robots will be init with this algorithm.
  */
 public class DefaultAlgorithm extends Algorithm {
-    /**
-     * Create a new Algorithm class with the associated robot.
-     *
-     * @param robot The robot instance that this algorithm deal with
-     */
-    public DefaultAlgorithm(Robot robot) {
-        super(robot);
-    }
 
     /**
      * This is a default behavior for each robot. So do nothing.

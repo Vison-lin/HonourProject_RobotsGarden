@@ -14,14 +14,6 @@ import java.util.Random;
  * Note that this algorithm cannot guarantee that the new location is located within the garden scope. This will be handled in the gardenController.
  */
 public class RandomAlgorithm extends Algorithm {
-    /**
-     * Create a new Algorithm class with the associated robot.
-     *
-     * @param robot The robot instance that this algorithm deal with
-     */
-    public RandomAlgorithm(Robot robot) {
-        super(robot);
-    }
 
     /**
      * Assign robot goes to an arbitrary point that locates within robot's vision

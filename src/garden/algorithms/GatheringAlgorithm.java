@@ -21,14 +21,16 @@ public class GatheringAlgorithm extends Algorithm{
 
     private double range;
 
-    public GatheringAlgorithm(Robot robot){
-        super(robot);
+    public GatheringAlgorithm() {
+        super();
 //        this.iter = iter;
 //        this.todo = todo;
 //        this.state = state;
 //        this.range = range;
-        this.state = new ArrayList<>(robot.getSensor().getAllVisibleRobotsInLocalScale());
-        this.range = robot.getVision();
+
+
+//        this.state = new ArrayList<>(getRobot().getSensor().getAllVisibleRobotsInLocalScale());
+//        this.range = getRobot().getVision();
 
     }
 
@@ -284,8 +286,11 @@ public class GatheringAlgorithm extends Algorithm{
 
     @Override
     public Point next(List<Robot> robotList) {
+//        System.out.println(getRobot().getSensor().getGlobalRobots().size());
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
+        this.range = getRobot().getVision();
 //        System.out.println("=====================================");
+//        System.out.println(state.size());
         int count = 1;
 //        for (Robot robot : state) {
 //            System.out.println("X: " + robot.getPositionX() + ", Y: " + robot.getPositionY()+" ,Point: "+count++);
@@ -307,4 +312,5 @@ public class GatheringAlgorithm extends Algorithm{
     public String algorithmDescription() {
         return "Robot will try to go to the position that has most other robots";
     }
+
 }

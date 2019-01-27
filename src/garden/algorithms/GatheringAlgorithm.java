@@ -12,77 +12,29 @@ import java.util.List;
 
 public class GatheringAlgorithm extends Algorithm{
 
-
-    private int iter;
-
-    private int todo;
-
+    /**
+     *  This list includes visible robots of the current robot
+     */
     private List<Robot> state;
 
+    /**
+     *  The vision range of the current robot
+     */
     private double range;
 
-    private Robot robot;
 
     public GatheringAlgorithm() {
         super();
-//        this.iter = iter;
-//        this.todo = todo;
-//        this.state = state;
-//        this.range = range;
-       // this.robot = robot;
-       // this.state = new ArrayList<>(robot.getSensor().getAllVisibleRobotsInLocalScale());
-       // this.range = robot.getVision();
 
     }
 
-
-
-
-
-//    public Boolean generate( ArrayList<Robot> state, int range){
-//        if(todo==0){
-//            return true;
-//        }
-//
-//        //ArrayList<Robot> uniques = getUniqueRobots(state);
-//        ArrayList newState = new ArrayList();
-//        for(Robot robot:state){
-//            ArrayList<Point> visibles = findRobotsVisible(robot,uniques,range);
-//            //Todo robot need faulty type.
-//            if(visibles.size()<2){
-//                newState.add(robot);
-//                continue;
-//            }
-//            Disc C = miniDisc(visibles);
-//            ArrayList rs = new ArrayList();
-//            for(Point p:visibles){
-//                if(p.getX()!=robot.getPositionX()|| p.getY()!= robot.getPositionY()){
-//                    rs.add(p);
-//                }
-//            }
-//            Point currRobot  = new Point();
-//            currRobot.setLocation(robot.getPositionX(),robot.getPositionY());
-//            Point connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
-//            //Todo disscussion
-//
-//
-//
-//
-//        }
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//       return generate(iter+1,todo-1,newState,range);
-//    }
+    /**
+     *  Apply the gathering algorithm (go-to-center)to calculate the next position of the current robot.
+     *
+     * @param visibles This list includes visible robots of the current robot
+     * @param range The vision range of the current robot
+     * @return
+     */
 
     public Point generateOneRobot (ArrayList<Robot>visibles , double range){
         Point result = new Point();
@@ -94,9 +46,9 @@ public class GatheringAlgorithm extends Algorithm{
         }
         Disc C = miniDisc(visibles);
         System.out.println("r: "+C.getrSquared());
-        System.out.println("Robot:"+robot.getPosition());
+       System.out.println("Robot:"+getRobot().getPosition());
         System.out.println("center:"+ C.getCenter());
-        System.out.println("center Global:"+robot.getSensor().convertToGlobal(C.getCenter()));
+        System.out.println("center Global:"+getRobot().getSensor().convertToGlobal(C.getCenter()));
         ArrayList rs = new ArrayList();
         for(Robot p:visibles){
             if(p.getPositionX()!=0.0|| p.getPositionY()!= 0.0){
@@ -107,7 +59,7 @@ public class GatheringAlgorithm extends Algorithm{
         currRobot.setLocation(0.0,0.0);
         Point connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
         System.out.println("Final:" +connectedCenter);
-        System.out.println("Final Global:"+robot.getSensor().convertToGlobal(connectedCenter));
+        System.out.println("Final Global:"+getRobot().getSensor().convertToGlobal(connectedCenter));
         return connectedCenter;
 
 
@@ -189,7 +141,6 @@ public class GatheringAlgorithm extends Algorithm{
         Point p1 = P.get(0).getPosition();
         Point p2 = P.get(1).getPosition();
         Disc D2 = new Disc(p1,p2);
-//        System.out.println("1:success");
         for(int i= 2;i<P.size();i++){
             Point pi = P.get(i).getPosition();
             if(!D2.contains(pi)){
@@ -235,10 +186,8 @@ public class GatheringAlgorithm extends Algorithm{
      */
     private Disc miniDiscWith2Points(ArrayList<Robot> P,Point q1,Point q2){
         Disc D0 = new Disc(q1,q2);
-        //System.out.println("3:suceess");
         for (Robot pk : P){
             if(!D0.contains(pk.getPosition())){
-                System.out.println("3:suceess");
                 D0 = new Disc(q1,q2,pk.getPosition());
             }
         }
@@ -252,19 +201,17 @@ public class GatheringAlgorithm extends Algorithm{
      * Apply the algorithm to make sure that the next position (ci) of the current robot (Ri) stills maintains connectivity
      * with its neighbours (R)
      *
-     * @param  V
-     * @param  ci
-     * @param  Ri
-     * @param  R
+     * @param  V vison of robot
+     * @param  ci next position of robot
+     * @param  Ri  current position of robot
+     * @param  R visible robots list of current robot
      */
 
     public Point getConnectedCenter(double V,Point ci, Point Ri,ArrayList<Robot> R){
         Vector Vgoal = new Vector(Ri,ci);
-//        System.out.println("norm: "+Vgoal.getNorm());
         if(Vgoal.getNorm()==0){
             return Ri;
         }
-
         ArrayList<Double> test = new ArrayList<Double>();
         for(Robot Rj:R){
             Vector Vrirj = new Vector(Ri,Rj.getPosition());
@@ -276,9 +223,7 @@ public class GatheringAlgorithm extends Algorithm{
             }
         }
         double limit = test.get(0);
-
-        for(double num:test){
-           System.out.println("Ds: "+num);
+        for(double num:test){ ;
             if(num<limit){
                 limit = num;
             }
@@ -296,7 +241,7 @@ public class GatheringAlgorithm extends Algorithm{
     public Point next(List<Robot> robotList) {
 //        System.out.println(getRobot().getSensor().getGlobalRobots().size());
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
-        this.range = state.get(0).getVision();
+        this.range = getRobot().getVision();
 //        System.out.println("=====================================");
         int count = 1;
 //        for (Robot robot : state) {
@@ -312,7 +257,7 @@ public class GatheringAlgorithm extends Algorithm{
 
     @Override
     public String algorithmName() {
-        return "Gathering Algorithm";
+        return "Gathering(Go-To-Center)";
     }
 
     @Override

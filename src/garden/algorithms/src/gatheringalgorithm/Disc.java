@@ -78,7 +78,7 @@ public class Disc {
         double a41 = Math.pow(p3.getX(),2)+Math.pow(p3.getY(),2);
 
         // compute the minors
-        double M11 = p1.getX()*(p2.getY()-p3.getY())-p1.getY()*(p2.getX()-p3.getX())+p2.getX()*p3.getX();
+        double M11 = p1.getX()*(p2.getY()-p3.getY())-p1.getY()*(p2.getX()-p3.getX())+p2.getX()*p3.getY()-p2.getY()*p3.getX();
         double M12 = a21*(p2.getY()-p3.getY())-p1.getY()*(a31-a41)+a31*p3.getY()-p2.getY()*a41;
         double M13 = a21*(p2.getX()-p3.getX())-p1.getX()*(a31-a41)+a31*p3.getX()-p2.getX()*a41;
         double M14 = a21*(p2.getX()*p3.getY()-p2.getY()*p3.getX())-p1.getX()*(a31*p3.getY()-p2.getY()*a41)+
@@ -111,10 +111,6 @@ public class Disc {
 
         return rs;
     }
-
-
-
-
 
 
     public Point getCenter(){

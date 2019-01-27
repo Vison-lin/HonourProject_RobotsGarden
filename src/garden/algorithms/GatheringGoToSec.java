@@ -12,41 +12,44 @@ import java.util.List;
 
 public class GatheringGoToSec extends Algorithm{
 
-
-    private int iter;
-
-    private int todo;
-
+    /**
+     *  The list includes visible robots of the current robot
+     */
     private List<Robot> state;
 
+    /**
+     *  The vision range of the current robot
+     */
     private double range;
 
-    private Robot robot;
-    public GatheringGoToSec(Robot robot){
-        super(robot);
-//        this.iter = iter;
-//        this.todo = todo;
-//        this.state = state;
-//        this.range = range;
-        this.robot = robot;
-        this.state = new ArrayList<>(robot.getSensor().getAllVisibleRobotsInLocalScale());
-        this.range = robot.getVision();
+
+    public GatheringGoToSec() {
+        super();
 
     }
 
+    /**
+     *  Apply the gathering algorithm (go-to-center) to calculate the next position of the current robot.
+     *
+     * @param visibles This list includes visible robots of the current robot
+     * @param range The vision range of the current robot
+     * @return
+     */
 
-
-    public Point generateOneRobot (ArrayList<Robot>visibles , double range){
+    private Point generateOneRobot (ArrayList<Robot>visibles , double range){
         Point result = new Point();
         ArrayList newState = new ArrayList();
-        visibles = getUniqueRobots(visibles);
+        visibles =getUniqueRobots(visibles);
         if (visibles.size()<2){
             result.setLocation(0.0,0.0);
             return result;
         }
         Disc C = miniDisc(visibles);
-
-        ArrayList rs = new ArrayList();
+        System.out.println("r: "+C.getrSquared());
+        System.out.println("Robot:"+getRobot().getPosition());
+        System.out.println("center:"+ C.getCenter());
+        System.out.println("center Global:"+getRobot().getSensor().convertToGlobal(C.getCenter()));
+        ArrayList<Robot> rs = new ArrayList<>();
         for(Robot p:visibles){
             if(p.getPositionX()!=0.0|| p.getPositionY()!= 0.0){
                 rs.add(p);
@@ -55,11 +58,14 @@ public class GatheringGoToSec extends Algorithm{
         Point currRobot  = new Point();
         currRobot.setLocation(0.0,0.0);
         Point connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
+        System.out.println("Final:" +connectedCenter);
+        System.out.println("Final Global:"+getRobot().getSensor().convertToGlobal(connectedCenter));
 
 
+        Vector goal = new Vector(connectedCenter,currRobot);
+        Point destination = goal.resize(Math.sqrt(C.getrSquared())).getEnd();
 
-
-        return connectedCenter;
+        return destination;
 
 
     }
@@ -90,8 +96,8 @@ public class GatheringGoToSec extends Algorithm{
      * @param  robots  a list of all robots
      * @return {Array}
      */
-    public ArrayList getUniqueRobots(ArrayList<Robot> robots){
-        ArrayList uniques = new ArrayList();
+    private ArrayList<Robot> getUniqueRobots(ArrayList<Robot> robots){
+        ArrayList<Robot> uniques = new ArrayList<>();
 
         for(Robot robot:robots){
             ArrayList robotsWithin = findRobotsVisible(robot,uniques,1e-10);
@@ -115,7 +121,7 @@ public class GatheringGoToSec extends Algorithm{
      */
 
     private ArrayList findRobotsVisible(Robot comparedRobot,ArrayList<Robot> state,double range){
-        ArrayList visible  = new ArrayList();
+        ArrayList<Robot> visible  = new ArrayList<>();
 
         for(Robot robot:state ){
             double distanceSquared = Math.pow((comparedRobot.getPositionX()-robot.getPositionX()),2)+
@@ -135,12 +141,11 @@ public class GatheringGoToSec extends Algorithm{
      * @return {Disc} smallest disc containing all points in `P`
      */
 
-    public Disc miniDisc(ArrayList<Robot> P){
+    private Disc miniDisc(ArrayList<Robot> P){
         Collections.shuffle(P);
         Point p1 = P.get(0).getPosition();
         Point p2 = P.get(1).getPosition();
         Disc D2 = new Disc(p1,p2);
-//        System.out.println("1:success");
         for(int i= 2;i<P.size();i++){
             Point pi = P.get(i).getPosition();
             if(!D2.contains(pi)){
@@ -186,7 +191,6 @@ public class GatheringGoToSec extends Algorithm{
      */
     private Disc miniDiscWith2Points(ArrayList<Robot> P,Point q1,Point q2){
         Disc D0 = new Disc(q1,q2);
-//        System.out.println("3:suceess");
         for (Robot pk : P){
             if(!D0.contains(pk.getPosition())){
                 D0 = new Disc(q1,q2,pk.getPosition());
@@ -202,19 +206,17 @@ public class GatheringGoToSec extends Algorithm{
      * Apply the algorithm to make sure that the next position (ci) of the current robot (Ri) stills maintains connectivity
      * with its neighbours (R)
      *
-     * @param  V
-     * @param  ci
-     * @param  Ri
-     * @param  R
+     * @param  V vison of robot
+     * @param  ci next position of robot
+     * @param  Ri  current position of robot
+     * @param  R visible robots list of current robot
      */
 
-    public Point getConnectedCenter(double V,Point ci, Point Ri,ArrayList<Robot> R){
+    private Point getConnectedCenter(double V,Point ci, Point Ri,ArrayList<Robot> R){
         Vector Vgoal = new Vector(Ri,ci);
-//        System.out.println("norm: "+Vgoal.getNorm());
         if(Vgoal.getNorm()==0){
             return Ri;
         }
-
         ArrayList<Double> test = new ArrayList<Double>();
         for(Robot Rj:R){
             Vector Vrirj = new Vector(Ri,Rj.getPosition());
@@ -226,17 +228,13 @@ public class GatheringGoToSec extends Algorithm{
             }
         }
         double limit = test.get(0);
-
-        for(double num:test){
-            System.out.println("Ds: "+num);
+        for(double num:test){ ;
             if(num<limit){
                 limit = num;
             }
         }
-//        System.out.println("Limit is: "+limit);
-
         double D = Math.min(Vgoal.getNorm(),limit);
-
+        System.out.println("D:  "+D*D);
         return Vgoal.resize(D).getEnd();
 
     }
@@ -245,26 +243,19 @@ public class GatheringGoToSec extends Algorithm{
     @Override
     public Point next(List<Robot> robotList) {
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
-//        System.out.println("=====================================");
-        int count = 1;
-//        for (Robot robot : state) {
-//            System.out.println("X: " + robot.getPositionX() + ", Y: " + robot.getPositionY()+" ,Point: "+count++);
-//        }
-//        this.state = robotList;
-//        System.out.println("Has visible size: "+state.size());
+        this.range = getRobot().getVision();
         Point point = generateOneRobot(new ArrayList<>(state),range);
-        //  System.out.println("rsX: "+ point.getX()+" rsY: "+point.getY());
-
         return point;
     }
 
     @Override
     public String algorithmName() {
-        return "GatheringGoToSEC";
+        return "Gathering(Go-To-Sec)";
     }
 
     @Override
     public String algorithmDescription() {
         return "Robot will try to go to the position that has most other robots";
     }
+
 }

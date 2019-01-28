@@ -2,12 +2,14 @@ package garden.controller.garden;
 
 import garden.controller.controlpanel.ControlPanelController;
 import garden.controller.controlpanel.controlpanel_component.RobotGenerationController;
+import garden.core.DisplayComponent;
 import garden.model.Robot;
 import garden.model.RobotGraphicalDisplay;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -57,9 +59,42 @@ public class GardenController extends VBox {
         garden.getChildren().removeAll(garden.getChildren());//remove all the element
         List<Circle> robotsPosition = new ArrayList<>();
         List<Circle> robotsBodyAndBorder = new ArrayList<>();
-//        List<Circle> robotsBody = new ArrayList<>();
-//        List<Circle> robotsBorder = new ArrayList<>();
         List<Circle> robotsVision = new ArrayList<>();
+        List<List<Node>> listOfSetOfBottomLayers = new ArrayList<>();
+
+        //get the index of the deepest bottom layer for all robots
+        int deepestBottomLayer = 0;
+        for (Robot robot : controlPanelController.getRobots()) {
+            int currLayer = robot.getGraphicalDisplay().getBottomLayers().size();
+            if (currLayer > deepestBottomLayer) {
+                deepestBottomLayer = currLayer;
+            }
+        }
+
+        //create list for each layer
+        for (int i = 0; i < deepestBottomLayer; i++) {
+            List<Node> currLayer = new ArrayList<>();
+            listOfSetOfBottomLayers.add(currLayer);
+        }
+
+        //for each robot, insert the bottomLayer into the corresponding bottomLayer set
+        for (int i = 0; i < deepestBottomLayer; i++) {
+            for (Robot robot : controlPanelController.getRobots()) {
+                DisplayComponent currDisplayComponent;
+                try {
+                    currDisplayComponent = robot.getGraphicalDisplay().getBottomLayers().get(i);
+                    listOfSetOfBottomLayers.get(i).add(currDisplayComponent.getDisplayPattern());
+                } catch (IndexOutOfBoundsException ignored) {
+                }//do nothing for the not-exist layer
+            }
+        }
+
+        //add those layers into the garden display list
+        for (int i = deepestBottomLayer - 1; i >= 0; i--) {
+            garden.getChildren().addAll(listOfSetOfBottomLayers.get(i));
+        }
+
+
         for (Robot robot : controlPanelController.getRobots()) {
             RobotGraphicalDisplay robotGraphicalDisplay = robot.getGraphicalDisplay();
             Circle robotPosition = robotGraphicalDisplay.getRobotPosition();
@@ -71,25 +106,20 @@ public class GardenController extends VBox {
             }
             robotsBodyAndBorder.add(robotBorder);
             robotsBodyAndBorder.add(robotBody);
-//            robotsBody.add(robotBody);
-//            robotsBorder.add(robotBorder);
             robotsPosition.add(robotPosition);
         }
         //ensure the vision is always under the border
         garden.getChildren().addAll(robotsVision);
 
-
-        //todo how to display?
-//        //ensure the border is always under the body
-//        garden.getChildren().addAll(robotsBorder);
-//        //ensure the body is always under the position
-//        garden.getChildren().addAll(robotsBody);
-        //ensure the body is always under the position
         garden.getChildren().addAll(robotsBodyAndBorder);
-
 
         //ensure the position is always in front of anything
         garden.getChildren().addAll(robotsPosition);
+
+        //remove unnecessary info (to ensure obliviousness <- KEY OF THE PROJECT)
+        for (Robot robot : controlPanelController.getRobots()) {
+            robot.getGraphicalDisplay().cleanBottomLayers();//todo why change color of position will change directly?
+        }
     }
 
     /**

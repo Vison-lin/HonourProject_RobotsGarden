@@ -1,8 +1,12 @@
 package garden.model;
 
+import garden.core.DisplayComponent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RobotGraphicalDisplay {
 
@@ -11,6 +15,7 @@ public class RobotGraphicalDisplay {
     private Circle robotVision;
     private Circle robotBorder;
     private boolean visionVisible;
+    private List<DisplayComponent> layers;
 
     /**
      * init with the default value:
@@ -29,6 +34,7 @@ public class RobotGraphicalDisplay {
         this.robotBorder = new Circle(11, Color.WHITE);
         this.robotVision = new Circle(100, Color.LIGHTBLUE);
         this.visionVisible = false;
+        this.layers = new ArrayList<>();
     }
 
     /**
@@ -53,6 +59,7 @@ public class RobotGraphicalDisplay {
         this.robotBorder = robotBorder;
         this.robotVision = robotVision;
         this.visionVisible = visionVisible;
+        this.layers = new ArrayList<>();
     }
 
     /**
@@ -202,5 +209,17 @@ public class RobotGraphicalDisplay {
 
     public void setRobotBorder(Circle robotBorder) {
         this.robotBorder = robotBorder;
+    }
+
+    public void insertBottomLayer(DisplayComponent displayComponent) {
+        this.layers.add(displayComponent);
+    }
+
+    public List<DisplayComponent> getBottomLayers() {
+        return this.layers;
+    }
+
+    public void cleanBottomLayers() {
+        this.layers.clear();
     }
 }

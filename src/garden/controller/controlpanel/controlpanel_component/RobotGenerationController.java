@@ -126,7 +126,7 @@ public class RobotGenerationController extends VBox {
             @Override
             public void handle(ActionEvent event) {
                 selectedRobotColor = colorPicker.getValue();
-                System.out.println(selectedRobotColor.toString());
+
             }
         });
     }

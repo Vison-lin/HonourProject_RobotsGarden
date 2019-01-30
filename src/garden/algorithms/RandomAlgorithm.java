@@ -4,6 +4,7 @@ import garden.core.Algorithm;
 import garden.model.Robot;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.Random;
 
@@ -22,7 +23,7 @@ public class RandomAlgorithm extends Algorithm {
      * @return the next position that the robot is going to go.
      */
     @Override
-    public Point next(List<Robot> localRobotList) {
+    public Point2D.Double next(List<Robot> localRobotList) {
 
         Random random = new Random();
         double distance = Double.POSITIVE_INFINITY;
@@ -33,7 +34,7 @@ public class RandomAlgorithm extends Algorithm {
             currY = random.nextInt((int) (2 * getRobot().getVision() + 1)) - getRobot().getVision();
             distance = Math.sqrt(Math.pow(currX, 2) + Math.pow(currY, 2));
         }
-        Point point = new Point();
+        Point2D.Double point = new Point2D.Double();
         point.setLocation(currX, currY);
         return point;
 

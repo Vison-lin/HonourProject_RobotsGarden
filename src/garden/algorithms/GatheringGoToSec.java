@@ -7,6 +7,7 @@ import garden.core.Algorithm;
 import garden.model.Robot;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -40,8 +41,8 @@ public class GatheringGoToSec extends Algorithm{
      * @return
      */
 
-    private Point generateOneRobot (ArrayList<Robot>visibles , double range){
-        Point result = new Point();
+    private Point2D.Double generateOneRobot (ArrayList<Robot>visibles , double range){
+        Point2D.Double result = new Point2D.Double();
         ArrayList newState = new ArrayList();
         visibles =getUniqueRobots(visibles);
         if (visibles.size()<2){
@@ -59,19 +60,19 @@ public class GatheringGoToSec extends Algorithm{
                 rs.add(p);
             }
         }
-        Point currRobot  = new Point();
+        Point2D.Double currRobot  = new Point2D.Double();
         currRobot.setLocation(0.0,0.0);
-        Point connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
+        Point2D.Double connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
         System.out.println("Final:" +connectedCenter);
         System.out.println("Final Global:"+getRobot().getSensor().convertToGlobal(connectedCenter));
-        Point secPoint = getRobot().getSensor().convertToGlobal(connectedCenter);
+        Point2D.Double secPoint = getRobot().getSensor().convertToGlobal(connectedCenter);
         sec = new SEC();
         sec.setCentreX(secPoint.getX());
         sec.setCentreY(secPoint.getY());
         sec.move();
 
         Vector goal = new Vector(connectedCenter,currRobot);
-        Point destination = goal.resize(Math.sqrt(C.getrSquared())).getEnd();
+        Point2D.Double destination = goal.resize(Math.sqrt(C.getrSquared())).getEnd();
 
         return destination;
 
@@ -151,11 +152,11 @@ public class GatheringGoToSec extends Algorithm{
 
     private Disc miniDisc(ArrayList<Robot> P){
         Collections.shuffle(P);
-        Point p1 = P.get(0).getPosition();
-        Point p2 = P.get(1).getPosition();
+        Point2D.Double p1 = P.get(0).getPosition();
+        Point2D.Double p2 = P.get(1).getPosition();
         Disc D2 = new Disc(p1,p2);
         for(int i= 2;i<P.size();i++){
-            Point pi = P.get(i).getPosition();
+            Point2D.Double pi = P.get(i).getPosition();
             if(!D2.contains(pi)){
                 D2 =miniDiscWithPoint(new ArrayList<Robot>(P.subList(0,i)),pi);
             }
@@ -172,12 +173,12 @@ public class GatheringGoToSec extends Algorithm{
      * @return {Disc} smallest enclosing disc for P with q on its boundary
      */
 
-    private Disc miniDiscWithPoint(ArrayList<Robot> P, Point q){
-        Point p1 = P.get(0).getPosition();
+    private Disc miniDiscWithPoint(ArrayList<Robot> P, Point2D.Double q){
+        Point2D.Double p1 = P.get(0).getPosition();
         Disc D1 = new Disc(p1,q);
 //        System.out.println("2:suceess");
         for(int i=1; i<P.size();i++){
-            Point pi = P.get(i).getPosition();
+            Point2D.Double pi = P.get(i).getPosition();
             if(!D1.contains(pi)){
                 D1 = miniDiscWith2Points(new ArrayList<Robot>(P.subList(0,i)),pi,q);
             }
@@ -197,7 +198,7 @@ public class GatheringGoToSec extends Algorithm{
      * @param q2 point {x, y} on the boundary of the new disc
      * @return {Disc} smallest enclosing disc for P with q1 and q2 on its boundary
      */
-    private Disc miniDiscWith2Points(ArrayList<Robot> P,Point q1,Point q2){
+    private Disc miniDiscWith2Points(ArrayList<Robot> P,Point2D.Double q1,Point2D.Double q2){
         Disc D0 = new Disc(q1,q2);
         for (Robot pk : P){
             if(!D0.contains(pk.getPosition())){
@@ -220,7 +221,7 @@ public class GatheringGoToSec extends Algorithm{
      * @param  R visible robots list of current robot
      */
 
-    private Point getConnectedCenter(double V,Point ci, Point Ri,ArrayList<Robot> R){
+    private Point2D.Double getConnectedCenter(double V,Point2D.Double ci, Point2D.Double Ri,ArrayList<Robot> R){
         Vector Vgoal = new Vector(Ri,ci);
         if(Vgoal.getNorm()==0){
             return Ri;
@@ -249,10 +250,10 @@ public class GatheringGoToSec extends Algorithm{
 
 
     @Override
-    public Point next(List<Robot> robotList) {
+    public Point2D.Double next(List<Robot> robotList) {
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
         this.range = getRobot().getVision();
-        Point point = generateOneRobot(new ArrayList<>(state),range);
+        Point2D.Double point = generateOneRobot(new ArrayList<>(state),range);
         getRobot().getGraphicalDisplay().insertBottomLayer(sec);
         return point;
     }

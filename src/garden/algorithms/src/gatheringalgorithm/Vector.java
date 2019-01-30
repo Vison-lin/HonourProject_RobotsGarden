@@ -1,6 +1,7 @@
 package garden.algorithms.src.gatheringalgorithm;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
@@ -11,11 +12,11 @@ public class Vector {
     /**
      * The start point of the vector
      */
-    private Point start;
+    private Point2D.Double start;
     /**
      * The end point of the vector
      */
-    private Point end;
+    private Point2D.Double end;
     /**
      * The delta coordinate of x
      */
@@ -30,7 +31,7 @@ public class Vector {
     private double norm;
 
 
-    public Vector(Point p1,Point p2){
+    public Vector(Point2D.Double p1,Point2D.Double p2){
         this.start = p1;
         this.end  = p2;
         this.deltaX = p2.getX() - p1.getX();
@@ -77,7 +78,7 @@ public class Vector {
         if(this.norm!=newNorm){
             double newDeltaX = this.deltaX*newNorm/this.norm;
             double newDeltaY = this.deltaY*newNorm/this.norm;
-            Point newEnd= new Point();
+            Point2D.Double newEnd= new Point2D.Double();
             newEnd.setLocation(this.start.getX()+newDeltaX,this.start.getY()+newDeltaY);
            vs = new Vector(this.start,newEnd);
             return vs;
@@ -91,7 +92,7 @@ public class Vector {
     }
 
 
-    public Point getEnd(){
+    public Point2D.Double getEnd(){
         return this.end;
     }
 

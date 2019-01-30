@@ -1,6 +1,7 @@
 package garden.algorithms.src.gatheringalgorithm;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 /**
  * This class defines simple behaviours and minimal data of a disc.
@@ -12,7 +13,7 @@ public class Disc {
     /**
      * The middle coordinate of the disc.
      */
-    private Point center;
+    private Point2D.Double center;
 
 
     /**
@@ -35,15 +36,15 @@ public class Disc {
         }
     }
 
-    public Disc(Point p1,Point p2){
-        center = new Point();
+    public Disc(Point2D.Double p1,Point2D.Double p2){
+        center = new Point2D.Double();
         this.center.setLocation((p1.getX()+p2.getX())/2,(p1.getY()+p2.getY())/2);
         this.rSquared = Math.pow((p1.getX()-this.center.getX()),2)+Math.pow((p1.getY()-this.center.getY()),2);
 
     }
 
-    public Disc(Point p1,Point p2,Point p3){
-        center = new Point();
+    public Disc(Point2D.Double p1,Point2D.Double p2,Point2D.Double p3){
+        center = new Point2D.Double();
 
             discResult rs = findDiscWith3Points2(p1,p2,p3);
             this.center.setLocation(rs.x,rs.y);
@@ -56,7 +57,7 @@ public class Disc {
      *
      * @param p coordinates of a given point
      */
-    public Boolean contains (Point p){
+    public Boolean contains (Point2D.Double p){
         double rSquared = Math.pow((p.getX()-this.center.getX()),2)+Math.pow((p.getY()-this.center.getY()),2);
         boolean result = rSquared <= this.rSquared;
         return  result;
@@ -72,7 +73,7 @@ public class Disc {
      * @param  p3 third point
      * @return return a tuple contains coordinates of center and the length of radius
      */
-    private discResult findDiscWith3Points(Point p1,Point p2,Point p3){
+    private discResult findDiscWith3Points(Point2D.Double p1,Point2D.Double p2,Point2D.Double p3){
         double a21 = Math.pow(p1.getX(),2)+Math.pow(p1.getY(),2);
         double a31 = Math.pow(p2.getX(),2)+Math.pow(p2.getY(),2);
         double a41 = Math.pow(p3.getX(),2)+Math.pow(p3.getY(),2);
@@ -95,7 +96,7 @@ public class Disc {
     }
 
 
-    private discResult findDiscWith3Points2(Point p1,Point p2,Point p3){
+    private discResult findDiscWith3Points2(Point2D.Double p1,Point2D.Double p2,Point2D.Double p3){
         double a = p1.getX()-p2.getX();
         double b = p1.getY()-p2.getY();
         double c = p1.getX()-p3.getX();
@@ -113,7 +114,7 @@ public class Disc {
     }
 
 
-    public Point getCenter(){
+    public Point2D.Double getCenter(){
         return center;
     }
 

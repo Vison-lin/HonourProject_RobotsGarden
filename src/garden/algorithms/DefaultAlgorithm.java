@@ -3,7 +3,7 @@ package garden.algorithms;
 import garden.core.Algorithm;
 import garden.model.Robot;
 
-import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.List;
 
 /**
@@ -18,10 +18,10 @@ public class DefaultAlgorithm extends Algorithm {
      * @return the next position that the robot is going to go.
      */
     @Override
-    public Point next(List<Robot> localRobotList) {
-        Point point = new Point();
+    public Point2D.Double next(List<Robot> localRobotList) {
+        Point2D.Double point = new Point2D.Double();
         point.setLocation(0, 0);//by default, not move, so move to 0, 0 in its local coordinate
-        return  point;
+        return point;
     }
 
     @Override

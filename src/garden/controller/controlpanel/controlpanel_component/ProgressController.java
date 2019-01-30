@@ -12,7 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
-import java.awt.*;
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -150,7 +150,7 @@ public class ProgressController extends VBox {
             Iterator<Robot> robotIterator2 = robots.iterator();
             while (robotIterator2.hasNext()) {
                 Robot curr = robotIterator2.next();
-                Point newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
+                Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
                 newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
                 curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
             }
@@ -181,7 +181,7 @@ public class ProgressController extends VBox {
         robotStack.add(deepCopied);
     }
 
-    private Point boundaryCheck(Point point) {
+    private Point2D.Double boundaryCheck(Point2D.Double point) {
         //negative check
         if (point.getX() < 0) {
             point.setLocation(0, point.getY());

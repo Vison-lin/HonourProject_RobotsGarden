@@ -2,6 +2,7 @@ package garden.model;
 
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -31,13 +32,13 @@ public class Sensor {
 
     }
 
-    public Point convertToGlobal(Point point) {
+    public Point.Double convertToGlobal(Point2D.Double point) {
 
         double x = point.getX() + robot.getPositionX();
 
         double y = point.getY() + robot.getPositionY();
 
-        Point result = new Point();
+        Point2D.Double result = new Point2D.Double();
 
         result.setLocation(x, y);
 
@@ -45,13 +46,13 @@ public class Sensor {
 
     }
 
-    public Point convertToLocal(Point point) {
+    public Point2D.Double convertToLocal(Point2D.Double point) {
 
         double x = point.getX() - robot.getPositionX();
 
         double y = point.getY() - robot.getPositionY();
 
-        Point result = new Point();
+        Point2D.Double result = new Point2D.Double();
 
         result.setLocation(x, y);
 
@@ -65,7 +66,7 @@ public class Sensor {
      * @param point the point that represent the global coordinate of the robot to test
      * @return
      */
-    public boolean isWithinVision(Point point) {
+    public boolean isWithinVision(Point2D.Double point) {
         return distance(point.getX(), point.getY()) <= robot.getGraphicalDisplay().getRobotVision().getRadius();
     }
 
@@ -108,9 +109,9 @@ public class Sensor {
             Robot curr = iterator2.next();
             double x = curr.getPositionX();
             double y = curr.getPositionY();
-            Point point = new Point();
+            Point2D.Double point = new Point2D.Double();
             point.setLocation(x, y);
-            Point localPoint = convertToLocal(point);
+            Point2D.Double localPoint = convertToLocal(point);
 //            System.out.println(localPoint.getX() + ", " + localPoint.getY());
             curr.moveTo(localPoint.getX(), localPoint.getY());
 //            curr.getGraphicalDisplay().setTranslateX(localPoint.x);

@@ -144,6 +144,7 @@ public class RobotGenerationController extends VBox {
         robot.moveTo(x, y);
         robot.setTag(tag);
         algorithmLoadingHelper.assignAlgorithmToRobot(robot, selectedAlgorithm);
+        //todo
         robots.add(robot);//add the robot into the robots list
         controlPanelController.getGardenController().addGeneratedRobotToGarden(robot);
         return robot;

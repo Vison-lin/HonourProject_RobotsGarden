@@ -1,6 +1,7 @@
 package garden.algorithms;
 
 import garden.algorithms.src.gatheringalgorithm.Disc;
+import garden.algorithms.src.gatheringalgorithm.SEC;
 import garden.algorithms.src.gatheringalgorithm.Vector;
 import garden.core.Algorithm;
 import garden.model.Robot;
@@ -21,6 +22,9 @@ public class GatheringGoToSec extends Algorithm{
      *  The vision range of the current robot
      */
     private double range;
+
+
+    SEC sec;
 
 
     public GatheringGoToSec() {
@@ -60,7 +64,11 @@ public class GatheringGoToSec extends Algorithm{
         Point connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
         System.out.println("Final:" +connectedCenter);
         System.out.println("Final Global:"+getRobot().getSensor().convertToGlobal(connectedCenter));
-
+        Point secPoint = getRobot().getSensor().convertToGlobal(connectedCenter);
+        sec = new SEC();
+        sec.setCentreX(secPoint.getX());
+        sec.setCentreY(secPoint.getY());
+        sec.move();
 
         Vector goal = new Vector(connectedCenter,currRobot);
         Point destination = goal.resize(Math.sqrt(C.getrSquared())).getEnd();
@@ -245,6 +253,7 @@ public class GatheringGoToSec extends Algorithm{
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
         this.range = getRobot().getVision();
         Point point = generateOneRobot(new ArrayList<>(state),range);
+        getRobot().getGraphicalDisplay().insertBottomLayer(sec);
         return point;
     }
 

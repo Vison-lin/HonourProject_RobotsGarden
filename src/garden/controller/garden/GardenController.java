@@ -98,6 +98,7 @@ public class GardenController extends VBox {
         for (Robot robot : controlPanelController.getRobots()) {
             RobotGraphicalDisplay robotGraphicalDisplay = robot.getGraphicalDisplay();
             Circle robotPosition = robotGraphicalDisplay.getRobotPosition();
+            System.out.println("The drawn robot positioned at: " + robotPosition.getTranslateX() +","+robotPosition.getTranslateY());
             Circle robotBody = robotGraphicalDisplay.getRobotBody();
             Circle robotBorder = robotGraphicalDisplay.getRobotBorder();
             Circle robotVision = robotGraphicalDisplay.getRobotVision();

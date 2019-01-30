@@ -1,6 +1,7 @@
 package garden.algorithms;
 
 import garden.algorithms.src.gatheringalgorithm.Disc;
+import garden.algorithms.src.gatheringalgorithm.SEC;
 import garden.algorithms.src.gatheringalgorithm.Vector;
 import garden.core.Algorithm;
 import garden.model.Robot;
@@ -23,6 +24,9 @@ public class GatheringAlgorithm extends Algorithm{
     private double range;
 
 
+    SEC sec;
+
+
     public GatheringAlgorithm() {
         super();
 
@@ -38,8 +42,9 @@ public class GatheringAlgorithm extends Algorithm{
 
     public Point generateOneRobot (ArrayList<Robot>visibles , double range){
         Point result = new Point();
-        ArrayList newState = new ArrayList();
+
         visibles = getUniqueRobots(visibles);
+
         if (visibles.size()<2){
             result.setLocation(0.0,0.0);
             return result;
@@ -243,13 +248,18 @@ public class GatheringAlgorithm extends Algorithm{
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
         this.range = getRobot().getVision();
 //        System.out.println("=====================================");
-        int count = 1;
-//        for (Robot robot : state) {
-//            System.out.println("X: " + robot.getPositionX() + ", Y: " + robot.getPositionY()+" ,Point: "+count++);
-//        }
-//        this.state = robotList;
-//        System.out.println("Has visible size: "+state.size());
+//        int count = 1;
+////        for (Robot robot : state) {
+////            System.out.println("X: " + robot.getPositionX() + ", Y: " + robot.getPositionY()+" ,Point: "+count++);
+////        }
+////        this.state = robotList;
+////        System.out.println("Has visible size: "+state.size());
+
         Point point = generateOneRobot(new ArrayList<>(state),range);
+        sec = new SEC();
+        Point secPoint = getRobot().getSensor().convertToGlobal(point);
+        sec.moveTo(secPoint.getX(),secPoint.getY());
+        getRobot().getGraphicalDisplay().insertBottomLayer(sec);
       //  System.out.println("rsX: "+ point.getX()+" rsY: "+point.getY());
 
         return point;

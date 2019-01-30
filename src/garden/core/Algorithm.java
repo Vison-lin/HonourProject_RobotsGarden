@@ -2,7 +2,7 @@ package garden.core;
 
 import garden.model.Robot;
 
-import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.List;
 
 
@@ -31,7 +31,7 @@ public abstract class Algorithm {
      * @param localRobotList the list that contains all the visible robots for this robots.
      * @return the next position that the robot is going to go.
      */
-    public abstract Point next(List<Robot> localRobotList);
+    public abstract Point2D.Double next(List<Robot> localRobotList);
 
     /**
      * The name of the algorithm that needs to be displayed on the screen

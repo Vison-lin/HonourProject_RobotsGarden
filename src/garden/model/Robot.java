@@ -4,7 +4,7 @@ import garden.algorithms.DefaultAlgorithm;
 import garden.core.Algorithm;
 import garden.core.AlgorithmClassLoader;
 
-import java.awt.*;
+import java.awt.geom.Point2D;
 import java.util.List;
 
 /**
@@ -67,10 +67,10 @@ public class Robot {
      * @param robots the list of global robots. In most cases, this is the snapshot of the current global robots. And all the robots should have the same snapshot at the same stage.
      * @return the new location that the robot is going to move.
      */
-    public Point next(List<Robot> robots) {
+    public Point2D.Double next(List<Robot> robots) {
         sensor.setGlobalRobots(robots);//set curr global robots to sensor
-        Point point = algorithm.next(robots);
-        Point globalPoint = this.sensor.convertToGlobal(point);
+        Point2D.Double point = algorithm.next(robots);
+        Point2D.Double globalPoint = this.sensor.convertToGlobal(point);
         return globalPoint;
     }
 
@@ -135,8 +135,8 @@ public class Robot {
      *
      * @return the x and y values of current position in a Point object where the first is x and the second is y.
      */
-    public Point getPosition(){
-        Point point = new Point();
+    public Point2D.Double getPosition() {
+        Point2D.Double point = new Point2D.Double();
         point.setLocation(getPositionX(), getPositionY());
         return point;
     }

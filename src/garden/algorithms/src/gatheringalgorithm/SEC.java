@@ -58,7 +58,6 @@ public class SEC extends DisplayAdapter {
         }
         Point2D.Double point = algorithm.generateOneRobot(new ArrayList<>(local), algorithm.getRobot().getVision());
         point = algorithm.getRobot().getSensor().convertToGlobal(point);
-        getDisplayPattern().setTranslateX(point.x);
-        getDisplayPattern().setTranslateY(point.y);
+        moveTo(point.x, point.y);
     }
 }

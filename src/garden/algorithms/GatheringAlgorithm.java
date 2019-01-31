@@ -205,7 +205,7 @@ public class GatheringAlgorithm extends Algorithm{
      * Apply the algorithm to make sure that the next position (ci) of the current robot (Ri) stills maintains connectivity
      * with its neighbours (R)
      *
-     * @param  V vison of robot
+     * @param  V vision of robot
      * @param  ci next position of robot
      * @param  Ri  current position of robot
      * @param  R visible robots list of current robot
@@ -213,6 +213,9 @@ public class GatheringAlgorithm extends Algorithm{
 
     public Point2D.Double getConnectedCenter(double V,Point2D.Double ci, Point2D.Double Ri,ArrayList<Robot> R){
         Vector Vgoal = new Vector(Ri,ci);
+        double D = Vgoal.getNorm();
+        System.out.println("D!: "+D);
+        System.out.println("Vgoal: "+Vgoal.getNorm());
         if(Vgoal.getNorm()==0){
             return Ri;
         }
@@ -220,17 +223,16 @@ public class GatheringAlgorithm extends Algorithm{
         for(Robot Rj:R){
             Vector Vrirj = new Vector(Ri,Rj.getPosition());
             double dj = Vrirj.getNorm();
-            System.out.println("dj: "+dj);
             ArrayList<Double> cosAndsin = Vrirj.getCosAndSin(Vgoal);
             double lj = (dj/2*cosAndsin.get(0))+Math.sqrt((V/2)*(V/2)-Math.pow((dj/2*cosAndsin.get(1)),2));
-            if(lj!=Double.NaN) {
+            if((lj+"").contains(".")) {
                 test.add(lj);
             }
         }
-        double D = Vgoal.getNorm();
         if(test.size()!=0) {
             double limit = test.get(0);
             for (double num : test) {
+                System.out.println("Num: "+num);
                 if (num < limit) {
                     limit = num;
                 }

@@ -139,7 +139,7 @@ public class ProgressController extends VBox {
 
     private void nextAction() {
         System.out.println("alg: "+singleAlgorithm+" pos: "+samePosition);
-        setAlgorithm();
+        selectedAlgortihm = robots.get(0).getAlgorithm().getClass().getSimpleName();
         if(!singleAlgorithm||!samePosition) {
             addDeepCopiedRobotList(robotStackPrev, robots);//store the current to the prev
             preSingleAlgorithm.add(singleAlgorithm);
@@ -148,10 +148,10 @@ public class ProgressController extends VBox {
                 robots.removeAll(robots);//clean the current
                 robots.addAll(robotStackNext.pop());
                 nextPosition = robots.get(0).getPosition();
-                for(Robot robot:robots){
-                    if(nextPosition.equals(robot.getPosition())){
+                for (Robot robot : robots) {
+                    if (nextPosition.equals(robot.getPosition())) {
                         samePosition = true;
-                    }else{
+                    } else {
                         samePosition = false;
                     }
                 }
@@ -173,7 +173,7 @@ public class ProgressController extends VBox {
                 Iterator<Robot> robotIterator2 = robots.iterator();
 
                 // run one tiime next to initialize the next postion
-                if(robotIterator2.hasNext()) {
+                if (robotIterator2.hasNext()) {
                     Robot curr = robotIterator2.next();
                     Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
                     newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
@@ -186,10 +186,10 @@ public class ProgressController extends VBox {
                     checkSingleAlgortihm(curr);
                     Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
                     newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
-                    System.out.println("nextPostion: "+nextPosition+"   newPosition: "+newPosition.getX()+newPosition.getY());
-                    if(nextPosition.equals(newPosition)){
+                    System.out.println("nextPostion: " + nextPosition + "   newPosition: " + newPosition.getX() + newPosition.getY());
+                    if (nextPosition.equals(newPosition)) {
                         samePosition = true;
-                    }else{
+                    } else {
                         samePosition = false;
                     }
                     curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
@@ -197,10 +197,8 @@ public class ProgressController extends VBox {
 
             }
 
+
             controlPanelController.getGardenController().updateGarden();
-        }
-        else{
-            //todo disable next button and prohibit user create new robot
         }
 
     }
@@ -257,16 +255,15 @@ public class ProgressController extends VBox {
     public void setControlPanelController(ControlPanelController controlPanelController) {
         this.controlPanelController = controlPanelController;
         setRobots();
-        setAlgorithm();
     }
 
     private void setRobots() {
         this.robots = controlPanelController.getRobots();
 }
 
-    private void setAlgorithm(){
-        this.selectedAlgortihm = controlPanelController.getRobotGenerationController().getSelectAlgorithm();
-    }
+//    private void setAlgorithm(){
+//        this.selectedAlgortihm = controlPanelController.getRobotGenerationController().getSelectAlgorithm();
+//    }
 
     private void checkSingleAlgortihm(Robot robot){
         if(!robot.getAlgorithm().getClass().getSimpleName().equals(selectedAlgortihm)){

@@ -12,6 +12,8 @@ public class FakedAlgorithm_UpdateColor extends Algorithm {
 
     SEC sec;
 
+    private int ctr = 0;
+
     public FakedAlgorithm_UpdateColor() {
 
     }
@@ -20,7 +22,8 @@ public class FakedAlgorithm_UpdateColor extends Algorithm {
     public Point2D.Double next(List<Robot> robots) {
         Point2D.Double point = new Point2D.Double();
         point.setLocation(1, 0);
-
+        ctr++;
+        System.out.println(this.ctr);
         sec = new SEC();
         getRobot().getGraphicalDisplay().insertBottomLayer(sec);
         Random random = new Random();

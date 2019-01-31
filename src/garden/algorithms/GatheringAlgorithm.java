@@ -1,6 +1,7 @@
 package garden.algorithms;
 
 import garden.algorithms.src.gatheringalgorithm.Disc;
+import garden.algorithms.src.gatheringalgorithm.SEC;
 import garden.algorithms.src.gatheringalgorithm.Vector;
 import garden.core.Algorithm;
 import garden.model.Robot;
@@ -23,7 +24,7 @@ public class GatheringAlgorithm extends Algorithm{
     private double range;
 
 
-//    SEC sec;
+    SEC sec;
 
 
     public GatheringAlgorithm() {
@@ -269,11 +270,11 @@ public class GatheringAlgorithm extends Algorithm{
 ////        System.out.println("Has visible size: "+state.size());
 
         Point2D.Double point = generateOneRobot(new ArrayList<>(state),range);
-//        sec = new SEC();
-//        sec.setAlgorithm(this);
+        sec = new SEC();
+        sec.setAlgorithm(this);
         Point2D.Double secPoint = getRobot().getSensor().convertToGlobal(point);
-        //sec.moveTo(secPoint.getX(),secPoint.getY());
-//        getRobot().getGraphicalDisplay().insertBottomLayer(sec);
+        sec.moveTo(secPoint.getX(), secPoint.getY());
+        getRobot().getGraphicalDisplay().insertBottomLayer(sec);
       //  System.out.println("rsX: "+ point.getX()+" rsY: "+point.getY());
 
         return point;

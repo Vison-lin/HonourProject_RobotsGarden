@@ -48,6 +48,7 @@ public class SEC extends DisplayAdapter {
 
     @Override
     public void update() {
+        setVisible(!isVisible());
         List<Robot> local = new ArrayList<>();
         for (Robot robot : algorithm.getRobot().getSensor().getAllVisibleRobotsInLocalScale()) {
             try {

@@ -232,9 +232,7 @@ public class GatheringGoToSec extends Algorithm{
             double dj = Vrirj.getNorm();
             ArrayList<Double> cosAndsin = Vrirj.getCosAndSin(Vgoal);
             double lj = (dj/2*cosAndsin.get(0))+Math.sqrt((V/2)*(V/2)-Math.pow((dj/2*cosAndsin.get(1)),2));
-            if(lj!=Double.NaN) {
                 test.add(lj);
-            }
         }
         double limit = test.get(0);
         for(double num:test){ ;

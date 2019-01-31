@@ -226,6 +226,14 @@ public class GatheringAlgorithm extends Algorithm{
             double dj = Vrirj.getNorm();
             ArrayList<Double> cosAndsin = Vrirj.getCosAndSin(Vgoal);
             double lj = (dj/2*cosAndsin.get(0))+Math.sqrt((V/2)*(V/2)-Math.pow((dj/2*cosAndsin.get(1)),2));
+            if(!((lj+"").contains("."))){
+                System.out.println("===========");
+                System.out.println("dj: "+dj);
+                System.out.println("cos: "+cosAndsin.get(0));
+                System.out.println("v/2*v/2 :"+(V/2)*(V/2) );
+                System.out.println("sin: "+cosAndsin.get(1));
+                System.out.println("============");
+            }
             if((lj+"").contains(".")) {
                 test.add(lj);
             }

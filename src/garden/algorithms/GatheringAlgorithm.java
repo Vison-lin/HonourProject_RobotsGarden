@@ -62,7 +62,7 @@ public class GatheringAlgorithm extends Algorithm{
         }
         Point2D.Double currRobot  = new Point2D.Double();
         currRobot.setLocation(0.0,0.0);
-        Point2D.Double connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
+        Point2D.Double connectedCenter = getConnectedCenter(range,C.getCenter(),currRobot,rs);
         System.out.println("Final:" +connectedCenter);
         System.out.println("Final Global:"+getRobot().getSensor().convertToGlobal(connectedCenter));
         return connectedCenter;
@@ -221,21 +221,25 @@ public class GatheringAlgorithm extends Algorithm{
         for(Robot Rj:R){
             Vector Vrirj = new Vector(Ri,Rj.getPosition());
             double dj = Vrirj.getNorm();
+            System.out.println("dj: "+dj);
             ArrayList<Double> cosAndsin = Vrirj.getCosAndSin(Vgoal);
             double lj = (dj/2*cosAndsin.get(0))+Math.sqrt((V/2)*(V/2)-Math.pow((dj/2*cosAndsin.get(1)),2));
             if(lj!=Double.NaN) {
                 test.add(lj);
             }
         }
-        double limit = test.get(0);
-        for (double num : test) {
-            if(num<limit){
-                limit = num;
+        double D = Vgoal.getNorm();
+        if(test.size()!=0) {
+            double limit = test.get(0);
+            for (double num : test) {
+                if (num < limit) {
+                    limit = num;
+                }
             }
-        }
-//        System.out.println("Limit is: "+limit);
 
-        double D = Math.min(Vgoal.getNorm(),limit);
+
+            D = Math.min(Vgoal.getNorm(), limit);
+        }
         System.out.println("D: "+D*D);
         return Vgoal.resize(D).getEnd();
 
@@ -260,7 +264,7 @@ public class GatheringAlgorithm extends Algorithm{
         sec.setAlgorithm(this);
         Point2D.Double secPoint = getRobot().getSensor().convertToGlobal(point);
         //sec.moveTo(secPoint.getX(),secPoint.getY());
-        //getRobot().getGraphicalDisplay().insertBottomLayer(sec);
+        getRobot().getGraphicalDisplay().insertBottomLayer(sec);
       //  System.out.println("rsX: "+ point.getX()+" rsY: "+point.getY());
 
         return point;

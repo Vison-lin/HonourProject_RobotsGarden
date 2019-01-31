@@ -178,7 +178,7 @@ public class ProgressController extends VBox {
                 //run next
                 Iterator<Robot> robotIterator2 = robots.iterator();
 
-                // run one time next to initialize the next postion
+                // run one time next to initialize the next position
                 if (robotIterator2.hasNext()) {
                     Robot curr = robotIterator2.next();
                     Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
@@ -201,6 +201,7 @@ public class ProgressController extends VBox {
                         boolean timeToTerminate = curr.getAlgorithm().timeToTerminate(this.robots);
                         if (timeToTerminate) {
                             next.setDisable(true);
+                            prev.setDisable(true);
 //                            autoRun.setText(AUTO_RUN_BTN_TO_START);
                             controlPanelController.getWarning().setText("Terminated!");
                         }

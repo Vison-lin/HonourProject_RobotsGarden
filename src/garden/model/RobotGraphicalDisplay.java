@@ -1,6 +1,6 @@
 package garden.model;
 
-import garden.core.DisplayComponent;
+import garden.core.DisplayAdapter;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -15,7 +15,7 @@ public class RobotGraphicalDisplay {
     private Circle robotVision;
     private Circle robotBorder;
     private boolean visionVisible;
-    private List<DisplayComponent> layers;
+    private List<DisplayAdapter> layers;
 
     /**
      * init with the default value:
@@ -230,11 +230,11 @@ public class RobotGraphicalDisplay {
         this.robotBorder = robotBorder;
     }
 
-    public void insertBottomLayer(DisplayComponent displayComponent) {
-        this.layers.add(displayComponent);
+    public void insertBottomLayer(DisplayAdapter displayAdapter) {
+        this.layers.add(displayAdapter);
     }
 
-    public List<DisplayComponent> getBottomLayers() {
+    public List<DisplayAdapter> getBottomLayers() {
         return this.layers;
     }
 

@@ -2,7 +2,7 @@ package garden.controller.garden;
 
 import garden.controller.controlpanel.ControlPanelController;
 import garden.controller.controlpanel.controlpanel_component.RobotGenerationController;
-import garden.core.DisplayComponent;
+import garden.core.DisplayAdapter;
 import garden.model.Robot;
 import garden.model.RobotGraphicalDisplay;
 import javafx.event.EventHandler;
@@ -80,11 +80,11 @@ public class GardenController extends VBox {
         //for each robot, insert the bottomLayer into the corresponding bottomLayer set
         for (int i = 0; i < deepestBottomLayer; i++) {
             for (Robot robot : controlPanelController.getRobots()) {
-                DisplayComponent currDisplayComponent;
+                DisplayAdapter currDisplayAdapter;
                 try {
-                    currDisplayComponent = robot.getGraphicalDisplay().getBottomLayers().get(i);
-                    if (currDisplayComponent.isVisible()) {
-                        listOfSetOfBottomLayers.get(i).add(currDisplayComponent.getDisplayPattern());
+                    currDisplayAdapter = robot.getGraphicalDisplay().getBottomLayers().get(i);
+                    if (currDisplayAdapter.isVisible()) {
+                        listOfSetOfBottomLayers.get(i).add(currDisplayAdapter.getDisplayPattern());
                     }
                 } catch (IndexOutOfBoundsException | NullPointerException ignored) {
                 }//do nothing for the not-exist layer
@@ -186,7 +186,7 @@ public class GardenController extends VBox {
                 if (event.getButton() == MouseButton.MIDDLE) {// for each of the btn that has added event, add one right click listener for it.
                     RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
                 } else if (event.getButton() == MouseButton.SECONDARY) {
-                    RobotHelper menu = new RobotHelper(gardenController, robot, controlPanelController.getRobotGenerationController().getSelectedRobotColor(), controlPanelController.getSelectedRobotVision());
+                    RobotToggle menu = new RobotToggle(gardenController, robot, controlPanelController.getRobotGenerationController().getSelectedRobotColor(), controlPanelController.getSelectedRobotVision());
                     menu.show(robotGraphicalDisplay.getRobotBody(),Side.BOTTOM,0,0);
                     updateGarden();
                 }

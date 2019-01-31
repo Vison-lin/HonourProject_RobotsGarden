@@ -138,6 +138,12 @@ public class ProgressController extends VBox {
     }
 
     private void nextAction() {
+
+        //remove unnecessary info (to ensure obliviousness <- KEY OF THE PROJECT)
+        for (Robot robot : controlPanelController.getRobots()) {
+            robot.iForgot();
+        }
+
         System.out.println("alg: "+singleAlgorithm+" pos: "+samePosition);
         selectedAlgortihm = robots.get(0).getAlgorithm().getClass().getSimpleName();
         if(!singleAlgorithm||!samePosition) {
@@ -169,10 +175,11 @@ public class ProgressController extends VBox {
                     localRobotsList.add(newRobotInstance);
                 }
 
+
                 //run next
                 Iterator<Robot> robotIterator2 = robots.iterator();
 
-                // run one tiime next to initialize the next postion
+                // run one time next to initialize the next postion
                 if (robotIterator2.hasNext()) {
                     Robot curr = robotIterator2.next();
                     Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)

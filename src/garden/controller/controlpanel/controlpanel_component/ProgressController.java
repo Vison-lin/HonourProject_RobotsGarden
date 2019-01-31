@@ -36,6 +36,13 @@ public class ProgressController extends VBox {
     private ControlPanelController controlPanelController;
     private List<Robot> robots;
     private boolean isRunning = false;
+    private String selectedAlgortihm;
+    private Point2D.Double nextPosition;
+    private boolean singleAlgorithm = true;
+    private Stack<Boolean> preSingleAlgorithm = new Stack<>();
+    private Stack<Boolean> preSamPosition = new Stack<>();
+    private boolean samePosition = false;
+
 
     private Stack<List<Robot>> robotStackPrev = new Stack<>();
 
@@ -104,6 +111,9 @@ public class ProgressController extends VBox {
                     robots.removeAll(robots);//clean the current
                     robots.addAll(robotStackPrev.pop());//restore the prev
                     controlPanelController.getGardenController().updateGarden();
+                    samePosition =preSamPosition.pop();
+                    singleAlgorithm = preSingleAlgorithm.pop();
+
                 }
             }
         });
@@ -128,35 +138,70 @@ public class ProgressController extends VBox {
     }
 
     private void nextAction() {
-        addDeepCopiedRobotList(robotStackPrev, robots);//store the current to the prev
-        if (!robotStackNext.empty()) {
-            robots.removeAll(robots);//clean the current
-            robots.addAll(robotStackNext.pop());
-        } else {
-            ArrayList<Robot> localRobotsList = new ArrayList<>();
-            //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
-            for (Robot robot : robots) {
-                Robot newRobotInstance = null;
-                try {
-                    newRobotInstance = robot.deepCopy();
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                    System.exit(0);
+        System.out.println("alg: "+singleAlgorithm+" pos: "+samePosition);
+        setAlgorithm();
+        if(!singleAlgorithm||!samePosition) {
+            addDeepCopiedRobotList(robotStackPrev, robots);//store the current to the prev
+            preSingleAlgorithm.add(singleAlgorithm);
+            preSamPosition.add(samePosition);
+            if (!robotStackNext.empty()) {
+                robots.removeAll(robots);//clean the current
+                robots.addAll(robotStackNext.pop());
+                nextPosition = robots.get(0).getPosition();
+                for(Robot robot:robots){
+                    if(nextPosition.equals(robot.getPosition())){
+                        samePosition = true;
+                    }else{
+                        samePosition = false;
+                    }
                 }
-                localRobotsList.add(newRobotInstance);
+            } else {
+                ArrayList<Robot> localRobotsList = new ArrayList<>();
+                //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
+                for (Robot robot : robots) {
+                    Robot newRobotInstance = null;
+                    try {
+                        newRobotInstance = robot.deepCopy();
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                        System.exit(0);
+                    }
+                    localRobotsList.add(newRobotInstance);
+                }
+
+                //run next
+                Iterator<Robot> robotIterator2 = robots.iterator();
+
+                // run one tiime next to initialize the next postion
+                if(robotIterator2.hasNext()) {
+                    Robot curr = robotIterator2.next();
+                    Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
+                    newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
+                    checkSingleAlgortihm(curr);
+                    nextPosition = newPosition;
+                    curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
+                }
+                while (robotIterator2.hasNext()) {
+                    Robot curr = robotIterator2.next();
+                    checkSingleAlgortihm(curr);
+                    Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
+                    newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
+                    System.out.println("nextPostion: "+nextPosition+"   newPosition: "+newPosition.getX()+newPosition.getY());
+                    if(nextPosition.equals(newPosition)){
+                        samePosition = true;
+                    }else{
+                        samePosition = false;
+                    }
+                    curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
+                }
+
             }
 
-            //run next
-            Iterator<Robot> robotIterator2 = robots.iterator();
-            while (robotIterator2.hasNext()) {
-                Robot curr = robotIterator2.next();
-                Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
-                newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
-                curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
-            }
+            controlPanelController.getGardenController().updateGarden();
         }
-
-        controlPanelController.getGardenController().updateGarden();
+        else{
+            //todo disable next button and prohibit user create new robot
+        }
 
     }
 
@@ -203,15 +248,31 @@ public class ProgressController extends VBox {
     public void cleanBothPrevAndNextStack() {
         robotStackPrev.clear();
         robotStackNext.clear();
+        preSamPosition.clear();
+        preSingleAlgorithm.clear();
+        singleAlgorithm = true;
+        samePosition = false;
     }
 
     public void setControlPanelController(ControlPanelController controlPanelController) {
         this.controlPanelController = controlPanelController;
         setRobots();
+        setAlgorithm();
     }
 
     private void setRobots() {
         this.robots = controlPanelController.getRobots();
+}
+
+    private void setAlgorithm(){
+        this.selectedAlgortihm = controlPanelController.getRobotGenerationController().getSelectAlgorithm();
+    }
+
+    private void checkSingleAlgortihm(Robot robot){
+        if(!robot.getAlgorithm().getClass().getSimpleName().equals(selectedAlgortihm)){
+            System.out.println("selec:"+selectedAlgortihm+", single:"+robot.getAlgorithm().getClass().getSimpleName());
+            singleAlgorithm = false;
+        }
     }
 
 }

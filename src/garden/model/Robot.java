@@ -171,8 +171,7 @@ public class Robot {
         Sensor newSensor = new Sensor(newRobot);
         newRobot.setSensor(newSensor);
         //deep copy algorithm: create a new algorithm instance and return it.
-        Algorithm algorithm;
-        algorithm = AlgorithmClassLoader.getAlgorithmInstanceByName(this.algorithm.getClass().getSimpleName());
+        Algorithm algorithm = AlgorithmClassLoader.getAlgorithmInstanceByName(this.algorithm.getClass().getSimpleName());
         algorithm.setRobot(newRobot);
         newRobot.setAlgorithm(algorithm);
         return newRobot;
@@ -180,5 +179,25 @@ public class Robot {
 
     public double getVision() {
         return this.getGraphicalDisplay().getRobotVision().getRadius();
+    }
+
+    /**
+     * <strong>ENSURE THE ROBOT IS OBLIVIOUS</strong>
+     * <br/>
+     * <br/>
+     * <strong>CORE METHOD OF THIS LIBRARY </strong>
+     * <br/>
+     * <strong>Clean everything that happened in the previous step: to simulate DISTRIBUTIVE COMPUTING</strong>
+     */
+    public void iForgot() {
+        //deep copy algorithm: to ensure algorithm itself cannot store historical data
+        try {
+            Algorithm algorithm = AlgorithmClassLoader.getAlgorithmInstanceByName(this.getAlgorithm().getClass().getSimpleName());
+            this.setAlgorithm(algorithm);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+        this.getGraphicalDisplay().cleanBottomLayers();//todo why change color of position will change directly?
     }
 }

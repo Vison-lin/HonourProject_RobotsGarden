@@ -145,7 +145,9 @@ public class ProgressController extends VBox {
         }
 
         System.out.println("alg: "+singleAlgorithm+" pos: "+samePosition);
-        selectedAlgortihm = robots.get(0).getAlgorithm().getClass().getSimpleName();
+        if(robots.size()!=0) {
+            selectedAlgortihm = robots.get(0).getAlgorithm().getClass().getSimpleName();
+        }
         if(!singleAlgorithm||!samePosition) {
             addDeepCopiedRobotList(robotStackPrev, robots);//store the current to the prev
             preSingleAlgorithm.add(singleAlgorithm);
@@ -267,10 +269,6 @@ public class ProgressController extends VBox {
     private void setRobots() {
         this.robots = controlPanelController.getRobots();
 }
-
-//    private void setAlgorithm(){
-//        this.selectedAlgortihm = controlPanelController.getRobotGenerationController().getSelectAlgorithm();
-//    }
 
     private void checkSingleAlgortihm(Robot robot){
         if(!robot.getAlgorithm().getClass().getSimpleName().equals(selectedAlgortihm)){

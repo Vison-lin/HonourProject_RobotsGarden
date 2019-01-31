@@ -1,6 +1,6 @@
 package garden.controller.garden;
 
-import garden.core.DisplayComponent;
+import garden.core.DisplayAdapter;
 import garden.model.Robot;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RobotHelper extends ContextMenu {
+public class RobotToggle extends ContextMenu {
 
 
     private ColorPicker colorPicker;
@@ -28,10 +28,10 @@ public class RobotHelper extends ContextMenu {
     private MenuItem setColor;
     private MenuItem showVision;
     private MenuItem setVision;
-    private List<Pair<DisplayComponent, MenuItem>> setDisplayComponentsVisibility = new ArrayList<>();
+    private List<Pair<DisplayAdapter, MenuItem>> setDisplayComponentsVisibility = new ArrayList<>();
     private GardenController gardenController;
 
-    public RobotHelper(GardenController gardenController, Robot robot, Paint robotColor, double robotVision) {
+    public RobotToggle(GardenController gardenController, Robot robot, Paint robotColor, double robotVision) {
         this.gardenController = gardenController;
         this.robot = robot;
         this.robotColor = robotColor;
@@ -42,10 +42,10 @@ public class RobotHelper extends ContextMenu {
         showVision = new MenuItem("Show Vision");
         setVision = new MenuItem("Change Vision");
         System.out.println(robot.getGraphicalDisplay().getBottomLayers().size());
-        for (DisplayComponent displayComponent : robot.getGraphicalDisplay().getBottomLayers()) {
-            MenuItem newDisplayComponent = new MenuItem(displayComponent.getComponentTag());
-            System.out.println(displayComponent.getComponentTag());
-            setDisplayComponentsVisibility.add(new Pair<>(displayComponent, newDisplayComponent));
+        for (DisplayAdapter displayAdapter : robot.getGraphicalDisplay().getBottomLayers()) {
+            MenuItem newDisplayComponent = new MenuItem(displayAdapter.getComponentTag());
+            System.out.println(displayAdapter.getComponentTag());
+            setDisplayComponentsVisibility.add(new Pair<>(displayAdapter, newDisplayComponent));
             getItems().add(newDisplayComponent);
         }
 
@@ -61,11 +61,10 @@ public class RobotHelper extends ContextMenu {
     }
 
     private void setDisplayComponentsVisibilityListener() {
-        for (Pair<DisplayComponent, MenuItem> pair : setDisplayComponentsVisibility) {
+        for (Pair<DisplayAdapter, MenuItem> pair : setDisplayComponentsVisibility) {
             pair.getValue().setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    pair.getKey().setVisible(!pair.getKey().isVisible());
                     pair.getKey().update();
                     gardenController.updateGarden();
                 }

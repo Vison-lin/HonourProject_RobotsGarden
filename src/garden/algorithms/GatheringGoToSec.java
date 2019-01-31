@@ -1,12 +1,10 @@
 package garden.algorithms;
 
 import garden.algorithms.src.gatheringalgorithm.Disc;
-import garden.algorithms.src.gatheringalgorithm.SEC;
 import garden.algorithms.src.gatheringalgorithm.Vector;
 import garden.core.Algorithm;
 import garden.model.Robot;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +23,7 @@ public class GatheringGoToSec extends Algorithm{
     private double range;
 
 
-    SEC sec;
+//    SEC sec;
 
 
     public GatheringGoToSec() {
@@ -66,10 +64,9 @@ public class GatheringGoToSec extends Algorithm{
         System.out.println("Final:" +connectedCenter);
         System.out.println("Final Global:"+getRobot().getSensor().convertToGlobal(connectedCenter));
         Point2D.Double secPoint = getRobot().getSensor().convertToGlobal(connectedCenter);
-        sec = new SEC();
-        sec.setCentreX(secPoint.getX());
-        sec.setCentreY(secPoint.getY());
-        sec.move();
+//        sec = new SEC();
+//        sec.setCentreX(secPoint.getX());
+//        sec.setCentreY(secPoint.getY());
 
         Vector goal = new Vector(connectedCenter,currRobot);
         Point2D.Double destination = goal.resize(Math.sqrt(C.getrSquared())).getEnd();
@@ -237,7 +234,7 @@ public class GatheringGoToSec extends Algorithm{
             }
         }
         double limit = test.get(0);
-        for(double num:test){ ;
+        for (double num : test) {
             if(num<limit){
                 limit = num;
             }
@@ -254,7 +251,7 @@ public class GatheringGoToSec extends Algorithm{
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
         this.range = getRobot().getVision();
         Point2D.Double point = generateOneRobot(new ArrayList<>(state),range);
-        getRobot().getGraphicalDisplay().insertBottomLayer(sec);
+//        getRobot().getGraphicalDisplay().insertBottomLayer(sec);
         return point;
     }
 

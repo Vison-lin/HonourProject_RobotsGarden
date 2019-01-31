@@ -121,13 +121,14 @@ public class ControlPanelController extends VBox {
     }
 
 
-    public void cleanBtnAction() {
+    public void resetAll() {
         AlgorithmLoadingHelper helper = new AlgorithmLoadingHelper();
         robots.clear();
         gardenController.updateGarden();
-        robotGenerationController.cleanAllGUIFields();
+        robotGenerationController.reset();
         //clean prev and next
-        progressController.cleanBothPrevAndNextStack();
+        progressController.reset();
+        autoGenerationController.reset();
     }
 
 

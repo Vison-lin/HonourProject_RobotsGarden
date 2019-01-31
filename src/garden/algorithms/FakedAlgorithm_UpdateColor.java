@@ -14,6 +14,8 @@ public class FakedAlgorithm_UpdateColor extends Algorithm {
 
     private int ctr = 0;
 
+    private static List<Robot> try1;
+
     public FakedAlgorithm_UpdateColor() {
 
     }
@@ -22,13 +24,8 @@ public class FakedAlgorithm_UpdateColor extends Algorithm {
     public Point2D.Double next(List<Robot> robots) {
         Point2D.Double point = new Point2D.Double();
         point.setLocation(1, 0);
-        ctr++;
-        System.out.println(this.ctr);
-        sec = new SEC();
         getRobot().getGraphicalDisplay().insertBottomLayer(sec);
         Random random = new Random();
-        sec.moveTo(random.nextInt(500), random.nextInt(500));
-        System.out.println("# of BottomLayer: " + getRobot().getGraphicalDisplay().getBottomLayers().size());
         return point;
     }
 
@@ -40,5 +37,10 @@ public class FakedAlgorithm_UpdateColor extends Algorithm {
     @Override
     public String algorithmDescription() {
         return "???!!!___";
+    }
+
+    @Override
+    public boolean timeToTerminate(List<Robot> globalRobotList) {
+        return globalRobotList.size() == 5;
     }
 }

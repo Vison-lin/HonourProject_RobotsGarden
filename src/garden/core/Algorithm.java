@@ -17,6 +17,21 @@ public abstract class Algorithm {
     }
 
     /**
+     * Optional method that will only valid (only been called) if all the robots in the garden run the same algorithm.
+     * <br/>
+     * By default, it will return false, i.e., robots never terminate.
+     * <br/>
+     * <br/>
+     * Note that since it has been called after the next() called, the globalRobotList will not be initialized at the time the algorithm has been called. Therefore, any attempt to get the globalRobotList outside of this method will through NullPointerException.
+     *
+     * @param globalRobotList The list of global robots
+     * @return true if all the robots (always, run the same algorithm) should be terminated, false otherwise
+     */
+    public boolean timeToTerminate(List<Robot> globalRobotList) {
+        return false;
+    }
+
+    /**
      * CORE METHOD:
      * <br/>
      * <br/>

@@ -86,7 +86,7 @@ public class GardenController extends VBox {
                     if (currDisplayComponent.isVisible()) {
                         listOfSetOfBottomLayers.get(i).add(currDisplayComponent.getDisplayPattern());
                     }
-                } catch (IndexOutOfBoundsException ignored) {
+                } catch (IndexOutOfBoundsException | NullPointerException ignored) {
                 }//do nothing for the not-exist layer
             }
         }

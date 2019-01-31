@@ -36,7 +36,7 @@ public class ProgressController extends VBox {
     private ControlPanelController controlPanelController;
     private List<Robot> robots;
     private boolean isRunning = false;
-    private String selectedAlgortihm;
+    private String selectedAlgorithm;
     private Point2D.Double nextPosition;
     private boolean singleAlgorithm = true;
     private Stack<Boolean> preSingleAlgorithm = new Stack<>();
@@ -132,7 +132,7 @@ public class ProgressController extends VBox {
         clean.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                controlPanelController.cleanBtnAction();
+                controlPanelController.resetAll();
             }
         });
     }
@@ -146,22 +146,19 @@ public class ProgressController extends VBox {
 
         System.out.println("alg: "+singleAlgorithm+" pos: "+samePosition);
         if(robots.size()!=0) {
-            selectedAlgortihm = robots.get(0).getAlgorithm().getClass().getSimpleName();
+            selectedAlgorithm = robots.get(0).getAlgorithm().getClass().getSimpleName();
         }
-        if(!singleAlgorithm||!samePosition) {
+
             addDeepCopiedRobotList(robotStackPrev, robots);//store the current to the prev
             preSingleAlgorithm.add(singleAlgorithm);
             preSamPosition.add(samePosition);
+
             if (!robotStackNext.empty()) {
                 robots.removeAll(robots);//clean the current
                 robots.addAll(robotStackNext.pop());
                 nextPosition = robots.get(0).getPosition();
                 for (Robot robot : robots) {
-                    if (nextPosition.equals(robot.getPosition())) {
-                        samePosition = true;
-                    } else {
-                        samePosition = false;
-                    }
+                    samePosition = nextPosition.equals(robot.getPosition());
                 }
             } else {
                 ArrayList<Robot> localRobotsList = new ArrayList<>();
@@ -196,19 +193,22 @@ public class ProgressController extends VBox {
                     Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
                     newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
                     System.out.println("nextPostion: " + nextPosition + "   newPosition: " + newPosition.getX() + newPosition.getY());
-                    if (nextPosition.equals(newPosition)) {
-                        samePosition = true;
-                    } else {
-                        samePosition = false;
-                    }
+                    samePosition = nextPosition.equals(newPosition);
                     curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
+
+                    if (singleAlgorithm) {
+                        //check if need to terminate the program: since we assume each robot runs same algorithm, we can use any robot instance to do the check
+                        boolean timeToTerminate = curr.getAlgorithm().timeToTerminate(this.robots);
+                        if (timeToTerminate) {
+                            next.setDisable(true);
+//                            autoRun.setText(AUTO_RUN_BTN_TO_START);
+                            controlPanelController.getWarning().setText("Terminated!");
+                        }
+                    }
                 }
 
             }
-
-
             controlPanelController.getGardenController().updateGarden();
-        }
 
     }
 
@@ -252,13 +252,19 @@ public class ProgressController extends VBox {
         return point;
     }
 
-    public void cleanBothPrevAndNextStack() {
+    public void reset() {
         robotStackPrev.clear();
         robotStackNext.clear();
         preSamPosition.clear();
         preSingleAlgorithm.clear();
         singleAlgorithm = true;
         samePosition = false;
+        prev.setDisable(false);
+        next.setDisable(false);
+        clean.setDisable(false);
+        autoRun.setDisable(false);
+        autoRun.setText(AUTO_RUN_BTN_TO_START);
+        autoRunTimeInterval.setText("");
     }
 
     public void setControlPanelController(ControlPanelController controlPanelController) {
@@ -271,8 +277,8 @@ public class ProgressController extends VBox {
 }
 
     private void checkSingleAlgortihm(Robot robot){
-        if(!robot.getAlgorithm().getClass().getSimpleName().equals(selectedAlgortihm)){
-            System.out.println("selec:"+selectedAlgortihm+", single:"+robot.getAlgorithm().getClass().getSimpleName());
+        if (!robot.getAlgorithm().getClass().getSimpleName().equals(selectedAlgorithm)) {
+            System.out.println("select:" + selectedAlgorithm + ", single:" + robot.getAlgorithm().getClass().getSimpleName());
             singleAlgorithm = false;
         }
     }

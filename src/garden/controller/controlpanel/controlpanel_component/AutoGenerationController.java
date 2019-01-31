@@ -13,7 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Random;
 
 public class AutoGenerationController extends VBox {
@@ -25,7 +24,6 @@ public class AutoGenerationController extends VBox {
     private TextField numberOfAutoCreatedRobots;
 
     private ControlPanelController controlPanelController;
-    private List<Robot> robots;
 
     public AutoGenerationController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../view/control_panel_component/auto_generation.fxml"));
@@ -116,10 +114,10 @@ public class AutoGenerationController extends VBox {
 
     public void setControlPanelController(ControlPanelController controlPanelController) {
         this.controlPanelController = controlPanelController;
-        setRobots();
     }
 
-    private void setRobots() {
-        this.robots = controlPanelController.getRobots();
+    public void reset() {
+        randomCreateRobots.setDisable(false);
+        numberOfAutoCreatedRobots.setText("");
     }
 }

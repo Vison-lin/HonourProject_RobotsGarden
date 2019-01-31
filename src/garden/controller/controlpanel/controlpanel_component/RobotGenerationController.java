@@ -176,11 +176,12 @@ public class RobotGenerationController extends VBox {
         this.selectedRobotVision = newSelectedRobotVision;
     }
 
-    public void cleanAllGUIFields() {
+    public void reset() {
         inputVision.setText(DEFAULT_ROBOT_VISION + "");
         selectedRobotVision = DEFAULT_ROBOT_VISION;
         colorPicker.setValue(Color.BLACK);
         selectedRobotColor = Color.BLACK;
+        algorithmSelection.getSelectionModel().select(0);
     }
 
     public Paint getSelectedRobotColor() {

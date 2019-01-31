@@ -47,12 +47,31 @@ public class RobotGraphicalDisplay {
      * @param visionVisible the visibility of the robot vision.
      */
     public RobotGraphicalDisplay(Circle robotPosition, Circle robotBody, Circle robotBorder, Circle robotVision, boolean visionVisible) {
-        if (robotBody == null || robotVision == null || robotPosition == null) {
-            throw new IllegalArgumentException("All the arguments cannot be null!");
+        if (robotBody == null || robotVision == null || robotPosition == null || robotBorder == null) {
+            String errMsg = "All the arguments cannot be null: ";
+            if (robotBody == null) {
+                errMsg += "robotBody is null ";
+            }
+            if (robotVision == null) {
+                errMsg += "robotvision is null ";
+            }
+            if (robotBorder == null) {
+                errMsg += "robotBorder is null ";
+            }
+            if (robotPosition == null) {
+                errMsg += "robotPosition is null ";
+            }
+            throw new IllegalArgumentException(errMsg);
         }
         if ((robotPosition.getTranslateX() != robotBody.getTranslateX()) || (robotPosition.getTranslateX() != robotVision.getTranslateX()) ||
-                (robotPosition.getTranslateY() != robotBody.getTranslateY()) || (robotPosition.getTranslateY() != robotVision.getTranslateY())) {
-            throw new IllegalArgumentException("The robotPosition does not have the same position as set for robotBody or selectedRobotVision. ALL three of them must always be in the same location");
+                (robotPosition.getTranslateY() != robotBorder.getTranslateY()) || (robotPosition.getTranslateY() != robotVision.getTranslateY())) {
+            String errMsg = "The robotPosition does not have the same position as set for robotBody, robotBorder or selectedRobotVision. All four of them must not be null and must always be in the same location: \n";
+            errMsg += "The coordinate of robotPosition is: " + robotPosition.getTranslateX() + ", " + robotPosition.getTranslateY() + ";\n";
+            errMsg += "The coordinate of robotBody is: " + robotBody.getTranslateX() + ", " + robotBody.getTranslateY() + ";\n";
+            errMsg += "The coordinate of robotBorder is: " + robotBorder.getTranslateX() + ", " + robotBorder.getTranslateY() + ";\n";
+            errMsg += "The coordinate of robotVision is: " + robotVision.getTranslateX() + ", " + robotVision.getTranslateY() + ".";
+
+            throw new IllegalArgumentException(errMsg);
         }
         this.robotPosition = robotPosition;
         this.robotBody = robotBody;

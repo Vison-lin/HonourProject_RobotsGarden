@@ -6,7 +6,6 @@ import garden.algorithms.src.gatheringalgorithm.Vector;
 import garden.core.Algorithm;
 import garden.model.Robot;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -229,7 +228,7 @@ public class GatheringAlgorithm extends Algorithm{
             }
         }
         double limit = test.get(0);
-        for(double num:test){ ;
+        for (double num : test) {
             if(num<limit){
                 limit = num;
             }
@@ -258,6 +257,7 @@ public class GatheringAlgorithm extends Algorithm{
 
         Point2D.Double point = generateOneRobot(new ArrayList<>(state),range);
         sec = new SEC();
+        sec.setAlgorithm(this);
         Point2D.Double secPoint = getRobot().getSensor().convertToGlobal(point);
         sec.moveTo(secPoint.getX(),secPoint.getY());
         getRobot().getGraphicalDisplay().insertBottomLayer(sec);

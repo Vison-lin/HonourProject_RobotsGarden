@@ -83,7 +83,9 @@ public class GardenController extends VBox {
                 DisplayComponent currDisplayComponent;
                 try {
                     currDisplayComponent = robot.getGraphicalDisplay().getBottomLayers().get(i);
-                    listOfSetOfBottomLayers.get(i).add(currDisplayComponent.getDisplayPattern());
+                    if (currDisplayComponent.isVisible()) {
+                        listOfSetOfBottomLayers.get(i).add(currDisplayComponent.getDisplayPattern());
+                    }
                 } catch (IndexOutOfBoundsException ignored) {
                 }//do nothing for the not-exist layer
             }
@@ -118,9 +120,9 @@ public class GardenController extends VBox {
         garden.getChildren().addAll(robotsPosition);
 
         //remove unnecessary info (to ensure obliviousness <- KEY OF THE PROJECT)
-        for (Robot robot : controlPanelController.getRobots()) {
-            robot.getGraphicalDisplay().cleanBottomLayers();//todo why change color of position will change directly?
-        }
+//        for (Robot robot : controlPanelController.getRobots()) {
+//            robot.getGraphicalDisplay().cleanBottomLayers();//todo why change color of position will change directly?
+//        }
     }
 
     /**

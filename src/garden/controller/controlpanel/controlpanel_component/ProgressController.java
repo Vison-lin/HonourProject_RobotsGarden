@@ -128,6 +128,11 @@ public class ProgressController extends VBox {
     }
 
     private void nextAction() {
+        //remove unnecessary info (to ensure obliviousness <- KEY OF THE PROJECT)
+        for (Robot robot : controlPanelController.getRobots()) {
+            robot.iForgot();
+        }
+
         addDeepCopiedRobotList(robotStackPrev, robots);//store the current to the prev
         if (!robotStackNext.empty()) {
             robots.removeAll(robots);//clean the current

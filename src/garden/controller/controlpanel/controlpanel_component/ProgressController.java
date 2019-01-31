@@ -37,11 +37,9 @@ public class ProgressController extends VBox {
     private List<Robot> robots;
     private boolean isRunning = false;
     private String selectedAlgorithm;
-    private Point2D.Double nextPosition;
     private boolean singleAlgorithm = true;
     private Stack<Boolean> preSingleAlgorithm = new Stack<>();
-    private Stack<Boolean> preSamPosition = new Stack<>();
-    private boolean samePosition = false;
+
 
 
     private Stack<List<Robot>> robotStackPrev = new Stack<>();
@@ -111,7 +109,6 @@ public class ProgressController extends VBox {
                     robots.removeAll(robots);//clean the current
                     robots.addAll(robotStackPrev.pop());//restore the prev
                     controlPanelController.getGardenController().updateGarden();
-                    samePosition =preSamPosition.pop();
                     singleAlgorithm = preSingleAlgorithm.pop();
 
                 }
@@ -143,23 +140,16 @@ public class ProgressController extends VBox {
         for (Robot robot : controlPanelController.getRobots()) {
             robot.iForgot();
         }
-
-        System.out.println("alg: "+singleAlgorithm+" pos: "+samePosition);
         if(robots.size()!=0) {
             selectedAlgorithm = robots.get(0).getAlgorithm().getClass().getSimpleName();
         }
 
             addDeepCopiedRobotList(robotStackPrev, robots);//store the current to the prev
             preSingleAlgorithm.add(singleAlgorithm);
-            preSamPosition.add(samePosition);
 
             if (!robotStackNext.empty()) {
                 robots.removeAll(robots);//clean the current
                 robots.addAll(robotStackNext.pop());
-                nextPosition = robots.get(0).getPosition();
-                for (Robot robot : robots) {
-                    samePosition = nextPosition.equals(robot.getPosition());
-                }
             } else {
                 ArrayList<Robot> localRobotsList = new ArrayList<>();
                 //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
@@ -178,22 +168,11 @@ public class ProgressController extends VBox {
                 //run next
                 Iterator<Robot> robotIterator2 = robots.iterator();
 
-                // run one time next to initialize the next position
-                if (robotIterator2.hasNext()) {
-                    Robot curr = robotIterator2.next();
-                    Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
-                    newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
-                    checkSingleAlgortihm(curr);
-                    nextPosition = newPosition;
-                    curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
-                }
                 while (robotIterator2.hasNext()) {
                     Robot curr = robotIterator2.next();
                     checkSingleAlgortihm(curr);
                     Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
                     newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
-                    System.out.println("nextPostion: " + nextPosition + "   newPosition: " + newPosition.getX() + newPosition.getY());
-                    samePosition = nextPosition.equals(newPosition);
                     curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
 
                     if (singleAlgorithm) {
@@ -256,10 +235,8 @@ public class ProgressController extends VBox {
     public void reset() {
         robotStackPrev.clear();
         robotStackNext.clear();
-        preSamPosition.clear();
         preSingleAlgorithm.clear();
         singleAlgorithm = true;
-        samePosition = false;
         prev.setDisable(false);
         next.setDisable(false);
         clean.setDisable(false);
@@ -279,7 +256,6 @@ public class ProgressController extends VBox {
 
     private void checkSingleAlgortihm(Robot robot){
         if (!robot.getAlgorithm().getClass().getSimpleName().equals(selectedAlgorithm)) {
-            System.out.println("select:" + selectedAlgorithm + ", single:" + robot.getAlgorithm().getClass().getSimpleName());
             singleAlgorithm = false;
         }
     }

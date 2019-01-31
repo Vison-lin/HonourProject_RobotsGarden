@@ -263,4 +263,17 @@ public class GatheringGoToSec extends Algorithm{
         return "Robot will try to go to the position that has most other robots";
     }
 
+    @Override
+    public boolean timeToTerminate(List<Robot> globalRobotList) {
+        Point2D.Double nextPosition = globalRobotList.get(0).getPosition();
+        Boolean isTerminate = true;
+        for(Robot robot: globalRobotList){
+            if(!(robot.getPosition().equals(nextPosition))){
+                isTerminate = false;
+            }
+
+        }
+        return isTerminate;
+
+    }
 }

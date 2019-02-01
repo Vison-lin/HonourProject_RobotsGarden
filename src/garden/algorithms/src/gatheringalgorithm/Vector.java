@@ -57,7 +57,7 @@ public class Vector {
     public ArrayList<Double> getCosAndSin(Vector otherVec){
         double cos = scalarProduct(otherVec)/(this.norm*otherVec.norm);
         double sin;
-        if ((Math.sqrt(1-cos*cos))==Double.NaN){
+        if (!((Math.sqrt(1-cos*cos)+"").contains("."))){
           sin = 0;
 
         }else{  sin = Math.sqrt(1-cos*cos);}

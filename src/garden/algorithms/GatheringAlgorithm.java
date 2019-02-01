@@ -230,6 +230,14 @@ public class GatheringAlgorithm extends Algorithm{
             double dj = Vrirj.getNorm();
             ArrayList<Double> cosAndsin = Vrirj.getCosAndSin(Vgoal);
             double lj = (dj/2*cosAndsin.get(0))+Math.sqrt((V/2)*(V/2)-Math.pow((dj/2*cosAndsin.get(1)),2));
+            if(!((lj+"").contains("."))){
+                System.out.println("===========");
+                System.out.println("dj: "+dj);
+                System.out.println("cos: "+cosAndsin.get(0));
+                System.out.println("v/2*v/2 :"+(V/2)*(V/2) );
+                System.out.println("sin: "+cosAndsin.get(1));
+                System.out.println("============");
+            }
             if((lj+"").contains(".")) {
                 test.add(lj);
             }
@@ -282,6 +290,20 @@ public class GatheringAlgorithm extends Algorithm{
     @Override
     public String algorithmDescription() {
         return "Robot will try to go to the position that has most other robots";
+    }
+
+    @Override
+    public boolean timeToTerminate(List<Robot> globalRobotList) {
+        Point2D.Double nextPosition = globalRobotList.get(0).getPosition();
+        Boolean isTerminate = true;
+        for(Robot robot: globalRobotList){
+            if(!(robot.getPosition().equals(nextPosition))){
+                isTerminate = false;
+            }
+
+        }
+        return isTerminate;
+
     }
 
 }

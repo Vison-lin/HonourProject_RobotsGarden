@@ -47,11 +47,13 @@ public class SEC extends DisplayAdapter {
 
     @Override
     public void update() {
+        System.out.println("========" + algorithm.getRobot().getSensor().getAllVisibleRobotsInLocalScale().toString());
         setVisible(!isVisible());
         List<Robot> local = new ArrayList<>();
         for (Robot robot : algorithm.getRobot().getSensor().getAllVisibleRobotsInLocalScale()) {
             try {
                 local.add(robot.deepCopy());
+                System.out.println("SEC:" + robot.getPositionX() + "," + robot.getPositionY());
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }

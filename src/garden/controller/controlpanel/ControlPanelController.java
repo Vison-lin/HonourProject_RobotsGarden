@@ -36,7 +36,10 @@ public class ControlPanelController extends VBox {
     @FXML
     private Button SaveButton;
 
-    private List<Robot> robots = Collections.synchronizedList(new ArrayList<>());
+    /**
+     * Global robots list
+     */
+    private static List<Robot> robots = Collections.synchronizedList(new ArrayList<>());
 
 
 
@@ -107,7 +110,7 @@ public class ControlPanelController extends VBox {
      * get the list of robots.
      * @return the list of the robots
      */
-    public List<Robot> getRobots() {
+    public static List<Robot> getRobots() {
         return robots;
     }
 
@@ -117,7 +120,7 @@ public class ControlPanelController extends VBox {
      * @param robots the new list of the robots
      */
     public void setRobots(ArrayList<Robot> robots) {
-        this.robots = robots;
+        ControlPanelController.robots = robots;
     }
 
 

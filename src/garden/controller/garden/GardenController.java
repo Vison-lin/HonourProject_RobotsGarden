@@ -64,7 +64,7 @@ public class GardenController extends VBox {
 
         //get the index of the deepest bottom layer for all robots
         int deepestBottomLayer = 0;
-        for (Robot robot : controlPanelController.getRobots()) {
+        for (Robot robot : ControlPanelController.getRobots()) {
             int currLayer = robot.getGraphicalDisplay().getBottomLayers().size();
             if (currLayer > deepestBottomLayer) {
                 deepestBottomLayer = currLayer;
@@ -79,7 +79,7 @@ public class GardenController extends VBox {
 
         //for each robot, insert the bottomLayer into the corresponding bottomLayer set
         for (int i = 0; i < deepestBottomLayer; i++) {
-            for (Robot robot : controlPanelController.getRobots()) {
+            for (Robot robot : ControlPanelController.getRobots()) {
                 DisplayAdapter currDisplayAdapter;
                 try {
                     currDisplayAdapter = robot.getGraphicalDisplay().getBottomLayers().get(i);
@@ -97,10 +97,10 @@ public class GardenController extends VBox {
         }
 
 
-        for (Robot robot : controlPanelController.getRobots()) {
+        for (Robot robot : ControlPanelController.getRobots()) {
             RobotGraphicalDisplay robotGraphicalDisplay = robot.getGraphicalDisplay();
             Circle robotPosition = robotGraphicalDisplay.getRobotPosition();
-            System.out.println("The drawn robot positioned at: " + robotPosition.getTranslateX() +","+robotPosition.getTranslateY());
+//            System.out.println("The drawn robot positioned at: " + robotPosition.getTranslateX() +","+robotPosition.getTranslateY());
             Circle robotBody = robotGraphicalDisplay.getRobotBody();
             Circle robotBorder = robotGraphicalDisplay.getRobotBorder();
             Circle robotVision = robotGraphicalDisplay.getRobotVision();

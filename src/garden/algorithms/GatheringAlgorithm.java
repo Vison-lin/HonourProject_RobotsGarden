@@ -45,9 +45,11 @@ public class GatheringAlgorithm extends Algorithm{
 
     public Point2D.Double generateOneRobot (ArrayList<Robot>visibles , double range){
         Point2D.Double result = new Point2D.Double();
-
+        System.out.println("VISIBLE: " + visibles);
         visibles = getUniqueRobots(visibles);
-
+        for (Robot robot : visibles) {
+            System.out.println("ALG:" + robot.getPositionX() + "," + robot.getPositionY());
+        }
         if (visibles.size()<2){
             result.setLocation(0.0,0.0);
             return result;

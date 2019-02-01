@@ -6,9 +6,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <fx:root xmlns:fx="http://javafx.com/fxml/1" prefHeight="60.0" prefWidth="471.0" type="javafx.scene.layout.VBox"
-         xmlns="http://javafx.com/javafx/8.0.172-ea">
+         xmlns="http://javafx.com/javafx/8.0.121">
 
     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select an color for robots: "/>
+    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text"/>
     <ColorPicker fx:id="colorPicker"/>
     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select an Vision for robots: "/>
     <TextField fx:id="inputVision"/>

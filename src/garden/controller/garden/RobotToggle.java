@@ -1,5 +1,6 @@
 package garden.controller.garden;
 
+import garden.controller.controlpanel.ControlPanelController;
 import garden.core.DisplayAdapter;
 import garden.model.Robot;
 import javafx.event.ActionEvent;
@@ -66,6 +67,7 @@ public class RobotToggle extends ContextMenu {
                 @Override
                 public void handle(ActionEvent event) {
                     pair.getKey().update();
+                    robot.getSensor().setGlobalRobots(ControlPanelController.getRobots());//todo need deep copy?
                     gardenController.updateGarden();
                 }
             });

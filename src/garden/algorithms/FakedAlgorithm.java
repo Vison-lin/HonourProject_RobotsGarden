@@ -27,7 +27,9 @@ public class FakedAlgorithm extends Algorithm {
 //        sec.setAlgorithm(this);
         Point2D.Double point = new Point2D.Double();
         point.setLocation(1, 0);
-        getRobot().getGraphicalDisplay().insertBottomLayer(sec);
+        System.out.println("in faked" + getRobot().toString());
+        System.out.println(getRobot().getGraphicalDisplay().getBottomLayers().size());
+//        getRobot().getGraphicalDisplay().insertBottomLayer(sec);
 //        Random random = new Random();
         return point;
     }

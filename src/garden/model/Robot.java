@@ -69,6 +69,7 @@ public class Robot {
      */
     public Point2D.Double next(List<Robot> robots) {
         sensor.setGlobalRobots(robots);//set curr global robots to sensor
+//        algorithm.getRobot().getGraphicalDisplay().insertBottomLayer();
         Point2D.Double point = algorithm.next(robots);
         Point2D.Double globalPoint = this.sensor.convertToGlobal(point);
         return globalPoint;
@@ -147,9 +148,7 @@ public class Robot {
 
     public void setAlgorithm(Algorithm algorithm) {
         this.algorithm = algorithm;
-//        if (this.algorithm.getRobot() == null) {
         this.algorithm.setRobot(this);
-//        }
     }
 
     public String getTag() {
@@ -190,14 +189,17 @@ public class Robot {
      * <strong>Clean everything that happened in the previous step: to simulate DISTRIBUTIVE COMPUTING</strong>
      */
     public void iForgot() {
-        //deep copy algorithm: to ensure algorithm itself cannot store historical data
+        this.getGraphicalDisplay().cleanBottomLayers();//todo why change color of position will change directly?
+        //deep copy algorithm: to ensure algorithm itself cannot store historical data. Do this later to ensure each time the algorithm's constructor can be called.
         try {
             Algorithm algorithm = AlgorithmClassLoader.getAlgorithmInstanceByName(this.getAlgorithm().getClass().getSimpleName());
+
             this.setAlgorithm(algorithm);
+            algorithm.setRobot(this);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             System.exit(0);
         }
-        this.getGraphicalDisplay().cleanBottomLayers();//todo why change color of position will change directly?
+
     }
 }

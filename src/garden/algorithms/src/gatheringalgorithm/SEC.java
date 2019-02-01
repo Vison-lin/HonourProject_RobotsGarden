@@ -23,7 +23,6 @@ public class SEC extends DisplayAdapter {
 
     public SEC() {
         super(new Circle(50, Color.DARKGREY), "SEC");
-        System.out.println("SEC Created");
     }
 
     public void setCentreX(double centreX) {

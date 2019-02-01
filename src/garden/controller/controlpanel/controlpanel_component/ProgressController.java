@@ -155,8 +155,10 @@ public class ProgressController extends VBox {
                 //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
                 for (Robot robot : robots) {
                     Robot newRobotInstance = null;
+
                     try {
                         newRobotInstance = robot.deepCopy();
+
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                         System.exit(0);
@@ -171,6 +173,7 @@ public class ProgressController extends VBox {
                 while (robotIterator2.hasNext()) {
                     Robot curr = robotIterator2.next();
                     checkSingleAlgortihm(curr);
+
                     Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
                     newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
                     curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot

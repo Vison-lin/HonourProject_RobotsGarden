@@ -30,7 +30,6 @@ public class GatheringAlgorithm extends Algorithm{
     public GatheringAlgorithm() {
 
         super();
-        System.out.println("!!!!!");
         sec = new SEC();
         sec.setAlgorithm(this);
         registerDisplayAdapter(sec);
@@ -265,7 +264,6 @@ public class GatheringAlgorithm extends Algorithm{
 //        System.out.println(getRobot().getSensor().getGlobalRobots().size());
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
         this.range = getRobot().getVision();
-//        System.out.println("=====================================");
 //        int count = 1;
 ////        for (Robot robot : state) {
 ////            System.out.println("X: " + robot.getPositionX() + ", Y: " + robot.getPositionY()+" ,Point: "+count++);
@@ -276,7 +274,6 @@ public class GatheringAlgorithm extends Algorithm{
         Point2D.Double point = generateOneRobot(new ArrayList<>(state),range);
         Point2D.Double secPoint = getRobot().getSensor().convertToGlobal(point);
 //        sec.moveTo(secPoint.getX(), secPoint.getY());
-        getRobot().getGraphicalDisplay().insertBottomLayer(sec);
       //  System.out.println("rsX: "+ point.getX()+" rsY: "+point.getY());
 
         return point;

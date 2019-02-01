@@ -24,7 +24,7 @@ public class FakedAlgorithm extends Algorithm {
 
     @Override
     public Point2D.Double next(List<Robot> robots) {
-        sec.setAlgorithm(this);
+//        sec.setAlgorithm(this);
         Point2D.Double point = new Point2D.Double();
         point.setLocation(1, 0);
         getRobot().getGraphicalDisplay().insertBottomLayer(sec);

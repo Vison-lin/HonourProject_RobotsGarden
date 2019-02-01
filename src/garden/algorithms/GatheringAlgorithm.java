@@ -276,7 +276,7 @@ public class GatheringAlgorithm extends Algorithm{
         Point2D.Double point = generateOneRobot(new ArrayList<>(state),range);
         Point2D.Double secPoint = getRobot().getSensor().convertToGlobal(point);
 //        sec.moveTo(secPoint.getX(), secPoint.getY());
-//        getRobot().getGraphicalDisplay().insertBottomLayer(sec);
+        getRobot().getGraphicalDisplay().insertBottomLayer(sec);
       //  System.out.println("rsX: "+ point.getX()+" rsY: "+point.getY());
 
         return point;

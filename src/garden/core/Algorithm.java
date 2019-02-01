@@ -81,6 +81,9 @@ public abstract class Algorithm {
 
     public void registerDisplayAdapter(DisplayAdapter displayAdapter) {
         this.displayAdapters.add(displayAdapter);
+        if (this.robot != null && this.robot.getGraphicalDisplay() != null && this.robot.getGraphicalDisplay().getBottomLayers() != null) {
+            robot.getGraphicalDisplay().insertBottomLayer(displayAdapter);
+        }
     }
 
 }

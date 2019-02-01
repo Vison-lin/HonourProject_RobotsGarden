@@ -18,6 +18,8 @@ public class FakedAlgorithm extends Algorithm {
 
     public FakedAlgorithm() {
         sec = new mAdapter();
+        sec.setAlgorithm(this);
+        registerDisplayAdapter(sec);
     }
 
     @Override

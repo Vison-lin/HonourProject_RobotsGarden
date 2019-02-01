@@ -3,6 +3,7 @@ package garden.core;
 import garden.model.Robot;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -13,7 +14,10 @@ public abstract class Algorithm {
      */
     private Robot robot;
 
+    private List<DisplayAdapter> displayAdapters;
+
     public Algorithm() {
+        displayAdapters = new ArrayList<>();
     }
 
     /**
@@ -68,5 +72,15 @@ public abstract class Algorithm {
 
     public void setRobot(Robot robot) {
         this.robot = robot;
+        robot.getGraphicalDisplay().getBottomLayers().clear();
+        for (DisplayAdapter displayAdapter : displayAdapters) {
+            robot.getGraphicalDisplay().insertBottomLayer(displayAdapter);
+        }
+
     }
+
+    public void registerDisplayAdapter(DisplayAdapter displayAdapter) {
+        this.displayAdapters.add(displayAdapter);
+    }
+
 }

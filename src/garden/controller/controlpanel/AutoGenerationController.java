@@ -1,6 +1,5 @@
-package garden.controller.controlpanel.controlpanel_component;
+package garden.controller.controlpanel;
 
-import garden.controller.controlpanel.ControlPanelController;
 import garden.model.Robot;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -9,8 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 import java.io.IOException;
 import java.util.Random;
@@ -24,10 +21,10 @@ public class AutoGenerationController extends VBox {
     @FXML
     private TextField numberOfAutoCreatedRobots;
 
-    private ControlPanelController controlPanelController;
+    private ControlPanelFacade controlPanelFacade;
 
     public AutoGenerationController() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../view/control_panel_component/auto_generation.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../view/control_panel_component/auto_generation.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
@@ -55,15 +52,10 @@ public class AutoGenerationController extends VBox {
                     Random random = new Random();
 
                     //init first one
-                    double maxX = (int) controlPanelController.getGardenController().getWidth() + 1;
-                    double maxY = (int) controlPanelController.getGardenController().getHeight() + 1;
+                    double maxX = (int) controlPanelFacade.getGardenController().getWidth() + 1;
+                    double maxY = (int) controlPanelFacade.getGardenController().getHeight() + 1;
                     int ctr = 0;
-                    //todo faked
-                    Circle robotPosition = new Circle(3, Color.WHITE);
-                    Circle robotBody = new Circle(10, controlPanelController.getSelectedRobotColor());
-                    Circle robotBorder = new Circle(11, Color.WHITE);
-                    Circle robotVision = new Circle(controlPanelController.getSelectedRobotVision(), Color.LIGHTBLUE);
-                    Robot initRobot = controlPanelController.getRobotGenerationController().robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY), robotPosition, robotBody, robotBorder, robotVision);
+                    Robot initRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY));
 
                     //create the rest
                     for (int i = 1; i < numOfNewRobots; i++) {
@@ -84,15 +76,11 @@ public class AutoGenerationController extends VBox {
                             double differY = currY - y;
                             distance = Math.sqrt(Math.pow(differX, 2) + Math.pow(differY, 2));
                         }
-                        robotPosition = new Circle(3, Color.WHITE);
-                        robotBody = new Circle(10, controlPanelController.getSelectedRobotColor());
-                        robotBorder = new Circle(11, Color.WHITE);
-                        robotVision = new Circle(controlPanelController.getSelectedRobotVision(), Color.LIGHTBLUE);
-                        initRobot = controlPanelController.getRobotGenerationController().robotGenerator(" =>" + ctr + "<= ", currX, currY, robotPosition, robotBody, robotBorder, robotVision);
+                        initRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", currX, currY);
                     }
-                    controlPanelController.getGardenController().updateGarden();
+                    controlPanelFacade.getGardenController().updateGarden();
                 } catch (NumberFormatException e) {
-                    controlPanelController.getWarning().setText("The Number of Random Created Robots Must Be an Integer!!!");
+                    controlPanelFacade.getWarning().setText("The Number of Random Created Robots Must Be an Integer!!!");
                 }
             }
         });
@@ -114,8 +102,8 @@ public class AutoGenerationController extends VBox {
         return original;
     }
 
-    public void setControlPanelController(ControlPanelController controlPanelController) {
-        this.controlPanelController = controlPanelController;
+    public void setControlPanelFacade(ControlPanelFacade controlPanelFacade) {
+        this.controlPanelFacade = controlPanelFacade;
     }
 
     public void reset() {

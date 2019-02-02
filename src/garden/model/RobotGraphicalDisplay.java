@@ -166,9 +166,12 @@ public class RobotGraphicalDisplay {
      * toggle the visibility of the robot's vision.
      * <br/>
      * It's recommended to always use this method instead of setting the visibility directly.
+     *
+     * @return boolean that represent the states of vision visibility AFTER toggled
      */
-    public void toggleVisionVisible() {
+    public boolean toggleVisionVisible() {
         this.setVisionVisible(!this.isVisionVisible());
+        return visionVisible;
     }
 
     public RobotGraphicalDisplay deepCopy() {

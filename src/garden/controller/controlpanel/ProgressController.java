@@ -1,6 +1,5 @@
-package garden.controller.controlpanel.controlpanel_component;
+package garden.controller.controlpanel;
 
-import garden.controller.controlpanel.ControlPanelController;
 import garden.model.Robot;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -45,7 +44,7 @@ public class ProgressController extends VBox {
     @FXML
     private Text autotimeText;
 
-    private ControlPanelController controlPanelController;
+    private ControlPanelFacade controlPanelFacade;
     private List<Robot> robots;
     private boolean isRunning = false;
     private String selectedAlgorithm;
@@ -60,7 +59,7 @@ public class ProgressController extends VBox {
 
 
     public ProgressController() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../view/control_panel_component/progress_control.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../view/control_panel_component/progress_control.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
@@ -103,7 +102,7 @@ public class ProgressController extends VBox {
                                     Platform.runLater(ProgressController.this::nextAction);//update in UI thread
                                     Thread.sleep(timeInterval);
                                 } catch (NumberFormatException e) {
-                                    controlPanelController.getWarning().setText("Invalid Input! The ms must be an integer!");
+                                    controlPanelFacade.getWarning().setText("Invalid Input! The ms must be an integer!");
                                     isRunning = false;
                                 }
                             }
@@ -125,7 +124,7 @@ public class ProgressController extends VBox {
                     addDeepCopiedRobotList(robotStackNext, robots);//store the current to the next
                     robots.removeAll(robots);//clean the current
                     robots.addAll(robotStackPrev.pop());//restore the prev
-                    controlPanelController.getGardenController().updateGarden();
+                    controlPanelFacade.updateGarden();
                     singleAlgorithm = preSingleAlgorithm.pop();
 
                 }
@@ -146,7 +145,7 @@ public class ProgressController extends VBox {
         clean.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                controlPanelController.resetAll();
+                controlPanelFacade.reset();
             }
         });
     }
@@ -154,7 +153,7 @@ public class ProgressController extends VBox {
     private void nextAction() {
 
         //remove unnecessary info (to ensure obliviousness <- KEY OF THE PROJECT)
-        for (Robot robot : controlPanelController.getRobots()) {
+        for (Robot robot : robots) {
             robot.iForgot();
         }
         if(robots.size()!=0) {
@@ -202,13 +201,13 @@ public class ProgressController extends VBox {
                             next.setDisable(true);
                             prev.setDisable(true);
 //                            autoRun.setText(AUTO_RUN_BTN_TO_START);
-                            controlPanelController.getWarning().setText("Terminated!");
+                            controlPanelFacade.getWarning().setText("Terminated!");
                         }
                     }
                 }
 
             }
-            controlPanelController.getGardenController().updateGarden();
+        controlPanelFacade.updateGarden();
 
     }
 
@@ -243,11 +242,11 @@ public class ProgressController extends VBox {
         }
 
         //boundary check
-        if (point.getX() > controlPanelController.getGardenController().getGarden().getWidth()) {
-            point.setLocation(controlPanelController.getGardenController().getGarden().getWidth(), point.getY());
+        if (point.getX() > controlPanelFacade.getGardenController().getGarden().getWidth()) {
+            point.setLocation(controlPanelFacade.getGardenController().getGarden().getWidth(), point.getY());
         }
-        if (point.getY() > controlPanelController.getGardenController().getGarden().getHeight()) {
-            point.setLocation(point.getX(), controlPanelController.getGardenController().getGarden().getHeight());
+        if (point.getY() > controlPanelFacade.getGardenController().getGarden().getHeight()) {
+            point.setLocation(point.getX(), controlPanelFacade.getGardenController().getGarden().getHeight());
         }
         return point;
     }
@@ -265,13 +264,13 @@ public class ProgressController extends VBox {
         autoRunTimeInterval.setText("");
     }
 
-    public void setControlPanelController(ControlPanelController controlPanelController) {
-        this.controlPanelController = controlPanelController;
+    public void setControlPanelFacade(ControlPanelFacade controlPanelFacade) {
+        this.controlPanelFacade = controlPanelFacade;
         setRobots();
     }
 
     private void setRobots() {
-        this.robots = controlPanelController.getRobots();
+        this.robots = controlPanelFacade.getRobots();
 }
 
     private void checkSingleAlgortihm(Robot robot){

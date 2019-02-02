@@ -142,6 +142,7 @@ public class ControlPanelController extends VBox {
         //clean prev and next
         progressController.reset();
         autoGenerationController.reset();
+        warning.setText(WARING_TEXT);
     }
 
     Text getWarning() {

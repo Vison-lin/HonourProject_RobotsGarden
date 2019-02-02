@@ -1,6 +1,6 @@
 package garden.controller.garden;
 
-import garden.controller.controlpanel.ControlPanelController;
+import garden.controller.controlpanel.ControlPanelFacade;
 import garden.controller.controlpanel.controlpanel_component.RobotGenerationController;
 import garden.core.DisplayAdapter;
 import garden.model.Robot;
@@ -32,7 +32,7 @@ public class GardenController extends VBox {
      */
     private static double ROBOT_SIZE = 9;
 
-    private ControlPanelController controlPanelController;
+    private ControlPanelFacade controlPanelFacade;
 
     private GardenController gardenController = this;
 
@@ -64,7 +64,7 @@ public class GardenController extends VBox {
 
         //get the index of the deepest bottom layer for all robots
         int deepestBottomLayer = 0;
-        for (Robot robot : ControlPanelController.getRobots()) {
+        for (Robot robot : controlPanelFacade.getRobots()) {
             int currLayer = robot.getGraphicalDisplay().getBottomLayers().size();
             if (currLayer > deepestBottomLayer) {
                 deepestBottomLayer = currLayer;
@@ -79,7 +79,7 @@ public class GardenController extends VBox {
 
         //for each robot, insert the bottomLayer into the corresponding bottomLayer set
         for (int i = 0; i < deepestBottomLayer; i++) {
-            for (Robot robot : ControlPanelController.getRobots()) {
+            for (Robot robot : controlPanelFacade.getRobots()) {
                 DisplayAdapter currDisplayAdapter;
                 try {
                     currDisplayAdapter = robot.getGraphicalDisplay().getBottomLayers().get(i);
@@ -97,7 +97,7 @@ public class GardenController extends VBox {
         }
 
 
-        for (Robot robot : ControlPanelController.getRobots()) {
+        for (Robot robot : controlPanelFacade.getRobots()) {
             RobotGraphicalDisplay robotGraphicalDisplay = robot.getGraphicalDisplay();
             Circle robotPosition = robotGraphicalDisplay.getRobotPosition();
 //            System.out.println("The drawn robot positioned at: " + robotPosition.getTranslateX() +","+robotPosition.getTranslateY());
@@ -147,7 +147,7 @@ public class GardenController extends VBox {
     }
 
     /**
-     * Init the robots: add on click to the pane(garden) so where ever click the pane, a new robots will be created.
+     * Init the robots: add on click to the pane(garden) so wherever click the pane, a new robots will be created.
      */
     private void robotsInitBooster() {
         //set onClickListener for creating robots
@@ -159,7 +159,7 @@ public class GardenController extends VBox {
                     Circle robotBody = new Circle(10, Color.BLACK);
                     Circle robotBorder = new Circle(11, Color.WHITE);
                     Circle robotVision = new Circle(RobotGenerationController.DEFAULT_ROBOT_VISION, Color.LIGHTBLUE);
-                    controlPanelController.getRobotGenerationController().robotGenerator("New Robot", event.getX(), event.getY(), robotPosition, robotBody, robotBorder, robotVision);
+                    controlPanelFacade.robotGenerator("New Robot", event.getX(), event.getY(), robotPosition, robotBody, robotBorder, robotVision);
                     //adding to the graph
                     updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
                 }
@@ -186,7 +186,7 @@ public class GardenController extends VBox {
                 if (event.getButton() == MouseButton.MIDDLE) {// for each of the btn that has added event, add one right click listener for it.
                     RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
                 } else if (event.getButton() == MouseButton.SECONDARY) {
-                    RobotToggle menu = new RobotToggle(gardenController, robot, controlPanelController.getRobotGenerationController().getSelectedRobotColor(), controlPanelController.getSelectedRobotVision());
+                    RobotToggle menu = new RobotToggle(gardenController, robot, controlPanelFacade.getSelectedRobotColor(), controlPanelFacade.getSelectedRobotVision());
                     menu.show(robotGraphicalDisplay.getRobotBody(),Side.BOTTOM,0,0);
                     updateGarden();
                 }
@@ -198,7 +198,12 @@ public class GardenController extends VBox {
         return garden;
     }
 
-    public void setControlPanelController(ControlPanelController controlPanelController) {
-        this.controlPanelController = controlPanelController;
+    public ControlPanelFacade getControlPanelFacade() {
+        return this.controlPanelFacade;
     }
+
+    public void setControlPanelFacade(ControlPanelFacade controlPanelFacade) {
+        this.controlPanelFacade = controlPanelFacade;
+    }
+
 }

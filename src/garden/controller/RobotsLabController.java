@@ -1,6 +1,7 @@
 package garden.controller;
 
 import garden.controller.controlpanel.ControlPanelController;
+import garden.controller.controlpanel.ControlPanelFacade;
 import garden.controller.garden.GardenController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,8 +13,11 @@ public class RobotsLabController extends HBox {
 
     @FXML
     private GardenController gardenController;
+
     @FXML
     private ControlPanelController controlPanelController;
+
+    private ControlPanelFacade controlPanelFacade;
 
     public RobotsLabController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/robots_lab.fxml"));
@@ -22,8 +26,9 @@ public class RobotsLabController extends HBox {
         try {
             fxmlLoader.load();
             //passing gardenController into controlPanelController
-            controlPanelController.setGardenController(gardenController);
-            gardenController.setControlPanelController(controlPanelController);
+            controlPanelFacade = controlPanelController.getControlPanelFacade();
+            controlPanelFacade.setGardenController(gardenController);
+            gardenController.setControlPanelFacade(controlPanelFacade);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

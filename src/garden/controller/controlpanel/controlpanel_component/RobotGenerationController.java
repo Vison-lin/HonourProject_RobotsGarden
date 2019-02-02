@@ -1,7 +1,7 @@
 package garden.controller.controlpanel.controlpanel_component;
 
 import garden.controller.controlpanel.AlgorithmLoadingHelper;
-import garden.controller.controlpanel.ControlPanelController;
+import garden.controller.controlpanel.ControlPanelFacade;
 import garden.model.Robot;
 import garden.model.RobotGraphicalDisplay;
 import javafx.collections.FXCollections;
@@ -28,13 +28,15 @@ import java.util.List;
 public class RobotGenerationController extends VBox {
 
     public static final double DEFAULT_ROBOT_VISION = 100;
+
     @FXML
     private ComboBox<Pair<String, String>> algorithmSelection;
     @FXML
     private ColorPicker colorPicker;
     @FXML
     private TextField inputVision;
-    private ControlPanelController controlPanelController;
+
+    private ControlPanelFacade controlPanelFacade;
 
     private AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
 
@@ -84,7 +86,7 @@ public class RobotGenerationController extends VBox {
                 try {
                     selectedRobotVision = Integer.valueOf(inputVision.getText());//todo must press return to trigger, beeter way? use int or double?
                 } catch (NumberFormatException e) {
-                    controlPanelController.getWarning().setText("Robot Vision must be an int");
+                    controlPanelFacade.getWarning().setText("Robot Vision must be an int");
                 }
 
             }
@@ -146,17 +148,17 @@ public class RobotGenerationController extends VBox {
         algorithmLoadingHelper.assignAlgorithmToRobot(robot, selectedAlgorithm);
         robots.add(robot);//add the robot into the robots list
         robot.getSensor().setGlobalRobots(robots);//pass the global list into robot sensor immediately: so that without clicking next, the robot's sensor start to scan its surroundings immediately todo add an start btn instead?
-        controlPanelController.getGardenController().addGeneratedRobotToGarden(robot);
+        controlPanelFacade.addGeneratedRobotToGarden(robot);
         return robot;
     }
 
-    public void setControlPanelController(ControlPanelController controlPanelController) {
-        this.controlPanelController = controlPanelController;
+    public void setControlPanelFacade(ControlPanelFacade controlPanelFacade) {
+        this.controlPanelFacade = controlPanelFacade;
         setRobots();
     }
 
     private void setRobots() {
-        this.robots = controlPanelController.getRobots();
+        this.robots = controlPanelFacade.getRobots();
     }
 
     public String getSelectAlgorithm(){return selectedAlgorithm;}

@@ -11,7 +11,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
 import java.io.File;
@@ -48,8 +47,7 @@ public class ControlPanelController extends VBox {
     @FXML
     private Text warning;
 
-
-
+    ControlPanelFacade controlPanelFacade;
 
     public ControlPanelController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../view/control_panel.fxml"));
@@ -58,14 +56,19 @@ public class ControlPanelController extends VBox {
 
         try {
             fxmlLoader.load();
-            this.progressController.setControlPanelController(this);
-            this.autoGenerationController.setControlPanelController(this);
-            this.robotGenerationController.setControlPanelController(this);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        controlPanelFacade = new ControlPanelFacade(this, autoGenerationController, progressController, robotGenerationController);
+        this.progressController.setControlPanelFacade(controlPanelFacade);
+        this.autoGenerationController.setControlPanelFacade(controlPanelFacade);
+        this.robotGenerationController.setControlPanelFacade(controlPanelFacade);
         initNodesText();
         saveListener();
+    }
+
+    public ControlPanelFacade getControlPanelFacade() {
+        return controlPanelFacade;
     }
 
     private void initNodesText() {
@@ -98,19 +101,11 @@ public class ControlPanelController extends VBox {
 
     }
 
-
-
-
-
-    public void setGardenController(GardenController gardenController) {
-        this.gardenController = gardenController;
-    }
-
     /**
      * get the list of robots.
      * @return the list of the robots
      */
-    public static List<Robot> getRobots() {
+    List<Robot> getRobots() {
         return robots;
     }
 
@@ -119,12 +114,12 @@ public class ControlPanelController extends VBox {
      * Note, one should avoid to use this method, instead, change the content of the robots directly.
      * @param robots the new list of the robots
      */
-    public void setRobots(ArrayList<Robot> robots) {
+    void setRobots(ArrayList<Robot> robots) {
         ControlPanelController.robots = robots;
     }
 
 
-    public void resetAll() {
+    void resetAll() {
         AlgorithmLoadingHelper helper = new AlgorithmLoadingHelper();
         robots.clear();
         gardenController.updateGarden();
@@ -134,24 +129,15 @@ public class ControlPanelController extends VBox {
         autoGenerationController.reset();
     }
 
-
-    public double getSelectedRobotVision() {
-        return robotGenerationController.getSelectedRobotVision();
-    }
-
-    public Paint getSelectedRobotColor() {
-        return robotGenerationController.getSelectedRobotColor();
-    }
-
-    public GardenController getGardenController() {
-        return gardenController;
-    }
-
-    public Text getWarning() {
+    Text getWarning() {
         return warning;
     }
 
-    public RobotGenerationController getRobotGenerationController() {
-        return robotGenerationController;
+    GardenController getGardenController() {
+        return this.gardenController;
+    }
+
+    void setGardenController(GardenController gardenController) {
+        this.gardenController = gardenController;
     }
 }

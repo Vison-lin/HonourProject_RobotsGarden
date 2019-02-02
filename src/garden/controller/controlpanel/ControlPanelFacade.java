@@ -1,8 +1,5 @@
 package garden.controller.controlpanel;
 
-import garden.controller.controlpanel.controlpanel_component.AutoGenerationController;
-import garden.controller.controlpanel.controlpanel_component.ProgressController;
-import garden.controller.controlpanel.controlpanel_component.RobotGenerationController;
 import garden.controller.garden.GardenController;
 import garden.model.Robot;
 import javafx.scene.paint.Paint;
@@ -28,6 +25,10 @@ public class ControlPanelFacade {
         this.robotGenerationController = robotGenerationController;
     }
 
+    /*
+                        === === === PUBLIC CONTROL PANEL API: OPEN FOR EVERY CLASSES === === ===
+     */
+
     /**
      * get the list of robots.
      *
@@ -35,14 +36,6 @@ public class ControlPanelFacade {
      */
     public List<Robot> getRobots() {
         return controlPanelController.getRobots();
-    }
-
-    public Text getWarning() {
-        return controlPanelController.getWarning();
-    }
-
-    public void reset() {
-        controlPanelController.resetAll();
     }
 
     public double getSelectedRobotVision() {
@@ -57,19 +50,39 @@ public class ControlPanelFacade {
         return this.robotGenerationController.robotGenerator(new_robot, x, y, robotPosition, robotBody, robotBorder, robotVision);
     }
 
-    public void addGeneratedRobotToGarden(Robot robot) {
+    void addGeneratedRobotToGarden(Robot robot) {
         this.controlPanelController.getGardenController().addGeneratedRobotToGarden(robot);
     }
 
-    public void updateGarden() {
+    /*
+                                        === === === END OF PUBLIC CONTROL PANEL APIs === === ===
+     */
+
+    /*
+                        === === === PRIVATE CONTROL PANEL API: ONLY OPEN TO THOSE CLASSES WITHIN THIS PACKAGE === === ===
+     */
+
+    void updateGarden() {
         this.controlPanelController.getGardenController().updateGarden();
     }
 
-    public GardenController getGardenController() {
+    GardenController getGardenController() {
         return controlPanelController.getGardenController();
     }
 
     public void setGardenController(GardenController gardenController) {
         this.controlPanelController.setGardenController(gardenController);
     }
+
+    Text getWarning() {
+        return controlPanelController.getWarning();
+    }
+
+    void reset() {
+        controlPanelController.resetAll();
+    }
+
+        /*
+                                       === === === END OF PRIVATE CONTROL PANEL APIs === === ===
+     */
 }

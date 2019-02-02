@@ -1,7 +1,5 @@
-package garden.controller.controlpanel.controlpanel_component;
+package garden.controller.controlpanel;
 
-import garden.controller.controlpanel.AlgorithmLoadingHelper;
-import garden.controller.controlpanel.ControlPanelFacade;
 import garden.model.Robot;
 import garden.model.RobotGraphicalDisplay;
 import javafx.collections.FXCollections;

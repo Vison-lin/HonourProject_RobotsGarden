@@ -1,6 +1,5 @@
-package garden.controller.controlpanel.controlpanel_component;
+package garden.controller.controlpanel;
 
-import garden.controller.controlpanel.ControlPanelFacade;
 import garden.model.Robot;
 import javafx.application.Platform;
 import javafx.concurrent.Task;

@@ -1,8 +1,5 @@
 package garden.controller.controlpanel;
 
-import garden.controller.controlpanel.controlpanel_component.AutoGenerationController;
-import garden.controller.controlpanel.controlpanel_component.ProgressController;
-import garden.controller.controlpanel.controlpanel_component.RobotGenerationController;
 import garden.controller.garden.GardenController;
 import garden.model.Robot;
 import javafx.event.EventHandler;

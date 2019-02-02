@@ -1,7 +1,7 @@
 package garden.controller.garden;
 
 import garden.controller.controlpanel.ControlPanelFacade;
-import garden.controller.controlpanel.controlpanel_component.RobotGenerationController;
+import garden.controller.controlpanel.RobotGenerationController;
 import garden.core.DisplayAdapter;
 import garden.model.Robot;
 import garden.model.RobotGraphicalDisplay;

@@ -15,7 +15,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 
@@ -49,7 +48,7 @@ public class RobotGenerationController extends VBox {
     public RobotGenerationController() {
 
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../view/control_panel_component/robot_customization_control.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../view/control_panel_component/robot_customization_control.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
@@ -138,8 +137,7 @@ public class RobotGenerationController extends VBox {
      * @param y   for now, generate
      * @return
      */
-    public Robot robotGenerator(String tag, double x, double y, Circle robotPosition, Circle robotBody, Circle robotBorder, Circle robotVision) {
-        RobotGraphicalDisplay robotGraphicalDisplay = new RobotGraphicalDisplay(robotPosition, robotBody, robotBorder, robotVision, false);
+    public Robot robotGenerator(String tag, double x, double y, RobotGraphicalDisplay robotGraphicalDisplay) {
         Robot robot = new Robot(robotGraphicalDisplay);
         robot.moveTo(x, y);
         robot.setTag(tag);

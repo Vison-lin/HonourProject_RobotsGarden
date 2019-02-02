@@ -1,6 +1,7 @@
 package garden.controller.controlpanel;
 
 import garden.model.Robot;
+import garden.model.RobotGraphicalDisplay;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,8 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 
 import java.io.IOException;
 import java.util.Random;
@@ -25,7 +24,7 @@ public class AutoGenerationController extends VBox {
     private ControlPanelFacade controlPanelFacade;
 
     public AutoGenerationController() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../view/control_panel_component/auto_generation.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../view/control_panel_component/auto_generation.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
@@ -55,12 +54,8 @@ public class AutoGenerationController extends VBox {
                     double maxX = (int) controlPanelFacade.getGardenController().getWidth() + 1;
                     double maxY = (int) controlPanelFacade.getGardenController().getHeight() + 1;
                     int ctr = 0;
-                    //todo faked
-                    Circle robotPosition = new Circle(3, Color.WHITE);
-                    Circle robotBody = new Circle(10, controlPanelFacade.getSelectedRobotColor());
-                    Circle robotBorder = new Circle(11, Color.WHITE);
-                    Circle robotVision = new Circle(controlPanelFacade.getSelectedRobotVision(), Color.LIGHTBLUE);
-                    Robot initRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY), robotPosition, robotBody, robotBorder, robotVision);
+                    RobotGraphicalDisplay initRobotGraphicalDisplay = controlPanelFacade.getCustomizedRobotGraphicalDisplay();
+                    Robot initRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY), initRobotGraphicalDisplay);
 
                     //create the rest
                     for (int i = 1; i < numOfNewRobots; i++) {
@@ -81,11 +76,8 @@ public class AutoGenerationController extends VBox {
                             double differY = currY - y;
                             distance = Math.sqrt(Math.pow(differX, 2) + Math.pow(differY, 2));
                         }
-                        robotPosition = new Circle(3, Color.WHITE);
-                        robotBody = new Circle(10, controlPanelFacade.getSelectedRobotColor());
-                        robotBorder = new Circle(11, Color.WHITE);
-                        robotVision = new Circle(controlPanelFacade.getSelectedRobotVision(), Color.LIGHTBLUE);
-                        initRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", currX, currY, robotPosition, robotBody, robotBorder, robotVision);
+                        RobotGraphicalDisplay robotGraphicalDisplay = controlPanelFacade.getCustomizedRobotGraphicalDisplay();
+                        initRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", currX, currY, robotGraphicalDisplay);
                     }
                     controlPanelFacade.getGardenController().updateGarden();
                 } catch (NumberFormatException e) {

@@ -2,6 +2,8 @@ package garden.controller.controlpanel;
 
 import garden.controller.garden.GardenController;
 import garden.model.Robot;
+import garden.model.RobotGraphicalDisplay;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -46,12 +48,16 @@ public class ControlPanelFacade {
         return robotGenerationController.getSelectedRobotColor();
     }
 
-    public Robot robotGenerator(String new_robot, double x, double y, Circle robotPosition, Circle robotBody, Circle robotBorder, Circle robotVision) {
-        return this.robotGenerationController.robotGenerator(new_robot, x, y, robotPosition, robotBody, robotBorder, robotVision);
+    public Robot robotGenerator(String new_robot, double x, double y, RobotGraphicalDisplay robotGraphicalDisplay) {
+        return this.robotGenerationController.robotGenerator(new_robot, x, y, robotGraphicalDisplay);
     }
 
-    void addGeneratedRobotToGarden(Robot robot) {
-        this.controlPanelController.getGardenController().addGeneratedRobotToGarden(robot);
+    public RobotGraphicalDisplay getCustomizedRobotGraphicalDisplay() {
+        Circle robotPosition = new Circle(3, Color.WHITE);
+        Circle robotBody = new Circle(10, this.getSelectedRobotColor());
+        Circle robotBorder = new Circle(11, Color.WHITE);
+        Circle robotVision = new Circle(this.getSelectedRobotVision(), Color.LIGHTBLUE);
+        return new RobotGraphicalDisplay(robotPosition, robotBody, robotBorder, robotVision, false);
     }
 
     /*
@@ -61,6 +67,10 @@ public class ControlPanelFacade {
     /*
                         === === === PRIVATE CONTROL PANEL API: ONLY OPEN TO THOSE CLASSES WITHIN THIS PACKAGE === === ===
      */
+
+    void addGeneratedRobotToGarden(Robot robot) {
+        this.controlPanelController.getGardenController().addGeneratedRobotToGarden(robot);
+    }
 
     void updateGarden() {
         this.controlPanelController.getGardenController().updateGarden();

@@ -153,7 +153,7 @@ public class GardenController extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY) {// add listener for left click
-                    controlPanelFacade.robotGenerator("New Robot", event.getX(), event.getY(), controlPanelFacade.getCustomizedRobotGraphicalDisplay());
+                    controlPanelFacade.robotGenerator("New Robot", event.getX(), event.getY());
                     //adding to the graph
                     updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
                 }

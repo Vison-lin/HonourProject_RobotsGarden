@@ -1,7 +1,6 @@
 package garden.controller.controlpanel;
 
 import garden.model.Robot;
-import garden.model.RobotGraphicalDisplay;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -54,8 +53,7 @@ public class AutoGenerationController extends VBox {
                     double maxX = (int) controlPanelFacade.getGardenController().getWidth() + 1;
                     double maxY = (int) controlPanelFacade.getGardenController().getHeight() + 1;
                     int ctr = 0;
-                    RobotGraphicalDisplay initRobotGraphicalDisplay = controlPanelFacade.getCustomizedRobotGraphicalDisplay();
-                    Robot initRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY), initRobotGraphicalDisplay);
+                    Robot initRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY));
 
                     //create the rest
                     for (int i = 1; i < numOfNewRobots; i++) {
@@ -76,8 +74,7 @@ public class AutoGenerationController extends VBox {
                             double differY = currY - y;
                             distance = Math.sqrt(Math.pow(differX, 2) + Math.pow(differY, 2));
                         }
-                        RobotGraphicalDisplay robotGraphicalDisplay = controlPanelFacade.getCustomizedRobotGraphicalDisplay();
-                        initRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", currX, currY, robotGraphicalDisplay);
+                        initRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", currX, currY);
                     }
                     controlPanelFacade.getGardenController().updateGarden();
                 } catch (NumberFormatException e) {

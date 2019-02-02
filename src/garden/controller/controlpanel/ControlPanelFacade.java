@@ -2,10 +2,7 @@ package garden.controller.controlpanel;
 
 import garden.controller.garden.GardenController;
 import garden.model.Robot;
-import garden.model.RobotGraphicalDisplay;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 import java.util.List;
@@ -48,16 +45,8 @@ public class ControlPanelFacade {
         return robotGenerationController.getSelectedRobotColor();
     }
 
-    public Robot robotGenerator(String new_robot, double x, double y, RobotGraphicalDisplay robotGraphicalDisplay) {
-        return this.robotGenerationController.robotGenerator(new_robot, x, y, robotGraphicalDisplay);
-    }
-
-    public RobotGraphicalDisplay getCustomizedRobotGraphicalDisplay() {
-        Circle robotPosition = new Circle(3, Color.WHITE);
-        Circle robotBody = new Circle(10, this.getSelectedRobotColor());
-        Circle robotBorder = new Circle(11, Color.WHITE);
-        Circle robotVision = new Circle(this.getSelectedRobotVision(), Color.LIGHTBLUE);
-        return new RobotGraphicalDisplay(robotPosition, robotBody, robotBorder, robotVision, false);
+    public Robot robotGenerator(String new_robot, double x, double y) {
+        return this.robotGenerationController.robotGenerator(new_robot, x, y);
     }
 
     /*

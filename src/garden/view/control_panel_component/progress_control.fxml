@@ -16,9 +16,9 @@
     </HBox>
     <HBox prefHeight="100.0" prefWidth="200.0">
         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="auto run in"/>
+            <Text fx:id="autoText" strokeType="OUTSIDE" strokeWidth="0.0" text="auto run in"/>
             <TextField fx:id="autoRunTimeInterval"/>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ms"/>
+            <Text fx:id="autotimeText" strokeType="OUTSIDE" strokeWidth="0.0" text="ms"/>
             <Button fx:id="autoRun" mnemonicParsing="false"/>
         </children>
     </HBox>

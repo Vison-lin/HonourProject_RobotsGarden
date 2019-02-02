@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
@@ -23,6 +24,12 @@ public class ProgressController extends VBox {
 
     private static final String AUTO_RUN_BTN_TO_START = "Start Auto Run";
     private static final String AUTO_RUN_BTN_TO_STOP = "STOP";
+    private static final String PREV_BUTTON = "PREV";
+    private static final String NEXT_BUTTON = "NEXT";
+    private static final String CLEAN_BUTTON = "CLEAN";
+    private static final String AUTO_TEXT = "Auto run in: ";
+    private static final String AUTO_TIME_TEXT =" ms";
+
     @FXML
     private Button prev;
     @FXML
@@ -33,6 +40,11 @@ public class ProgressController extends VBox {
     private Button autoRun;
     @FXML
     private TextField autoRunTimeInterval;
+    @FXML
+    private Text autoText;
+    @FXML
+    private Text autotimeText;
+
     private ControlPanelController controlPanelController;
     private List<Robot> robots;
     private boolean isRunning = false;
@@ -66,6 +78,11 @@ public class ProgressController extends VBox {
 
     private void initNodesText() {
         autoRun.setText(AUTO_RUN_BTN_TO_START);
+        prev.setText(PREV_BUTTON);
+        next.setText(NEXT_BUTTON);
+        clean.setText(CLEAN_BUTTON);
+        autoText.setText(AUTO_TEXT);
+        autotimeText.setText(AUTO_TIME_TEXT);
     }
 
     private void autoRunListener() {

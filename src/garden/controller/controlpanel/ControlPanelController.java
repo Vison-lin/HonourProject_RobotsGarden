@@ -24,17 +24,27 @@ import java.util.List;
 
 public class ControlPanelController extends VBox {
 
+    private static final String STATUS_CONTROL_TEXT ="Status Control";
+    private static final String AUTO_GENERATE_TEXT ="Auto Generate";
+    private static final String CUSTOMIZE_ROBOTS_TEXT = "Customize Robots";
+    private static final String SAVE_BUTTON = "Save";
+    private static final String WARING_TEXT = "Warning information";
     @FXML
     RobotGenerationController robotGenerationController;
     @FXML
     private ProgressController progressController;
     @FXML
     private AutoGenerationController autoGenerationController;
-
-
-
+    @FXML
+    private Text statuscontrolText;
+    @FXML
+    private Text autogenerateText;
+    @FXML
+    private Text customizeText;
     @FXML
     private Button SaveButton;
+    @FXML
+    private Text warning;
 
     /**
      * Global robots list
@@ -42,12 +52,7 @@ public class ControlPanelController extends VBox {
     private static List<Robot> robots = Collections.synchronizedList(new ArrayList<>());
 
 
-
     private GardenController gardenController;
-
-    @FXML
-    private Text warning;
-
 
 
 
@@ -69,6 +74,11 @@ public class ControlPanelController extends VBox {
     }
 
     private void initNodesText() {
+        statuscontrolText.setText(STATUS_CONTROL_TEXT);
+        autogenerateText.setText(AUTO_GENERATE_TEXT);
+        customizeText.setText(CUSTOMIZE_ROBOTS_TEXT);
+        SaveButton.setText(SAVE_BUTTON);
+        warning.setText(WARING_TEXT);
     }
 
     private void saveListener(){

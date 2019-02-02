@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 
@@ -28,12 +29,25 @@ import java.util.List;
 public class RobotGenerationController extends VBox {
 
     public static final double DEFAULT_ROBOT_VISION = 100;
+    public static final double DEFAULT_ROBOT_UNIT = Double.POSITIVE_INFINITY;
+    public static final String DEFAULT_COLOR_TEXT = "Select an color for robots: ";
+    public static final String DEFAULT_VISION_TEXT = "Select an vision for robots: ";
+    public static final String DEFAULT_UNIT_TEXT = "Select an unit for robots: ";
     @FXML
     private ComboBox<Pair<String, String>> algorithmSelection;
     @FXML
     private ColorPicker colorPicker;
     @FXML
     private TextField inputVision;
+    @FXML
+    private TextField inputUnit;
+    @FXML
+    private Text colorText;
+    @FXML
+    private Text visionText;
+    @FXML
+    private Text unitText;
+
     private ControlPanelController controlPanelController;
 
     private AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
@@ -43,6 +57,8 @@ public class RobotGenerationController extends VBox {
     private double selectedRobotVision;
 
     private Paint selectedRobotColor = Color.BLACK;
+
+    private double selectedRobotUnit;
 
     private List<Robot> robots;
 
@@ -59,7 +75,8 @@ public class RobotGenerationController extends VBox {
             throw new RuntimeException(e);
         }
         initNodesText();
-        inputVisionListner();
+        inputVisionListener();
+        inputUnitListener();
         colorPickerListener();
 
         try {
@@ -75,23 +92,42 @@ public class RobotGenerationController extends VBox {
     private void initNodesText() {
         inputVision.setText(DEFAULT_ROBOT_VISION + "");
         selectedRobotVision = DEFAULT_ROBOT_VISION;
+        inputUnit.setText("");
+        selectedRobotUnit = DEFAULT_ROBOT_UNIT;
+        colorText.setText(DEFAULT_COLOR_TEXT);
+        visionText.setText(DEFAULT_VISION_TEXT);
+        unitText.setText(DEFAULT_UNIT_TEXT);
+
     }
 
-    private void inputVisionListner() {
+    private void inputVisionListener() {
         inputVision.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 try {
                     selectedRobotVision = Integer.valueOf(inputVision.getText());//todo must press return to trigger, beeter way? use int or double?
                 } catch (NumberFormatException e) {
-                    controlPanelController.getWarning().setText("Robot Vision must be an int");
+                    controlPanelController.getWarning().setText("Robot vision must be an int");
                 }
 
             }
         });
-
-
     }
+
+    private void inputUnitListener(){
+        inputUnit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try{
+                    selectedRobotUnit = Double.valueOf(inputUnit.getText());
+                }catch (NumberFormatException e){
+                    controlPanelController.getWarning().setText("Robot unit number must be an int or double");
+                }
+            }
+        });
+    }
+
+
 
 
     private void algorithmSelectionInit() throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException {
@@ -145,6 +181,7 @@ public class RobotGenerationController extends VBox {
         robot.setTag(tag);
         algorithmLoadingHelper.assignAlgorithmToRobot(robot, selectedAlgorithm);
         robots.add(robot);//add the robot into the robots list
+        robot.setUnit(selectedRobotUnit);//set the unit number for the robot;
         robot.getSensor().setGlobalRobots(robots);//pass the global list into robot sensor immediately: so that without clicking next, the robot's sensor start to scan its surroundings immediately todo add an start btn instead?
         controlPanelController.getGardenController().addGeneratedRobotToGarden(robot);
         return robot;
@@ -173,6 +210,8 @@ public class RobotGenerationController extends VBox {
         return this.selectedRobotVision;
     }
 
+    public double getSelectedRobotUnit(){return this.selectedRobotUnit;}
+
     public void setSelectedRobotVision(double newSelectedRobotVision) {
         this.selectedRobotVision = newSelectedRobotVision;
     }
@@ -180,6 +219,8 @@ public class RobotGenerationController extends VBox {
     public void reset() {
         inputVision.setText(DEFAULT_ROBOT_VISION + "");
         selectedRobotVision = DEFAULT_ROBOT_VISION;
+        inputUnit.setText("");
+        selectedRobotUnit = DEFAULT_ROBOT_UNIT;
         colorPicker.setValue(Color.BLACK);
         selectedRobotColor = Color.BLACK;
         algorithmSelection.getSelectionModel().select(0);

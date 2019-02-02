@@ -3,6 +3,7 @@ package garden.model;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,11 +34,12 @@ public class Sensor {
     }
 
     public Point.Double convertToGlobal(Point2D.Double point) {
-
+        DecimalFormat nf = new DecimalFormat("#.000000");
         double x = point.getX() + robot.getPositionX();
+        x=Double.valueOf(nf.format(x));
 
         double y = point.getY() + robot.getPositionY();
-
+        y=Double.valueOf(nf.format(y));
         Point2D.Double result = new Point2D.Double();
 
         result.setLocation(x, y);
@@ -47,11 +49,11 @@ public class Sensor {
     }
 
     public Point2D.Double convertToLocal(Point2D.Double point) {
-
+        DecimalFormat nf = new DecimalFormat("#.000000");
         double x = point.getX() - robot.getPositionX();
-
+        x=Double.valueOf(nf.format(x));
         double y = point.getY() - robot.getPositionY();
-
+        y=Double.valueOf(nf.format(y));
         Point2D.Double result = new Point2D.Double();
 
         result.setLocation(x, y);

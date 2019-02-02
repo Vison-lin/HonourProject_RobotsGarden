@@ -9,15 +9,15 @@
 <fx:root xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="500.0" type="javafx.scene.layout.VBox"
          xmlns="http://javafx.com/javafx/8.0.172-ea">
     <children>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Status Control"/>
+        <Text fx:id="statuscontrolText" strokeType="OUTSIDE" strokeWidth="0.0" text="Status Control"/>
 
         <ProgressController fx:id="progressController"/>
 
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Auto generate"/>
+        <Text fx:id="autogenerateText" strokeType="OUTSIDE" strokeWidth="0.0" text="Auto generate"/>
 
         <AutoGenerationController fx:id="autoGenerationController"/>
 
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Customize Robots"/>
+        <Text fx:id="customizeText" strokeType="OUTSIDE" strokeWidth="0.0" text="Customize Robots"/>
 
         <RobotGenerationController fx:id="robotGenerationController"/>
 

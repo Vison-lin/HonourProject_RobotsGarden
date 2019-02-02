@@ -1,6 +1,7 @@
 package garden.algorithms.src.gatheringalgorithm;
 
 import garden.algorithms.GatheringAlgorithm;
+import garden.algorithms.GatheringGoToSec;
 import garden.core.Algorithm;
 import garden.core.DisplayAdapter;
 import garden.model.Robot;
@@ -19,7 +20,14 @@ public class SEC extends DisplayAdapter {
 
     private double radius;
 
-    private GatheringAlgorithm algorithm;
+    private Algorithm algorithm;
+
+    private GatheringAlgorithm goToCenter;
+
+    private GatheringGoToSec  goToSec;
+
+    private String tag;
+
 
     public SEC() {
         super(new Circle(50, Color.DARKGREY), "SEC");
@@ -41,25 +49,38 @@ public class SEC extends DisplayAdapter {
         return algorithm;
     }
 
-    public void setAlgorithm(GatheringAlgorithm algorithm) {
-        this.algorithm = algorithm;
+    public void setAlgorithm(Algorithm algorithm,String tag) {
+        this.tag=tag;
+        if(tag.equals("gotosec")){
+            goToSec =(GatheringGoToSec)algorithm;
+            this.algorithm = goToSec;
+        }else if(tag.equals("gotocenter")){
+            goToCenter =(GatheringAlgorithm) algorithm;
+            this.algorithm = goToCenter;
+
+        }
     }
+
 
     @Override
     public void update() {
-        System.out.println("========" + algorithm.getRobot().getSensor().getAllVisibleRobotsInLocalScale().toString());
         setVisible(!isVisible());
         List<Robot> local = new ArrayList<>();
         for (Robot robot : algorithm.getRobot().getSensor().getAllVisibleRobotsInLocalScale()) {
             try {
                 local.add(robot.deepCopy());
-                System.out.println("SEC:" + robot.getPositionX() + "," + robot.getPositionY());
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
-        Point2D.Double point = algorithm.generateOneRobot(new ArrayList<>(local), algorithm.getRobot().getVision());
+        Point2D.Double point = new Point2D.Double();
+        if(tag.equals("gotosec")){
+            point = goToSec.calculateSEC(new ArrayList<>(local), algorithm.getRobot().getVision());
+        }else if(tag.equals("gotocenter")){
+            point = goToCenter.calculateSEC(new ArrayList<>(local), algorithm.getRobot().getVision());
+        }
         point = algorithm.getRobot().getSensor().convertToGlobal(point);
+        setDisplayPattern(new Circle(radius,Color.LIGHTGREEN));
         moveTo(point.x, point.y);
     }
 }

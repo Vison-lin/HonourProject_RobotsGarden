@@ -1,6 +1,7 @@
 package garden.algorithms;
 
 import garden.algorithms.src.gatheringalgorithm.Disc;
+import garden.algorithms.src.gatheringalgorithm.SEC;
 import garden.algorithms.src.gatheringalgorithm.Vector;
 import garden.core.Algorithm;
 import garden.model.Robot;
@@ -23,16 +24,22 @@ public class GatheringGoToSec extends Algorithm{
     private double range;
 
 
-//    SEC sec;
+    /**
+     *  The sec of the current robot.
+     */
+    private SEC sec;
 
 
     public GatheringGoToSec() {
         super();
+        sec = new SEC();
+        sec.setAlgorithm(this,"gotosec");
+        registerDisplayAdapter(sec);
 
     }
 
     /**
-     *  Apply the gathering algorithm (go-to-center) to calculate the next position of the current robot.
+     *  Apply the gathering algorithm (go-to-sec) to calculate the next position of the current robot.
      *
      * @param visibles This list includes visible robots of the current robot
      * @param range The vision range of the current robot
@@ -41,7 +48,7 @@ public class GatheringGoToSec extends Algorithm{
 
     private Point2D.Double generateOneRobot (ArrayList<Robot>visibles , double range){
         Point2D.Double result = new Point2D.Double();
-        ArrayList newState = new ArrayList();
+
         visibles =getUniqueRobots(visibles);
         if (visibles.size()<2){
             result.setLocation(0.0,0.0);
@@ -63,17 +70,45 @@ public class GatheringGoToSec extends Algorithm{
         Point2D.Double connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
         System.out.println("Final:" +connectedCenter);
         System.out.println("Final Global:"+getRobot().getSensor().convertToGlobal(connectedCenter));
-        Point2D.Double secPoint = getRobot().getSensor().convertToGlobal(connectedCenter);
-//        sec = new SEC();
-//        sec.setCentreX(secPoint.getX());
-//        sec.setCentreY(secPoint.getY());
+
 
         Vector goal = new Vector(connectedCenter,currRobot);
-        Point2D.Double destination = goal.resize(Math.sqrt(C.getrSquared())).getEnd();
+        Point2D.Double destination = goal.resize(C.getRadius()).getEnd();
+
+        double unit = getRobot().getUnit();
+        if(unit<=(C.getRadius()-goal.getNorm())){
+            goal = new Vector(currRobot,destination);
+            destination = goal.resize(unit).getEnd();
+
+        }
 
         return destination;
 
 
+    }
+
+    public Point2D.Double calculateSEC(ArrayList<Robot>visibles , double range){
+        Point2D.Double result = new Point2D.Double();
+
+        visibles =getUniqueRobots(visibles);
+        if (visibles.size()<2){
+            result.setLocation(0.0,0.0);
+            return result;
+        }
+        Disc C = miniDisc(visibles);
+        sec.setRadius(C.getRadius());
+        ArrayList<Robot> rs = new ArrayList<>();
+        for(Robot p:visibles){
+            if(p.getPositionX()!=0.0|| p.getPositionY()!= 0.0){
+                rs.add(p);
+            }
+        }
+        Point2D.Double currRobot  = new Point2D.Double();
+        currRobot.setLocation(0.0,0.0);
+        Point2D.Double connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
+
+
+        return connectedCenter;
     }
 
 
@@ -248,9 +283,7 @@ public class GatheringGoToSec extends Algorithm{
     public Point2D.Double next(List<Robot> robotList) {
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
         this.range = getRobot().getVision();
-        Point2D.Double point = generateOneRobot(new ArrayList<>(state),range);
-//        getRobot().getGraphicalDisplay().insertBottomLayer(sec);
-        return point;
+        return generateOneRobot(new ArrayList<>(state),range);
     }
 
     @Override

@@ -37,9 +37,16 @@ public class Robot {
     private Algorithm algorithm;
 
     /**
+     *  The unit number of robot which control the amount of the step of moiving
+     */
+    private double unit ;
+
+
+    /**
      * Create a new robot object. It will be positioned in (0, 0)
      * @param graphicalDisplay the Circle object which represent this robot on the screen
      */
+
     public Robot(RobotGraphicalDisplay graphicalDisplay) {
         this.graphicalDisplay = graphicalDisplay;
         this.sensor = new Sensor(this);
@@ -158,6 +165,10 @@ public class Robot {
     public void setTag(String tag) {
         this.tag = tag;
     }
+
+    public  double getUnit(){return  unit;}
+
+    public void setUnit(Double unit){this.unit = graphicalDisplay.getRobotBody().getRadius()*unit;}
 
     /**
      * Deep copy the robot object. Note that it does not deep copy neither the algorithm that assigned to this robot nor the global robot list that passed into the sensor.

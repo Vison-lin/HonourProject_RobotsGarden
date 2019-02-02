@@ -17,6 +17,7 @@ import java.util.Random;
 
 public class AutoGenerationController extends VBox {
 
+    private static final String RANDOM_CREATE_ROBOT_BUTTON = "Random Create Connected Robots";
     @FXML
     private Button randomCreateRobots;
 
@@ -40,6 +41,7 @@ public class AutoGenerationController extends VBox {
     }
 
     private void initNodesText() {
+        randomCreateRobots.setText(RANDOM_CREATE_ROBOT_BUTTON);
     }
 
     private void randomCreateConnectedRobotsBtnListener() {

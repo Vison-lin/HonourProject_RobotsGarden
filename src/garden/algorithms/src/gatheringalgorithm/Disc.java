@@ -2,6 +2,8 @@ package garden.algorithms.src.gatheringalgorithm;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 /**
  * This class defines simple behaviours and minimal data of a disc.
@@ -11,15 +13,18 @@ import java.awt.geom.Point2D;
 public class Disc {
 
     /**
-     * The middle coordinate of the disc.
+     * The middle coordinate of the sec.
      */
     private Point2D.Double center;
 
 
-    /**
-     * The half length of the disc
-     */
     private double rSquared;
+
+    /**
+     * The radius of the sec
+     */
+
+    private double radius;
 
 
     /**
@@ -29,6 +34,7 @@ public class Disc {
         private double x;
         private double y;
         private double rSquared;
+
         public discResult(double x,double y,double rSquared){
             this.x = x;
             this.y = y;
@@ -38,17 +44,24 @@ public class Disc {
 
     public Disc(Point2D.Double p1,Point2D.Double p2){
         center = new Point2D.Double();
-        this.center.setLocation((p1.getX()+p2.getX())/2,(p1.getY()+p2.getY())/2);
-        this.rSquared = Math.pow((p1.getX()-this.center.getX()),2)+Math.pow((p1.getY()-this.center.getY()),2);
+//        NumberFormat nf = NumberFormat.getNumberInstance();
+//        nf.setMaximumFractionDigits(4);
+        DecimalFormat nf = new DecimalFormat("#.000000");
+        this.center.setLocation(Double.valueOf(nf.format((p1.getX()+p2.getX())/2)),Double.valueOf(nf.format((p1.getY()+p2.getY())/2)));
+        this.rSquared =Double.valueOf(nf.format( Math.pow((p1.getX()-this.center.getX()),2)+Math.pow((p1.getY()-this.center.getY()),2)));
+        this.radius = Double.valueOf(nf.format(Math.sqrt(rSquared)));
 
     }
 
     public Disc(Point2D.Double p1,Point2D.Double p2,Point2D.Double p3){
         center = new Point2D.Double();
-
             discResult rs = findDiscWith3Points2(p1,p2,p3);
-            this.center.setLocation(rs.x,rs.y);
-            this.rSquared = rs.rSquared;
+        //        NumberFormat nf = NumberFormat.getNumberInstance();
+//        nf.setMaximumFractionDigits(4);
+        DecimalFormat nf = new DecimalFormat("#.000000");
+            this.center.setLocation(Double.valueOf(nf.format(rs.x)),Double.valueOf(nf.format(rs.y)));
+            this.rSquared = Double.valueOf(nf.format(rs.rSquared));
+            this.radius = Double.valueOf(nf.format(Math.sqrt(rSquared)));
 
     }
 
@@ -121,4 +134,8 @@ public class Disc {
     public double getrSquared() {
         return rSquared;
     }
+
+    public double getRadius(){return radius;}
+
+
 }

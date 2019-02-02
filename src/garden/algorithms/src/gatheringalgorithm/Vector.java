@@ -2,6 +2,7 @@ package garden.algorithms.src.gatheringalgorithm;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -93,6 +94,8 @@ public class Vector {
 
 
     public Point2D.Double getEnd(){
+        DecimalFormat nf = new DecimalFormat("#.000000");
+        this.end.setLocation(Double.valueOf(nf.format(end.getX())),Double.valueOf(nf.format(end.getY())));
         return this.end;
     }
 

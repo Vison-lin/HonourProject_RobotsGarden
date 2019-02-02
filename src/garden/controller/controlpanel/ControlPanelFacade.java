@@ -49,6 +49,14 @@ public class ControlPanelFacade {
         return this.robotGenerationController.robotGenerator(new_robot, x, y);
     }
 
+    public void setMouseCoordinate(double x, double y) {
+        controlPanelController.setMouseCoordinate(x, y);
+    }
+
+    public void cleanMouseCoordinate() {
+        controlPanelController.cleanMouseCoordinate();
+    }
+
     /*
                                         === === === END OF PUBLIC CONTROL PANEL APIs === === ===
      */

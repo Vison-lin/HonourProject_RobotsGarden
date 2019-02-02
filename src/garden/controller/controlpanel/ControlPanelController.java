@@ -20,8 +20,7 @@ import java.util.List;
 
 public class ControlPanelController extends VBox {
 
-    @FXML
-    RobotGenerationController robotGenerationController;
+    private static final String DEFAULT_MOUSE_COORDINATE_DISPLAY = "( --, -- )";
     @FXML
     private ProgressController progressController;
     @FXML
@@ -43,6 +42,10 @@ public class ControlPanelController extends VBox {
 
     @FXML
     private Text warning;
+    @FXML
+    private RobotGenerationController robotGenerationController;
+    @FXML
+    private Text mouseCoordinate;
 
     ControlPanelFacade controlPanelFacade;
 
@@ -69,6 +72,7 @@ public class ControlPanelController extends VBox {
     }
 
     private void initNodesText() {
+        mouseCoordinate.setText(DEFAULT_MOUSE_COORDINATE_DISPLAY);
     }
 
     private void saveListener(){
@@ -136,5 +140,13 @@ public class ControlPanelController extends VBox {
 
     void setGardenController(GardenController gardenController) {
         this.gardenController = gardenController;
+    }
+
+    void setMouseCoordinate(double x, double y) {
+        mouseCoordinate.setText("( " + x + ", " + y + " )");
+    }
+
+    void cleanMouseCoordinate() {
+        mouseCoordinate.setText(DEFAULT_MOUSE_COORDINATE_DISPLAY);
     }
 }

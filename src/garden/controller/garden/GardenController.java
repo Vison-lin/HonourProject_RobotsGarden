@@ -4,6 +4,8 @@ import garden.controller.controlpanel.ControlPanelFacade;
 import garden.core.DisplayAdapter;
 import garden.model.Robot;
 import garden.model.RobotGraphicalDisplay;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -50,6 +52,8 @@ public class GardenController extends VBox {
             throw new RuntimeException(e);
         }
         robotsInitBooster();
+        gardenMouseHoverListener();
+        gardenMouseMoveOutListener();
 
     }
 
@@ -153,9 +157,29 @@ public class GardenController extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY) {// add listener for left click
-                    controlPanelFacade.robotGenerator("New Robot", event.getX(), event.getY());
+                    controlPanelFacade.robotGenerator("New Robot", event.getX(), event.getY());//todo name?
                     //adding to the graph
                     updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
+                }
+            }
+        });
+    }
+
+    private void gardenMouseHoverListener() {
+        garden.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                controlPanelFacade.setMouseCoordinate(event.getX(), event.getY());
+            }
+        });
+    }
+
+    private void gardenMouseMoveOutListener() {
+        garden.hoverProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (!newValue) {
+                    controlPanelFacade.cleanMouseCoordinate();
                 }
             }
         });

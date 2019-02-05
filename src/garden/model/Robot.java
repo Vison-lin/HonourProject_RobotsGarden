@@ -180,6 +180,7 @@ public class Robot {
         Robot newRobot = new Robot(newRobotGraphicalDisplay);
         Sensor newSensor = new Sensor(newRobot);
         newRobot.setSensor(newSensor);
+        newRobot.setUnit(this.getUnit());
         //deep copy algorithm: create a new algorithm instance and return it.
         Algorithm algorithm = AlgorithmClassLoader.getAlgorithmInstanceByName(this.algorithm.getClass().getSimpleName());
         algorithm.setRobot(newRobot);

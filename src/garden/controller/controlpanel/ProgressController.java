@@ -27,7 +27,7 @@ public class ProgressController extends VBox {
     private static final String NEXT_BUTTON = "NEXT";
     private static final String CLEAN_BUTTON = "CLEAN";
     private static final String AUTO_TEXT = "Auto run in: ";
-    private static final String AUTO_TIME_TEXT =" ms";
+    private static final String AUTO_TIME_TEXT = " ms";
 
     @FXML
     private Button prev;
@@ -47,10 +47,9 @@ public class ProgressController extends VBox {
     private ControlPanelFacade controlPanelFacade;
     private List<Robot> robots;
     private boolean isRunning = false;
-    private String selectedAlgorithm;
+    private String selectedAlgorithm;//used for check if all the robots runs the same algorithm. If yes, can than run timeToTerminate.
     private boolean singleAlgorithm = true;
     private Stack<Boolean> preSingleAlgorithm = new Stack<>();
-
 
 
     private Stack<List<Robot>> robotStackPrev = new Stack<>();
@@ -156,57 +155,57 @@ public class ProgressController extends VBox {
         for (Robot robot : robots) {
             robot.iForgot();
         }
-        if(robots.size()!=0) {
+        if (robots.size() != 0) {
             selectedAlgorithm = robots.get(0).getAlgorithm().getClass().getSimpleName();
         }
 
-            addDeepCopiedRobotList(robotStackPrev, robots);//store the current to the prev
-            preSingleAlgorithm.add(singleAlgorithm);
+        addDeepCopiedRobotList(robotStackPrev, robots);//store the current to the prev
+        preSingleAlgorithm.add(singleAlgorithm);
 
-            if (!robotStackNext.empty()) {
-                robots.removeAll(robots);//clean the current
-                robots.addAll(robotStackNext.pop());
-            } else {
-                ArrayList<Robot> localRobotsList = new ArrayList<>();
-                //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
-                for (Robot robot : robots) {
-                    Robot newRobotInstance = null;
+        if (!robotStackNext.empty()) {
+            robots.removeAll(robots);//clean the current
+            robots.addAll(robotStackNext.pop());
+        } else {
+            ArrayList<Robot> localRobotsList = new ArrayList<>();
+            //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
+            for (Robot robot : robots) {
+                Robot newRobotInstance = null;
 
-                    try {
-                        newRobotInstance = robot.deepCopy();
+                try {
+                    newRobotInstance = robot.deepCopy();
 
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                        System.exit(0);
-                    }
-                    localRobotsList.add(newRobotInstance);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                    System.exit(0);
                 }
-
-
-                //run next
-                Iterator<Robot> robotIterator2 = robots.iterator();
-
-                while (robotIterator2.hasNext()) {
-                    Robot curr = robotIterator2.next();
-                    checkSingleAlgortihm(curr);
-
-                    Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
-                    newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
-                    curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
-
-                    if (singleAlgorithm) {
-                        //check if need to terminate the program: since we assume each robot runs same algorithm, we can use any robot instance to do the check
-                        boolean timeToTerminate = curr.getAlgorithm().timeToTerminate(this.robots);
-                        if (timeToTerminate) {
-                            next.setDisable(true);
-                            prev.setDisable(true);
-//                            autoRun.setText(AUTO_RUN_BTN_TO_START);
-                            controlPanelFacade.getWarning().setText("Terminated!");
-                        }
-                    }
-                }
-
+                localRobotsList.add(newRobotInstance);
             }
+
+
+            //run next
+            Iterator<Robot> robotIterator2 = robots.iterator();
+
+            while (robotIterator2.hasNext()) {
+                Robot curr = robotIterator2.next();
+                checkSingleAlgortihm(curr);
+
+                Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
+                newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
+                curr.moveTo(newPosition.getX(), newPosition.getY());//move the robot
+
+//                if (singleAlgorithm) {
+                //check if need to terminate the program: since we assume each robot runs same algorithm, we can use any robot instance to do the check
+                boolean timeToTerminate = curr.getAlgorithm().timeToTerminate(this.robots);
+                if (timeToTerminate) {
+                    next.setDisable(true);
+                    prev.setDisable(true);
+//                            autoRun.setText(AUTO_RUN_BTN_TO_START);
+                    controlPanelFacade.getWarning().setText("Terminated!");
+                }
+//                }
+            }
+
+        }
         controlPanelFacade.updateGarden();
 
     }
@@ -271,9 +270,9 @@ public class ProgressController extends VBox {
 
     private void setRobots() {
         this.robots = controlPanelFacade.getRobots();
-}
+    }
 
-    private void checkSingleAlgortihm(Robot robot){
+    private void checkSingleAlgortihm(Robot robot) {
         if (!robot.getAlgorithm().getClass().getSimpleName().equals(selectedAlgorithm)) {
             singleAlgorithm = false;
         }

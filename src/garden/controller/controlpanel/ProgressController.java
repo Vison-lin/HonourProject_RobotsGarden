@@ -1,5 +1,6 @@
 package garden.controller.controlpanel;
 
+import garden.core.Algorithm;
 import garden.model.Robot;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -47,9 +48,9 @@ public class ProgressController extends VBox {
     private ControlPanelFacade controlPanelFacade;
     private List<Robot> robots;
     private boolean isRunning = false;
-    private String selectedAlgorithm;//used for check if all the robots runs the same algorithm. If yes, can than run timeToTerminate.
-    private boolean singleAlgorithm = true;
-    private Stack<Boolean> preSingleAlgorithm = new Stack<>();
+//    private String selectedAlgorithm;//used for check if all the robots runs the same algorithm. If yes, can than run timeToTerminate.
+//    private boolean singleAlgorithm = true;
+//    private Stack<Boolean> preSingleAlgorithm = new Stack<>();
 
 
     private Stack<List<Robot>> robotStackPrev = new Stack<>();
@@ -124,7 +125,7 @@ public class ProgressController extends VBox {
                     robots.removeAll(robots);//clean the current
                     robots.addAll(robotStackPrev.pop());//restore the prev
                     controlPanelFacade.updateGarden();
-                    singleAlgorithm = preSingleAlgorithm.pop();
+//                    singleAlgorithm = preSingleAlgorithm.pop();
 
                 }
             }
@@ -155,12 +156,12 @@ public class ProgressController extends VBox {
         for (Robot robot : robots) {
             robot.iForgot();
         }
-        if (robots.size() != 0) {
-            selectedAlgorithm = robots.get(0).getAlgorithm().getClass().getSimpleName();
-        }
+//        if (robots.size() != 0) {
+//            selectedAlgorithm = robots.get(0).getAlgorithm().getClass().getSimpleName();
+//        }
 
         addDeepCopiedRobotList(robotStackPrev, robots);//store the current to the prev
-        preSingleAlgorithm.add(singleAlgorithm);
+//        preSingleAlgorithm.add(singleAlgorithm);
 
         if (!robotStackNext.empty()) {
             robots.removeAll(robots);//clean the current
@@ -187,7 +188,7 @@ public class ProgressController extends VBox {
 
             while (robotIterator2.hasNext()) {
                 Robot curr = robotIterator2.next();
-                checkSingleAlgortihm(curr);
+//                checkSingleAlgortihm(curr);
 
                 Point2D.Double newPosition = curr.next(localRobotsList);//ensure all the robots get the same copy in each stage (next btn)
                 newPosition = boundaryCheck(newPosition);//ensure the robot will always stay within its vision.
@@ -195,14 +196,25 @@ public class ProgressController extends VBox {
 
 //                if (singleAlgorithm) {
                 //check if need to terminate the program: since we assume each robot runs same algorithm, we can use any robot instance to do the check
-                boolean timeToTerminate = curr.getAlgorithm().timeToTerminate(this.robots);
-                if (timeToTerminate) {
-                    next.setDisable(true);
-                    prev.setDisable(true);
-//                            autoRun.setText(AUTO_RUN_BTN_TO_START);
-                    controlPanelFacade.getWarning().setText("Terminated!");
-                }
+
 //                }
+            }
+
+            Iterator<Robot> robotIterator3 = robots.iterator();
+
+            boolean afterAllTerminate = true;
+
+            while (robotIterator3.hasNext()) {
+                Algorithm algorithm = robotIterator3.next().getAlgorithm();
+                boolean timeToTerminate = algorithm.timeToTerminate(this.robots);
+                afterAllTerminate = afterAllTerminate && timeToTerminate;
+            }
+
+            if (afterAllTerminate) {
+                next.setDisable(true);
+                prev.setDisable(true);
+//                            autoRun.setText(AUTO_RUN_BTN_TO_START);
+                controlPanelFacade.getWarning().setText("Terminated!");
             }
 
         }
@@ -222,7 +234,9 @@ public class ProgressController extends VBox {
         while (iterator.hasNext()) {
             Robot curr = iterator.next();
             try {
-                deepCopied.add(curr.deepCopy());
+                Robot robot = curr.deepCopy();
+                controlPanelFacade.addListenerToGivenRobot(robot);
+                deepCopied.add(robot);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
                 System.exit(0);
@@ -253,8 +267,8 @@ public class ProgressController extends VBox {
     public void reset() {
         robotStackPrev.clear();
         robotStackNext.clear();
-        preSingleAlgorithm.clear();
-        singleAlgorithm = true;
+//        preSingleAlgorithm.clear();
+//        singleAlgorithm = true;
         prev.setDisable(false);
         next.setDisable(false);
         clean.setDisable(false);
@@ -272,10 +286,10 @@ public class ProgressController extends VBox {
         this.robots = controlPanelFacade.getRobots();
     }
 
-    private void checkSingleAlgortihm(Robot robot) {
-        if (!robot.getAlgorithm().getClass().getSimpleName().equals(selectedAlgorithm)) {
-            singleAlgorithm = false;
-        }
-    }
+//    private void checkSingleAlgortihm(Robot robot) {
+//        if (!robot.getAlgorithm().getClass().getSimpleName().equals(selectedAlgorithm)) {
+//            singleAlgorithm = false;
+//        }
+//    }
 
 }

@@ -187,22 +187,18 @@ public class GardenController extends VBox {
 
     /**
      *
-     * Add the generated Robot to garden and assign necessary listener to it.
+     * Assign necessary listener to the given robot -- in order to response user click.
      *
      * @param robot the robot object need to add to the garden pane.
      */
     public void addGeneratedRobotToGarden(Robot robot) {
-        addOnClickListenerToRobot(robot);
-    }
-
-    private void addOnClickListenerToRobot(Robot robot) {
         RobotGraphicalDisplay robotGraphicalDisplay = robot.getGraphicalDisplay();
         //set onClickListener for opening robot setting & displaying vision range
         robotGraphicalDisplay.getRobotBody().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.MIDDLE) {// for each of the btn that has added event, add one right click listener for it.
-                    RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
+//                    RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
                 } else if (event.getButton() == MouseButton.SECONDARY) {
                     RobotToggle menu = new RobotToggle(gardenController, robot, controlPanelFacade);
                     menu.show(robotGraphicalDisplay.getRobotBody(),Side.BOTTOM,0,0);

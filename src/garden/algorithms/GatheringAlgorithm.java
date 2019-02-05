@@ -55,10 +55,10 @@ public class GatheringAlgorithm extends Algorithm{
             return result;
         }
         Disc C = miniDisc(visibles);
-        System.out.println("r: "+C.getrSquared());
-       System.out.println("Robot:"+getRobot().getPosition());
-        System.out.println("center:"+ C.getCenter());
-        System.out.println("center Global:"+getRobot().getSensor().convertToGlobal(C.getCenter()));
+//        System.out.println("r: "+C.getrSquared());
+//       System.out.println("Robot:"+getRobot().getPosition());
+//        System.out.println("center:"+ C.getCenter());
+//        System.out.println("center Global:"+getRobot().getSensor().convertToGlobal(C.getCenter()));
         ArrayList<Robot> rs = new ArrayList<>();
         for(Robot p:visibles){
             if(p.getPositionX()!=0.0|| p.getPositionY()!= 0.0){
@@ -76,8 +76,8 @@ public class GatheringAlgorithm extends Algorithm{
 
         }
 
-        System.out.println("Final:" +connectedCenter);
-        System.out.println("Final Global:"+getRobot().getSensor().convertToGlobal(connectedCenter));
+//        System.out.println("Final:" +connectedCenter);
+//        System.out.println("Final Global:"+getRobot().getSensor().convertToGlobal(connectedCenter));
         return connectedCenter;
 
     }
@@ -237,8 +237,8 @@ public class GatheringAlgorithm extends Algorithm{
     private Point2D.Double getConnectedCenter(double V,Point2D.Double ci, Point2D.Double Ri,ArrayList<Robot> R){
         Vector Vgoal = new Vector(Ri,ci);
         double D = Vgoal.getNorm();
-        System.out.println("D!: "+D);
-        System.out.println("Vgoal: "+Vgoal.getNorm());
+//        System.out.println("D!: "+D);
+//        System.out.println("Vgoal: "+Vgoal.getNorm());
         if(Vgoal.getNorm()==0){
             return Ri;
         }
@@ -248,14 +248,14 @@ public class GatheringAlgorithm extends Algorithm{
             double dj = Vrirj.getNorm();
             ArrayList<Double> cosAndsin = Vrirj.getCosAndSin(Vgoal);
             double lj = (dj/2*cosAndsin.get(0))+Math.sqrt((V/2)*(V/2)-Math.pow((dj/2*cosAndsin.get(1)),2));
-            if(!((lj+"").contains("."))){
-                System.out.println("===========");
-                System.out.println("dj: "+dj);
-                System.out.println("cos: "+cosAndsin.get(0));
-                System.out.println("v/2*v/2 :"+(V/2)*(V/2) );
-                System.out.println("sin: "+cosAndsin.get(1));
-                System.out.println("============");
-            }
+//            if(!((lj+"").contains("."))){
+//                System.out.println("===========");
+//                System.out.println("dj: "+dj);
+//                System.out.println("cos: "+cosAndsin.get(0));
+//                System.out.println("v/2*v/2 :"+(V/2)*(V/2) );
+//                System.out.println("sin: "+cosAndsin.get(1));
+//                System.out.println("============");
+//            }
             if((lj+"").contains(".")) {
                 test.add(lj);
             }
@@ -263,7 +263,7 @@ public class GatheringAlgorithm extends Algorithm{
         if(test.size()!=0) {
             double limit = test.get(0);
             for (double num : test) {
-                System.out.println("Num: "+num);
+//                System.out.println("Num: "+num);
                 if (num < limit) {
                     limit = num;
                 }
@@ -272,7 +272,7 @@ public class GatheringAlgorithm extends Algorithm{
 
             D = Math.min(Vgoal.getNorm(), limit);
         }
-        System.out.println("D: "+D*D);
+//        System.out.println("D: "+D*D);
         return Vgoal.resize(D).getEnd();
 
     }
@@ -300,16 +300,26 @@ public class GatheringAlgorithm extends Algorithm{
 
     @Override
     public boolean timeToTerminate(List<Robot> globalRobotList) {
-        Point2D.Double nextPosition = globalRobotList.get(0).getPosition();
+        boolean isSingleAlgorithm = true;
         Boolean isTerminate = true;
-        for(Robot robot: globalRobotList){
-            if(!(robot.getPosition().equals(nextPosition))){
-                isTerminate = false;
+        String algorithmName = globalRobotList.get(0).getAlgorithm().getClass().getSimpleName();
+        for (Robot curr : globalRobotList) {
+            if (!curr.getAlgorithm().getClass().getSimpleName().equals(algorithmName)) {
+                isSingleAlgorithm = false;
             }
+        }
+        if (isSingleAlgorithm) {
+            Point2D.Double nextPosition = globalRobotList.get(0).getPosition();
+            System.out.println(nextPosition);
+            for (Robot robot : globalRobotList) {
+                if (!(robot.getPosition().equals(nextPosition))) {
+                    System.out.println(robot.getPosition());
+                    isTerminate = false;
+                    System.out.println("===");
+                }
 
+            }
         }
         return isTerminate;
-
     }
-
 }

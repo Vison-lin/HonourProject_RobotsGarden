@@ -75,12 +75,12 @@ public class GatheringGoToSec extends Algorithm{
         Vector goal = new Vector(connectedCenter,currRobot);
         Point2D.Double destination = goal.resize(C.getRadius()).getEnd();
 
-        double unit = getRobot().getUnit();
-        if(unit<=(C.getRadius()-goal.getNorm())){
-            goal = new Vector(currRobot,destination);
-            destination = goal.resize(unit).getEnd();
-
-        }
+//        double unit = getRobot().getUnit();
+//        if(unit<=(C.getRadius()-goal.getNorm())){
+//            goal = new Vector(currRobot,destination);
+//            destination = goal.resize(unit).getEnd();
+//
+//        }
 
         return destination;
 

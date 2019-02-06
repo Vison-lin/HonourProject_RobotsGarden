@@ -69,6 +69,7 @@ public class SEC extends DisplayAdapter {
         for (Robot robot : algorithm.getRobot().getSensor().getAllVisibleRobotsInLocalScale()) {
             try {
                 local.add(robot.deepCopy());
+                System.out.println("robot: "+robot.getPosition());
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -81,6 +82,7 @@ public class SEC extends DisplayAdapter {
         }
         point = algorithm.getRobot().getSensor().convertToGlobal(point);
         setDisplayPattern(new Circle(radius,Color.LIGHTGREEN));
+        System.out.println("SEC： "+point);
         moveTo(point.x, point.y);
     }
 }

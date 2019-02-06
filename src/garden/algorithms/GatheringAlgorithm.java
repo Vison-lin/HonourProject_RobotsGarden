@@ -69,12 +69,12 @@ public class GatheringAlgorithm extends Algorithm{
         currRobot.setLocation(0.0,0.0);
         Point2D.Double connectedCenter = getConnectedCenter(range,C.getCenter(),currRobot,rs);
 
-        double unit = getRobot().getUnit();
-        if(unit<=Math.sqrt(C.getrSquared())){
-            Vector goal = new Vector(currRobot,connectedCenter);
-            connectedCenter = goal.resize(unit).getEnd();
-
-        }
+//        double unit = getRobot().getUnit();
+//        if(unit<=Math.sqrt(C.getrSquared())){
+//            Vector goal = new Vector(currRobot,connectedCenter);
+//            connectedCenter = goal.resize(unit).getEnd();
+//
+//        }
 
 //        System.out.println("Final:" +connectedCenter);
 //        System.out.println("Final Global:"+getRobot().getSensor().convertToGlobal(connectedCenter));

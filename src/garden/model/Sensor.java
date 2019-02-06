@@ -34,7 +34,7 @@ public class Sensor {
     }
 
     public Point.Double convertToGlobal(Point2D.Double point) {
-        DecimalFormat nf = new DecimalFormat("#.000000");
+        DecimalFormat nf = new DecimalFormat("#.000000"); //keep the fraction digit to 6 number
         double x = point.getX() + robot.getPositionX();
         x=Double.valueOf(nf.format(x));
 
@@ -49,7 +49,7 @@ public class Sensor {
     }
 
     public Point2D.Double convertToLocal(Point2D.Double point) {
-        DecimalFormat nf = new DecimalFormat("#.000000");
+        DecimalFormat nf = new DecimalFormat("#.000000"); //keep the fraction digit to 6 number
         double x = point.getX() - robot.getPositionX();
         x=Double.valueOf(nf.format(x));
         double y = point.getY() - robot.getPositionY();

@@ -56,7 +56,7 @@ public class GatheringAlgorithm extends Algorithm{
         }
         Disc C = miniDisc(visibles);
         System.out.println("r: "+C.getrSquared());
-       System.out.println("Robot:"+getRobot().getPosition());
+        System.out.println("Robot:"+getRobot().getPosition());
         System.out.println("center:"+ C.getCenter());
         System.out.println("center Global:"+getRobot().getSensor().convertToGlobal(C.getCenter()));
         ArrayList<Robot> rs = new ArrayList<>();

@@ -39,7 +39,7 @@ public class Robot {
     /**
      *  The unit number of robot which control the amount of the step of moiving
      */
-    private double unit ;
+    private double unit;
 
 
     /**

@@ -137,6 +137,7 @@ public class ControlPanelController extends VBox {
     void resetAll() {
         AlgorithmLoadingHelper helper = new AlgorithmLoadingHelper();
         robots.clear();
+        gardenController.getGarden().getChildren().removeAll(gardenController.getGarden().getChildren());
         gardenController.updateGarden();
         robotGenerationController.reset();
         //clean prev and next

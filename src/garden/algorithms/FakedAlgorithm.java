@@ -46,6 +46,11 @@ public class FakedAlgorithm extends Algorithm {
 
     @Override
     public boolean timeToTerminate(List<Robot> globalRobotList) {
-        return globalRobotList.size() == 5;
+        boolean terminate = true;
+        for (Robot robot : globalRobotList) {
+            boolean t = robot.getAlgorithm().timeToTerminate(globalRobotList);
+            terminate = terminate && t;
+        }
+        return terminate;
     }
 }

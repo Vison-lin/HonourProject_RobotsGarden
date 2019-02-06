@@ -65,7 +65,7 @@ public class ControlPanelFacade {
                         === === === PRIVATE CONTROL PANEL API: ONLY OPEN TO THOSE CLASSES WITHIN THIS PACKAGE === === ===
      */
 
-    void addGeneratedRobotToGarden(Robot robot) {
+    void addListenerToGivenRobot(Robot robot) {
         this.controlPanelController.getGardenController().addGeneratedRobotToGarden(robot);
     }
 

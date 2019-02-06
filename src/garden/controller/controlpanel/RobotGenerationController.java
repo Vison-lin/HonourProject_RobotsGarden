@@ -187,7 +187,7 @@ public class RobotGenerationController extends VBox {
         robots.add(robot);//add the robot into the robots list
         robot.setUnit(selectedRobotUnit);//set the unit number for the robot;
         robot.getSensor().setGlobalRobots(robots);//pass the global list into robot sensor immediately: so that without clicking next, the robot's sensor start to scan its surroundings immediately todo add an start btn instead?
-        controlPanelFacade.addGeneratedRobotToGarden(robot);
+        controlPanelFacade.addListenerToGivenRobot(robot);
         return robot;
     }
 

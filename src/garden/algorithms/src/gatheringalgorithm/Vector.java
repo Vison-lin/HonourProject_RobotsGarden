@@ -94,8 +94,9 @@ public class Vector {
 
 
     public Point2D.Double getEnd(){
-        DecimalFormat nf = new DecimalFormat("#.000000");
-        this.end.setLocation(Double.valueOf(nf.format(end.getX())),Double.valueOf(nf.format(end.getY())));
+       //DecimalFormat nf = new DecimalFormat("#.000000");
+        //this.end.setLocation(Double.valueOf(nf.format(end.getX())),Double.valueOf(nf.format(end.getY())));
+        this.end.setLocation(end.getX(),end.getY());
         return this.end;
     }
 

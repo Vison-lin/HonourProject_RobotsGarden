@@ -34,12 +34,12 @@ public class Sensor {
     }
 
     public Point.Double convertToGlobal(Point2D.Double point) {
-        DecimalFormat nf = new DecimalFormat("#.000000"); //keep the fraction digit to 6 number
+        //DecimalFormat nf = new DecimalFormat("#.000000"); //keep the fraction digit to 6 number
         double x = point.getX() + robot.getPositionX();
-        x=Double.valueOf(nf.format(x));
+       // x=Double.valueOf(nf.format(x));
 
         double y = point.getY() + robot.getPositionY();
-        y=Double.valueOf(nf.format(y));
+       // y=Double.valueOf(nf.format(y));
         Point2D.Double result = new Point2D.Double();
 
         result.setLocation(x, y);
@@ -49,11 +49,11 @@ public class Sensor {
     }
 
     public Point2D.Double convertToLocal(Point2D.Double point) {
-        DecimalFormat nf = new DecimalFormat("#.000000"); //keep the fraction digit to 6 number
+        //DecimalFormat nf = new DecimalFormat("#.000000"); //keep the fraction digit to 6 number
         double x = point.getX() - robot.getPositionX();
-        x=Double.valueOf(nf.format(x));
+       // x=Double.valueOf(nf.format(x));
         double y = point.getY() - robot.getPositionY();
-        y=Double.valueOf(nf.format(y));
+       // y=Double.valueOf(nf.format(y));
         Point2D.Double result = new Point2D.Double();
 
         result.setLocation(x, y);
@@ -114,10 +114,8 @@ public class Sensor {
             Point2D.Double point = new Point2D.Double();
             point.setLocation(x, y);
             Point2D.Double localPoint = convertToLocal(point);
-//            System.out.println(localPoint.getX() + ", " + localPoint.getY());
+            curr.setUnit(Double.POSITIVE_INFINITY);//to ensure to move to the desert position: when having unit, robot cannot move to desert position. No impact for global list since it is just a local (deep) copy
             curr.moveTo(localPoint.getX(), localPoint.getY());
-//            curr.getGraphicalDisplay().setTranslateX(localPoint.x);
-//            curr.getGraphicalDisplay().setTranslateY(localPoint.y);
         }
         return localRobotsList;//should use deep copy
     }
@@ -128,6 +126,12 @@ public class Sensor {
 
     public void setGlobalRobots(List<Robot> globalRobots) {
         this.globalRobots = globalRobots;
+    }
+
+    public static Point2D.Double c(Point2D.Double mDouble){
+        Point2D.Double returnValue = new Point2D.Double();
+        returnValue.setLocation(mDouble.getX(), mDouble.getY());
+        return returnValue;
     }
 
 }

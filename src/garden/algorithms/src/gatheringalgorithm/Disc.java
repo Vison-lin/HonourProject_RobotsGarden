@@ -46,10 +46,13 @@ public class Disc {
         center = new Point2D.Double();
 //        NumberFormat nf = NumberFormat.getNumberInstance();
 //        nf.setMaximumFractionDigits(4);
-        DecimalFormat nf = new DecimalFormat("#.000000"); //keep the fraction digit to 6 number
-        this.center.setLocation(Double.valueOf(nf.format((p1.getX()+p2.getX())/2)),Double.valueOf(nf.format((p1.getY()+p2.getY())/2)));
-        this.rSquared =Double.valueOf(nf.format( Math.pow((p1.getX()-this.center.getX()),2)+Math.pow((p1.getY()-this.center.getY()),2)));
-        this.radius = Double.valueOf(nf.format(Math.sqrt(rSquared)));
+        //DecimalFormat nf = new DecimalFormat("#.000000"); //keep the fraction digit to 6 number
+        //this.center.setLocation(Double.valueOf(nf.format((p1.getX()+p2.getX())/2)),Double.valueOf(nf.format((p1.getY()+p2.getY())/2)));
+        //this.rSquared =Double.valueOf(nf.format( Math.pow((p1.getX()-this.center.getX()),2)+Math.pow((p1.getY()-this.center.getY()),2)));
+        //this.radius = Double.valueOf(nf.format(Math.sqrt(rSquared)));
+        this.center.setLocation((p1.getX()+p2.getX())/2,(p1.getY()+p2.getY())/2);
+        this.rSquared = Math.pow((p1.getX()-this.center.getX()),2)+Math.pow((p1.getY()-this.center.getY()),2);
+        this.radius = Math.sqrt(rSquared);
 
     }
 
@@ -58,10 +61,13 @@ public class Disc {
             discResult rs = findDiscWith3Points2(p1,p2,p3);
         //        NumberFormat nf = NumberFormat.getNumberInstance();
 //        nf.setMaximumFractionDigits(4);
-        DecimalFormat nf = new DecimalFormat("#.000000"); //keep the fraction digit to 6 number
-            this.center.setLocation(Double.valueOf(nf.format(rs.x)),Double.valueOf(nf.format(rs.y)));
-            this.rSquared = Double.valueOf(nf.format(rs.rSquared));
-            this.radius = Double.valueOf(nf.format(Math.sqrt(rSquared)));
+//        DecimalFormat nf = new DecimalFormat("#.000000"); //keep the fraction digit to 6 number
+//            this.center.setLocation(Double.valueOf(nf.format(rs.x)),Double.valueOf(nf.format(rs.y)));
+//            this.rSquared = Double.valueOf(nf.format(rs.rSquared));
+//            this.radius = Double.valueOf(nf.format(Math.sqrt(rSquared)));
+            this.center.setLocation(rs.x,rs.y);
+            this.rSquared = rs.rSquared;
+            this.radius = Math.sqrt(rSquared);
 
     }
 

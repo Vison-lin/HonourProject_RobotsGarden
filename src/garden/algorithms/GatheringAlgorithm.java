@@ -70,11 +70,11 @@ public class GatheringAlgorithm extends Algorithm{
         Point2D.Double connectedCenter = getConnectedCenter(range,C.getCenter(),currRobot,rs);
 
 //        double unit = getRobot().getUnit();
-//        if(unit<=Math.sqrt(C.getrSquared())){
-//            Vector goal = new Vector(currRobot,connectedCenter);
-//            connectedCenter = goal.resize(unit).getEnd();
-//
-//        }
+////        if(unit<=Math.sqrt(C.getrSquared())){
+////            Vector goal = new Vector(currRobot,connectedCenter);
+////            connectedCenter = goal.resize(unit).getEnd();
+////
+////        }
 
 //        System.out.println("Final:" +connectedCenter);
 //        System.out.println("Final Global:"+getRobot().getSensor().convertToGlobal(connectedCenter));
@@ -310,9 +310,12 @@ public class GatheringAlgorithm extends Algorithm{
         }
         if (isSingleAlgorithm) {
             Point2D.Double nextPosition = globalRobotList.get(0).getPosition();
-            System.out.println(nextPosition);
+            //System.out.println(nextPosition);
             for (Robot robot : globalRobotList) {
-                if (!(robot.getPosition().equals(nextPosition))) {
+                //System.out.println("==="+Math.abs(nextPosition.getX()-robot.getPosition().getX()));
+                //System.out.println("=!="+calculateDigit(nextPosition.getX()));
+                if (Math.abs(nextPosition.getX()-robot.getPosition().getX())>calculateDigit(nextPosition.getX())) {
+                    if(Math.abs(nextPosition.getY()-robot.getPosition().getY())>calculateDigit(nextPosition.getY()))
                     System.out.println(robot.getPosition());
                     isTerminate = false;
                     System.out.println("===");
@@ -322,4 +325,24 @@ public class GatheringAlgorithm extends Algorithm{
         }
         return isTerminate;
     }
+
+    /**
+     *  This method help to caclulate the index of the last fraction digit of a double,then return a double
+     *  format like"0.#9"，where "#" refers to number of "0" equal or bigger than zero.
+     * @param num
+     * @return
+     */
+    private double calculateDigit (double num){
+        int lengthX = (num +"").length();
+        int dotX =  1+(num+"").indexOf(".");
+        String result ="0.";
+        for(int i=1;i<lengthX-dotX;i++){
+            result+="0";
+        }
+        result+="9";
+        return Double.valueOf(result);
+
+    }
+
+
 }

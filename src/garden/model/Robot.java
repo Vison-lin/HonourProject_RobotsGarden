@@ -94,6 +94,8 @@ public class Robot {
 //        algorithm.getRobot().getGraphicalDisplay().insertBottomLayer();
         Point2D.Double point = algorithm.next(robots);
         Point2D.Double globalPoint = this.sensor.convertToGlobal(point);
+
+
         return globalPoint;
     }
 

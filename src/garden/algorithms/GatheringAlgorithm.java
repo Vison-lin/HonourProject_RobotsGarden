@@ -310,12 +310,12 @@ public class GatheringAlgorithm extends Algorithm{
         }
         if (isSingleAlgorithm) {
             Point2D.Double nextPosition = globalRobotList.get(0).getPosition();
-            System.out.println(nextPosition);
+//            System.out.println(nextPosition);
             for (Robot robot : globalRobotList) {
                 if (!(robot.getPosition().equals(nextPosition))) {
-                    System.out.println(robot.getPosition());
+//                    System.out.println(robot.getPosition());
                     isTerminate = false;
-                    System.out.println("===");
+//                    System.out.println("===");
                 }
 
             }

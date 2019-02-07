@@ -55,10 +55,10 @@ public class GatheringGoToSec extends Algorithm{
             return result;
         }
         Disc C = miniDisc(visibles);
-        System.out.println("r: "+C.getrSquared());
-        System.out.println("Robot:"+getRobot().getPosition());
-        System.out.println("center:"+ C.getCenter());
-        System.out.println("center Global:"+getRobot().getSensor().convertToGlobal(C.getCenter()));
+//        System.out.println("r: "+C.getrSquared());
+//        System.out.println("Robot:"+getRobot().getPosition());
+//        System.out.println("center:"+ C.getCenter());
+//        System.out.println("center Global:"+getRobot().getSensor().convertToGlobal(C.getCenter()));
         ArrayList<Robot> rs = new ArrayList<>();
         for(Robot p:visibles){
             if(p.getPositionX()!=0.0|| p.getPositionY()!= 0.0){
@@ -68,8 +68,8 @@ public class GatheringGoToSec extends Algorithm{
         Point2D.Double currRobot  = new Point2D.Double();
         currRobot.setLocation(0.0,0.0);
         Point2D.Double connectedCenter= getConnectedCenter(range,C.getCenter(),currRobot,rs);
-        System.out.println("Final:" +connectedCenter);
-        System.out.println("Final Global:"+getRobot().getSensor().convertToGlobal(connectedCenter));
+//        System.out.println("Final:" +connectedCenter);
+//        System.out.println("Final Global:"+getRobot().getSensor().convertToGlobal(connectedCenter));
 
 
         Vector goal = new Vector(connectedCenter,currRobot);
@@ -273,7 +273,7 @@ public class GatheringGoToSec extends Algorithm{
             }
         }
         double D = Math.min(Vgoal.getNorm(),limit);
-        System.out.println("D:  "+D*D);
+//        System.out.println("D:  "+D*D);
         return Vgoal.resize(D).getEnd();
 
     }

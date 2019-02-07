@@ -139,9 +139,13 @@ public class Robot {
     }
 
     /**
-     * Get the current position (Global)
+     * Get the current position, in global coordinate scale.
      *
-     * @return the x and y values of current position in a Point object where the first is x and the second is y.
+     * <br/>
+     * <strong>Note: It will return a new Point2D.Double object. So any modification on the returned object will have no effect on robot position. To move the robot, please use moveTo() method.</strong>
+     * <br/>
+     *
+     * @return the NEW point2D.Double object represent the coordinate.
      */
     public Point2D.Double getPosition() {
         Point2D.Double point = new Point2D.Double();

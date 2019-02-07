@@ -66,7 +66,7 @@ public class ControlPanelFacade {
      */
 
     void addListenerToGivenRobot(Robot robot) {
-        this.controlPanelController.getGardenController().addGeneratedRobotToGarden(robot);
+        this.controlPanelController.getGardenController().addListenerToRobot(robot);
     }
 
     void updateGarden() {

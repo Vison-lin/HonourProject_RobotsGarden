@@ -17,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -191,21 +192,75 @@ public class GardenController extends VBox {
      *
      * @param robot the robot object need to add to the garden pane.
      */
-    public void addGeneratedRobotToGarden(Robot robot) {
+    public void addListenerToRobot(Robot robot) {
         RobotGraphicalDisplay robotGraphicalDisplay = robot.getGraphicalDisplay();
         //set onClickListener for opening robot setting & displaying vision range
         robotGraphicalDisplay.getRobotBody().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.getButton() == MouseButton.MIDDLE) {// for each of the btn that has added event, add one right click listener for it.
-//                    RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
-                } else if (event.getButton() == MouseButton.SECONDARY) {
-                    RobotToggle menu = new RobotToggle(gardenController, robot, controlPanelFacade);
-                    menu.show(robotGraphicalDisplay.getRobotBody(),Side.BOTTOM,0,0);
-                    updateGarden();
+                if (event.getButton() == MouseButton.SECONDARY) {
+                    System.out.println("Clicked");
+                    //build up a local copy for further implementation: Translate position to closest int coordinate
+                    List<Robot> localCopied = new ArrayList<>();
+                    for (Robot mRobot : controlPanelFacade.getRobots()) {
+                        try {
+                            Robot copied = mRobot.deepCopy();
+                            Point2D.Double position = roundUpCoordinate(copied.getPosition());
+                            copied.moveTo(position.getX(), position.getY());
+                            localCopied.add(copied);
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    Point2D.Double location = robot.getPosition();
+                    Point2D.Double tempLocation = new Point2D.Double(location.x, location.y);
+                    tempLocation = roundUpCoordinate(tempLocation);
+                    if (isOverlay(tempLocation, localCopied)) {//not overlay: single robot in one position
+                        RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
+                    } else {
+                        RobotToggle menu = new RobotToggle(gardenController, robot, controlPanelFacade);
+                        menu.show(robotGraphicalDisplay.getRobotBody(), Side.BOTTOM, 0, 0);
+                        updateGarden();
+                    }
                 }
             }
         });
+    }
+
+    /**
+     * Used to determine if the given location already exists points (robots)
+     *
+     * @param location The location to be check
+     * @return ture if there exist at least one point in the given location. False otherwise.
+     */
+    private boolean isOverlay(Point2D.Double location, List<Robot> localCopiedRobotsList) {
+        System.out.println(location.getX() + ", " + location.getY());
+        int ctr = 0;
+        for (Robot robot : localCopiedRobotsList) {
+            if (robot.getPosition().getX() == location.getX() && robot.getPosition().getY() == location.getY()) {
+                ctr++;
+                if (ctr > 1) {//if there is one except robot itself also in this location
+                    return true;
+                }
+            }
+        }
+        if (ctr == 0) {
+            throw new IllegalStateException("Cannot find robot itself while adding listener.");
+        }
+        return false;
+    }
+
+    /**
+     * Round up the coordinate of the location. For example, (38.2, 8.9) will be round up to (38, 9).
+     *
+     * @param location the location to be round up
+     * @return return the given object, reference unchanged, with the rounded up location
+     */
+    private Point2D.Double roundUpCoordinate(Point2D.Double location) {
+        int x = (int) Math.round(location.getX());
+        int y = (int) Math.round(location.getY());
+        location.setLocation(x, y);
+        return location;
     }
 
     public Pane getGarden() {

@@ -76,6 +76,10 @@ public class RobotToggle extends ContextMenu {
             pair.getValue().setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
+                    for (Robot robot : controlPanelFacade.getRobots()){
+                        System.out.println("-----"+robot.getPosition());
+                    }
+                    System.out.println("myself"+robot.getPosition());
                     robot.getSensor().setGlobalRobots(controlPanelFacade.getRobots());//todo need deep copy?
                     pair.getKey().update();
                     gardenController.updateGarden();

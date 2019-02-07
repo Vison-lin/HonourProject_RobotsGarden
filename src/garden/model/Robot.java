@@ -3,9 +3,11 @@ package garden.model;
 import garden.algorithms.DefaultAlgorithm;
 import garden.core.Algorithm;
 import garden.core.AlgorithmClassLoader;
+import garden.algorithms.src.gatheringalgorithm.Vector;
 
 import java.awt.geom.Point2D;
 import java.util.List;
+
 
 /**
  * Class that represent Robot object.
@@ -39,7 +41,7 @@ public class Robot {
     /**
      *  The unit number of robot which control the amount of the step of moiving
      */
-    private double unit ;
+    private double unit;
 
 
     /**
@@ -51,6 +53,7 @@ public class Robot {
         this.graphicalDisplay = graphicalDisplay;
         this.sensor = new Sensor(this);
         this.algorithm = new DefaultAlgorithm();
+        this.unit = Double.POSITIVE_INFINITY;
         algorithm.setRobot(this);
     }
 
@@ -61,7 +64,19 @@ public class Robot {
      * @param y the y coordinate of the new position
      */
     public void moveTo(double x, double y) {
-        graphicalDisplay.moveTo(x, y);
+        Point2D.Double end = new Point2D.Double();
+        end.setLocation(x,y);
+        Vector vector = new Vector(getPosition(),end);
+        if(vector.getNorm()<= unit){
+            graphicalDisplay.moveTo(x, y);
+        }else{
+            end = vector.resize(unit).getEnd();
+            graphicalDisplay.moveTo(end.getX(), end.getY());
+
+        }
+
+
+
     }
 
     /**
@@ -79,6 +94,8 @@ public class Robot {
 //        algorithm.getRobot().getGraphicalDisplay().insertBottomLayer();
         Point2D.Double point = algorithm.next(robots);
         Point2D.Double globalPoint = this.sensor.convertToGlobal(point);
+
+
         return globalPoint;
     }
 

@@ -8,10 +8,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ComboBoxBase;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -46,7 +44,10 @@ public class RobotGenerationController extends VBox {
     private Text visionText;
     @FXML
     private Text unitText;
-
+    @FXML
+    private RadioButton visionCheck;
+    @FXML
+    private RadioButton unitCheck;
 
     private ControlPanelFacade controlPanelFacade;
 
@@ -78,6 +79,8 @@ public class RobotGenerationController extends VBox {
         inputVisionListener();
         inputUnitListener();
         colorPickerListener();
+        visionCheckListener();
+        unitCheckListener();
 
         try {
             algorithmSelectionInit();
@@ -93,6 +96,7 @@ public class RobotGenerationController extends VBox {
         inputVision.setText(DEFAULT_ROBOT_VISION + "");
         selectedRobotVision = DEFAULT_ROBOT_VISION;
         inputUnit.setText("");
+        inputUnit.setDisable(true);
         selectedRobotUnit = DEFAULT_ROBOT_UNIT;
         colorText.setText(DEFAULT_COLOR_TEXT);
         visionText.setText(DEFAULT_VISION_TEXT);
@@ -125,6 +129,42 @@ public class RobotGenerationController extends VBox {
                 }
             }
         });
+    }
+
+    private void visionCheckListener(){
+        visionCheck.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(visionCheck.isSelected()){
+                    selectedRobotVision = Math.sqrt(500*500*2);
+                    inputVision.setText("");
+                    inputVision.setDisable(true);
+
+                }else{
+                    inputVision.setDisable(false);
+                    inputVision.setText(DEFAULT_ROBOT_VISION+"");
+                    selectedRobotVision = DEFAULT_ROBOT_VISION;
+                }
+            }
+        });
+    }
+
+    private void unitCheckListener(){
+            unitCheck.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    if(unitCheck.isSelected()){
+                        inputUnit.setText("");
+                        inputUnit.setDisable(true);
+                        selectedRobotUnit = DEFAULT_ROBOT_UNIT;
+
+                    }else{
+                        inputUnit.setDisable(false);
+                        inputUnit.setText("");
+
+                    }
+                }
+            });
     }
 
 
@@ -222,11 +262,16 @@ public class RobotGenerationController extends VBox {
 
     public void reset() {
         inputVision.setText(DEFAULT_ROBOT_VISION + "");
+        inputVision.setDisable(false);
         selectedRobotVision = DEFAULT_ROBOT_VISION;
         inputUnit.setText("");
+        inputUnit.setDisable(true);
         selectedRobotUnit = DEFAULT_ROBOT_UNIT;
         colorPicker.setValue(Color.BLACK);
         selectedRobotColor = Color.BLACK;
+        visionCheck.setSelected(false);
+        unitCheck.setSelected(true);
+
         algorithmSelection.getSelectionModel().select(0);
     }
 

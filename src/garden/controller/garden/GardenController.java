@@ -216,9 +216,9 @@ public class GardenController extends VBox {
                     Point2D.Double tempLocation = new Point2D.Double(location.x, location.y);
                     tempLocation = roundUpCoordinate(tempLocation);
                     if (isOverlay(tempLocation, localCopied)) {//not overlay: single robot in one position
-                        RobotSettingHelper robotSettingHelper = new RobotSettingHelper(robot, garden.getScene().getWindow());
+                        MultiRobotToggle multiRobotToggle = new MultiRobotToggle(robot, garden.getScene().getWindow(), gardenController);
                     } else {
-                        RobotToggle menu = new RobotToggle(gardenController, robot, controlPanelFacade);
+                        SingleRobotToggle menu = new SingleRobotToggle(gardenController, robot, controlPanelFacade);
                         menu.show(robotGraphicalDisplay.getRobotBody(), Side.BOTTOM, 0, 0);
                         updateGarden();
                     }

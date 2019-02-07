@@ -14,27 +14,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RobotToggle extends ContextMenu {
+public class SingleRobotToggle extends ContextMenu {
 
+    private static final String SHOW_VISION_TO_SHOW = "show vision";
+    private static final String SHOW_VISION_TO_NOT_SHOW = "Hide vision";
+    private static final String CHANGE_VISION = "Change Vision";
+    private static final String CHANGE_COLOR = "Change Color";
     private Robot robot;
-
     private Paint robotColor;
-
     private double robotVision;
-
-
     private MenuItem setColor;
     private MenuItem showVision;
     private MenuItem setVision;
     private List<Pair<DisplayAdapter, MenuItem>> setDisplayComponentsVisibility = new ArrayList<>();
     private GardenController gardenController;
-    private static final String SHOW_VISION_TO_SHOW = "show vision";
-    private static final String SHOW_VISION_TO_NOT_SHOW = "Hide vision";
-    private static final String CHANGE_VISION = "Change Vision";
-    private static final String CHANGE_COLOR = "Change Color";
     private ControlPanelFacade controlPanelFacade;
 
-    RobotToggle(GardenController gardenController, Robot robot, ControlPanelFacade controlPanelFacade) {
+    SingleRobotToggle(GardenController gardenController, Robot robot, ControlPanelFacade controlPanelFacade) {
         this.gardenController = gardenController;
         this.robot = robot;
         this.robotColor = controlPanelFacade.getSelectedRobotColor();
@@ -76,10 +72,10 @@ public class RobotToggle extends ContextMenu {
             pair.getValue().setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    for (Robot robot : controlPanelFacade.getRobots()){
-                        System.out.println("-----"+robot.getPosition());
+                    for (Robot robot : controlPanelFacade.getRobots()) {
+                        System.out.println("-----" + robot.getPosition());
                     }
-                    System.out.println("myself"+robot.getPosition());
+                    System.out.println("myself" + robot.getPosition());
                     robot.getSensor().setGlobalRobots(controlPanelFacade.getRobots());//todo need deep copy?
                     pair.getKey().update();
                     gardenController.updateGarden();
@@ -88,7 +84,7 @@ public class RobotToggle extends ContextMenu {
         }
     }
 
-    private void setColorPickerListener(){
+    private void setColorPickerListener() {
         setColor.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -98,7 +94,7 @@ public class RobotToggle extends ContextMenu {
         });
     }
 
-    private void showVisionListener(){
+    private void showVisionListener() {
         showVision.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -108,7 +104,7 @@ public class RobotToggle extends ContextMenu {
         });
     }
 
-    private void setVisionListener(){
+    private void setVisionListener() {
         setVision.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

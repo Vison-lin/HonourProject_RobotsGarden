@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.BorderPane?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.BorderPane"
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.VBox"
          xmlns="http://javafx.com/javafx/8.0.172-ea">
-   <top>
-       <ComboBox prefWidth="150.0" BorderPane.alignment="CENTER" fx:id="overlayRobotSelection"/>
-   </top>
+
+    <ComboBox fx:id="overlayRobotSelection" prefWidth="150.0" BorderPane.alignment="CENTER"/>
+
+    <Text fx:id="robotTag" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textOrigin="CENTER"
+          BorderPane.alignment="CENTER"/>
+    <Button mnemonicParsing="false" text="Toggle vision" fx:id="toggleVision"/>
 </fx:root>

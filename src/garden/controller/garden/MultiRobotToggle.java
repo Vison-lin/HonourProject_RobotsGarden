@@ -1,14 +1,20 @@
 package garden.controller.garden;
 
 import garden.model.Robot;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -16,14 +22,25 @@ import javafx.util.StringConverter;
 import java.io.IOException;
 import java.util.List;
 
-class MultiRobotToggle extends BorderPane {
+class MultiRobotToggle extends VBox {
 
     @FXML
     private ComboBox<Robot> overlayRobotSelection;
 
+    @FXML
+    private Text robotTag;
+
+    @FXML
+    private Button toggleVision;
+
     private List<Robot> robots;
 
+    private Robot selectedRobot;
+
+    private GardenController gardenController;
+
     MultiRobotToggle(GardenController gardenController, List<Robot> robots) {
+        this.gardenController = gardenController;
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(gardenController.getGarden().getScene().getWindow());
@@ -40,9 +57,25 @@ class MultiRobotToggle extends BorderPane {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        initNodesText();
         boostRobotDropDownMenu();
-        gardenController.updateGarden();
+    }
 
+    private void initNodesText() {
+        robotTag.setText("Please select one robot");
+    }
+
+    private void generateRobotSettingPage() {
+        robotTag.setText(selectedRobot.getTag());
+        toggleVision.setOnMouseClicked(
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        selectedRobot.getGraphicalDisplay().toggleVisionVisible();
+                        gardenController.updateGarden();
+                    }
+                }
+        );
     }
 
     private void boostRobotDropDownMenu() {
@@ -58,6 +91,19 @@ class MultiRobotToggle extends BorderPane {
             @Override
             public Robot fromString(String string) {
                 return null;
+            }
+        });
+        //select and display first one by default
+        overlayRobotSelection.getSelectionModel().select(0);
+        selectedRobot = overlayRobotSelection.getSelectionModel().getSelectedItem();
+        generateRobotSettingPage();
+
+        //add listener
+        overlayRobotSelection.valueProperty().addListener(new ChangeListener<Robot>() {
+            @Override
+            public void changed(ObservableValue<? extends Robot> observable, Robot oldValue, Robot newValue) {
+                selectedRobot = newValue;
+                generateRobotSettingPage();
             }
         });
     }

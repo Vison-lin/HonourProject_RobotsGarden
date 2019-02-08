@@ -16,6 +16,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.util.Pair;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
@@ -201,22 +202,14 @@ public class GardenController extends VBox {
                 if (event.getButton() == MouseButton.SECONDARY) {
                     System.out.println("Clicked");
                     //build up a local copy for further implementation: Translate position to closest int coordinate
-                    List<Robot> localCopied = new ArrayList<>();
-                    for (Robot mRobot : controlPanelFacade.getRobots()) {
-                        try {
-                            Robot copied = mRobot.deepCopy();
-                            Point2D.Double position = roundUpCoordinate(copied.getPosition());
-                            copied.moveTo(position.getX(), position.getY());
-                            localCopied.add(copied);
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
+                    Pair<Boolean, List<Robot>> overlay = filterOfRobotListWithOnlyInTheClosestPosition(robot);
+                    boolean overlayExist = overlay.getKey();
+                    List<Robot> overlayRobots = overlay.getValue();
+                    if (overlayExist) {//not overlay: single robot in one position
+                        if (overlayRobots == null) {
+                            throw new IllegalStateException("Cannot find overlaid robots");
                         }
-                    }
-                    Point2D.Double location = robot.getPosition();
-                    Point2D.Double tempLocation = new Point2D.Double(location.x, location.y);
-                    tempLocation = roundUpCoordinate(tempLocation);
-                    if (isOverlay(tempLocation, localCopied)) {//not overlay: single robot in one position
-                        MultiRobotToggle multiRobotToggle = new MultiRobotToggle(robot, garden.getScene().getWindow(), gardenController);
+                        MultiRobotToggle multiRobotToggle = new MultiRobotToggle(gardenController, overlayRobots);
                     } else {
                         SingleRobotToggle menu = new SingleRobotToggle(gardenController, robot, controlPanelFacade);
                         menu.show(robotGraphicalDisplay.getRobotBody(), Side.BOTTOM, 0, 0);
@@ -227,12 +220,7 @@ public class GardenController extends VBox {
         });
     }
 
-    /**
-     * Used to determine if the given location already exists points (robots)
-     *
-     * @param location The location to be check
-     * @return ture if there exist at least one point in the given location. False otherwise.
-     */
+
     private boolean isOverlay(Point2D.Double location, List<Robot> localCopiedRobotsList) {
         System.out.println(location.getX() + ", " + location.getY());
         int ctr = 0;
@@ -251,16 +239,43 @@ public class GardenController extends VBox {
     }
 
     /**
-     * Round up the coordinate of the location. For example, (38.2, 8.9) will be round up to (38, 9).
+     * Used to get the robots list which all the robots overlaid with the given robot.
+     *
+     * <strong>Note that: the goal is achieved by TEMPORARY (Not affect original) rounding up the coordinate of the location. For example, (38.2, 8.9) will be round up to (38, 9).</strong>
+     *
+     * @param robot the target robot
+     * @return Pair of Boolean and List<Robot>. For Boolean: used to determine if the given location already exists points (robots). If exist, then the second LIst<Robot> will be the overlaid robot. Otherwise, the second List<Robot> <strong>will be NULL</strong>
+     */
+    private Pair<Boolean, List<Robot>> filterOfRobotListWithOnlyInTheClosestPosition(Robot robot) {
+        Point2D.Double position = roundUpCoordinate(robot.getPosition());
+        List<Robot> robotsInSamePosition = new ArrayList<>();
+        int ctr = 0;
+        for (Robot curr : controlPanelFacade.getRobots()) {
+            Point2D.Double currRoundedUpPosition = roundUpCoordinate(curr.getPosition());
+            if (position.getX() == currRoundedUpPosition.getX() && position.getY() == currRoundedUpPosition.getY()) {
+                robotsInSamePosition.add(curr);
+                ctr++;
+            }
+        }
+        if (ctr > 1) {//if there is one except robot itself also in this location
+            return new Pair<>(true, robotsInSamePosition);
+        } else {
+            return new Pair<>(false, null);
+        }
+    }
+
+    /**
+     *
      *
      * @param location the location to be round up
-     * @return return the given object, reference unchanged, with the rounded up location
+     * @return return a new Point2D.Double object with the rounded up location
      */
     private Point2D.Double roundUpCoordinate(Point2D.Double location) {
+        Point2D.Double result = new Point2D.Double();
         int x = (int) Math.round(location.getX());
         int y = (int) Math.round(location.getY());
-        location.setLocation(x, y);
-        return location;
+        result.setLocation(x, y);
+        return result;
     }
 
     public Pane getGarden() {

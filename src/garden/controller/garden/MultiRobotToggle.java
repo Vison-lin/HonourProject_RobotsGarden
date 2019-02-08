@@ -1,38 +1,34 @@
 package garden.controller.garden;
 
 import garden.model.Robot;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
+import javafx.util.StringConverter;
 
 import java.io.IOException;
+import java.util.List;
 
 class MultiRobotToggle extends BorderPane {
 
     @FXML
-    private Button setAlg;
+    private ComboBox<Robot> overlayRobotSelection;
 
-    private Robot robot;
+    private List<Robot> robots;
 
-    @FXML
-    private ColorPicker colorPicker;
-
-    MultiRobotToggle(Robot robot, Window primaryStage, GardenController gardenController) {
-        this.robot = robot;
+    MultiRobotToggle(GardenController gardenController, List<Robot> robots) {
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(primaryStage);
+        dialog.initOwner(gardenController.getGarden().getScene().getWindow());
         FXMLLoader fxmlLoader;
+        this.robots = robots;
         try {
             fxmlLoader = new FXMLLoader(getClass().getResource("../../view/robot_setting_page.fxml"));
             fxmlLoader.setRoot(this);
@@ -44,28 +40,24 @@ class MultiRobotToggle extends BorderPane {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        boostAlgorithmSelectionWindow();
-        robot.getGraphicalDisplay().getRobotBody().setRadius(100);
+        boostRobotDropDownMenu();
         gardenController.updateGarden();
 
     }
 
-    //todo auto search class name
-    private void boostAlgorithmSelectionWindow() {
-//        setAlg.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                System.out.println("!!");
-////                robot.setAlgorithm(new GatheringAlgorithm(robot));
-//                robot.getGraphicalDisplay().
-//            }
-//        });
-        colorPicker.setOnAction(new EventHandler<ActionEvent>() {
+    private void boostRobotDropDownMenu() {
+        ObservableList<Robot> value = FXCollections.observableArrayList();
+        value.addAll(robots);
+        overlayRobotSelection.setItems(value);
+        overlayRobotSelection.setConverter(new StringConverter<Robot>() {
             @Override
-            public void handle(ActionEvent event) {
+            public String toString(Robot object) {
+                return object.getTag();
+            }
 
-//                System.out.println("!!!!!!!");
-                colorPicker.setValue(Color.RED);
+            @Override
+            public Robot fromString(String string) {
+                return null;
             }
         });
     }

@@ -59,6 +59,7 @@ public class AutoGenerationController extends VBox {
 
                     //create the rest
                     for (int i = 1; i < numOfNewRobots; i++) {
+                        ctr++;
                         double xBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionX() + initRobot.getVision(), maxX);
                         double xBoundLow = validateWithinTheEnclosingSquare(initRobot.getPositionX() - initRobot.getVision(), maxX);
                         double yBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionY() + initRobot.getVision(), maxY);

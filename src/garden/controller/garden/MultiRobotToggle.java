@@ -33,6 +33,9 @@ class MultiRobotToggle extends VBox {
     @FXML
     private Button toggleVision;
 
+    @FXML
+    private Button detailSetting;
+
     private List<Robot> robots;
 
     private Robot selectedRobot;
@@ -76,6 +79,12 @@ class MultiRobotToggle extends VBox {
                     }
                 }
         );
+        detailSetting.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                new RobotSettingHelper(gardenController);
+            }
+        });
     }
 
     private void boostRobotDropDownMenu() {

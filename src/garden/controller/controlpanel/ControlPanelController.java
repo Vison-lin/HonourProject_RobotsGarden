@@ -59,7 +59,7 @@ public class ControlPanelController extends VBox {
     ControlPanelFacade controlPanelFacade;
 
     public ControlPanelController() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../view/control_panel.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/garden/view/control_panel.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 

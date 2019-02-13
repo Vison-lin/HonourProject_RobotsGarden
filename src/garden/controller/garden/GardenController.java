@@ -45,7 +45,7 @@ public class GardenController extends VBox {
     private Pane garden;
 
     public GardenController() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../view/garden.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/garden/view/garden.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
         try {

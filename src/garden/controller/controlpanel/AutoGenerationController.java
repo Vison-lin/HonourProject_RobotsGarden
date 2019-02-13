@@ -24,7 +24,7 @@ public class AutoGenerationController extends VBox {
     private ControlPanelFacade controlPanelFacade;
 
     public AutoGenerationController() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../view/control_panel_component/auto_generation.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/garden/view/control_panel_component/auto_generation.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 

@@ -66,7 +66,7 @@ public class RobotGenerationController extends VBox {
     public RobotGenerationController() {
 
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../view/control_panel_component/robot_customization_control.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/garden/view/control_panel_component/robot_customization_control.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
@@ -81,14 +81,7 @@ public class RobotGenerationController extends VBox {
         colorPickerListener();
         visionCheckListener();
         unitCheckListener();
-
-        try {
-            algorithmSelectionInit();
-        } catch (InstantiationException | InvocationTargetException | ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();//todo handle it and display it on the screen.!!!
-        }
+//        algorithmSelectionInit();
         algorithmSelectionListener();
     }
 
@@ -168,11 +161,14 @@ public class RobotGenerationController extends VBox {
     }
 
 
-
-
-    private void algorithmSelectionInit() throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    private void algorithmSelectionInit() {
         ObservableList<Pair<String, String>> value = FXCollections.observableArrayList();
-        List<Pair<String, String>> allAlgInfo = algorithmLoadingHelper.getAlgorithmList();
+        List<Pair<String, String>> allAlgInfo = null;
+        try {
+            allAlgInfo = algorithmLoadingHelper.getAlgorithmList();
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
         value.addAll(allAlgInfo);
         algorithmSelection.setItems(value);
         algorithmSelection.getSelectionModel().select(0);

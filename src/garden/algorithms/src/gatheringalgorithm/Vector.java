@@ -1,8 +1,6 @@
 package garden.algorithms.src.gatheringalgorithm;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**

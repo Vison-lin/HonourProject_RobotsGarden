@@ -1,9 +1,6 @@
 package garden.algorithms.src.gatheringalgorithm;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 /**
  * This class defines simple behaviours and minimal data of a disc.

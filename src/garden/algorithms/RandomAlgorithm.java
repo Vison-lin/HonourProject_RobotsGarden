@@ -3,7 +3,6 @@ package garden.algorithms;
 import garden.core.Algorithm;
 import garden.model.Robot;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.Random;

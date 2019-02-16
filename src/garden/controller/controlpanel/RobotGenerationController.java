@@ -81,7 +81,7 @@ public class RobotGenerationController extends VBox {
         colorPickerListener();
         visionCheckListener();
         unitCheckListener();
-//        algorithmSelectionInit();
+        algorithmSelectionInit();
         algorithmSelectionListener();
     }
 
@@ -172,7 +172,9 @@ public class RobotGenerationController extends VBox {
         value.addAll(allAlgInfo);
         algorithmSelection.setItems(value);
         algorithmSelection.getSelectionModel().select(0);
-        selectedAlgorithm = algorithmSelection.getSelectionModel().getSelectedItem().getValue();//assign the first algorithm as the default selected item
+        if (allAlgInfo.size() > 0) {
+            selectedAlgorithm = algorithmSelection.getSelectionModel().getSelectedItem().getValue();//assign the first algorithm as the default selected item
+        }
         algorithmSelection.setConverter(new StringConverter<Pair<String, String>>() {
             @Override
             public String toString(Pair<String, String> object) {

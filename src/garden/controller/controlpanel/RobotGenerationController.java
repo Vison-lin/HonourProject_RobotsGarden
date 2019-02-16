@@ -161,7 +161,7 @@ public class RobotGenerationController extends VBox {
     }
 
 
-    private void algorithmSelectionInit() {
+    private void algorithmSelectionInit() {//todo how to deal with no algorithm found?
         ObservableList<Pair<String, String>> value = FXCollections.observableArrayList();
         List<Pair<String, String>> allAlgInfo = null;
         try {

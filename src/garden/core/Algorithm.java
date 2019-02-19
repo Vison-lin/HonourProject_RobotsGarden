@@ -66,6 +66,16 @@ public abstract class Algorithm {
      */
     public abstract String algorithmDescription();
 
+    /**
+     * Get the robot instance that associated with this algorithm
+     *
+     * <p>
+     * <strong>NOTE: getRobot() CAN ONLY BE CALLED WITHIN the next() method or any other method that will be called AFTER the next() method has been called.</strong>
+     * <br/>Attempting to call it within the constructor or any method that runs prior the next() method will cause NullPointerException.
+     * </p>
+     *
+     * @return the robot instance that associated with this algorithm
+     */
     public Robot getRobot() {
         return robot;
     }

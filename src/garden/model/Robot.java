@@ -1,9 +1,9 @@
 package garden.model;
 
 import garden.algorithms.DefaultAlgorithm;
+import garden.algorithms.src.gatheringalgorithm.Vector;
 import garden.core.Algorithm;
 import garden.core.AlgorithmClassLoader;
-import garden.algorithms.src.gatheringalgorithm.Vector;
 
 import java.awt.geom.Point2D;
 import java.util.List;
@@ -92,7 +92,7 @@ public class Robot {
     public Point2D.Double next(List<Robot> robots) {
         sensor.setGlobalRobots(robots);//set curr global robots to sensor
 //        algorithm.getRobot().getGraphicalDisplay().insertBottomLayer();
-        Point2D.Double point = algorithm.next(robots);
+        Point2D.Double point = algorithm.next(this.sensor.getAllVisibleRobotsInLocalScale());
         Point2D.Double globalPoint = this.sensor.convertToGlobal(point);
 
 

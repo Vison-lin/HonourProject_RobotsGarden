@@ -207,10 +207,15 @@ public class RobotGenerationController extends VBox {
 
 
     /**
-     * @param tag todo
-     * @param x
-     * @param y   for now, generate
-     * @return
+     *
+     * Generate the robot, add all necessary listener to it, and insert it to the global robot list.
+     *
+     * <br/> No need for inserting the generated robot to the global robot list again.
+     *
+     * @param tag the tag of the robot
+     * @param x the x coordinate of the robot
+     * @param y the y coordinate of the robot
+     * @return the generated robot: for further operation. Note that any modification on this robot will reflect on the screen.
      */
     public Robot robotGenerator(String tag, double x, double y) {
         Circle robotPosition = new Circle(3, Color.WHITE);

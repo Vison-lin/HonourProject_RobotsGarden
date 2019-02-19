@@ -20,12 +20,14 @@ public class SingleRobotToggle extends ContextMenu {
     private static final String SHOW_VISION_TO_NOT_SHOW = "Hide vision";
     private static final String CHANGE_VISION = "Change Vision";
     private static final String CHANGE_COLOR = "Change Color";
+    private static final String DELETION = "Delete";
     private Robot robot;
     private Paint robotColor;
     private double robotVision;
     private MenuItem setColor;
     private MenuItem showVision;
     private MenuItem setVision;
+    private MenuItem delete;
     private List<Pair<DisplayAdapter, MenuItem>> setDisplayComponentsVisibility = new ArrayList<>();
     private GardenController gardenController;
     private ControlPanelFacade controlPanelFacade;
@@ -40,6 +42,7 @@ public class SingleRobotToggle extends ContextMenu {
         setColor = new MenuItem(CHANGE_COLOR);
         showVision = new MenuItem(SHOW_VISION_TO_SHOW);
         setVision = new MenuItem(CHANGE_VISION);
+        delete = new MenuItem(DELETION);
 
         boolean isShowingVision = !robot.getGraphicalDisplay().toggleVisionVisible();
         if (isShowingVision) {
@@ -60,11 +63,27 @@ public class SingleRobotToggle extends ContextMenu {
         setColorPickerListener();
         setVisionListener();
         showVisionListener();
+        setDeletionListener();
         setDisplayComponentsVisibilityListener();
+
         getItems().add(setColor);
         getItems().add(showVision);
         getItems().add(setVision);
+        getItems().add(delete);
 
+    }
+
+    private void setDeletionListener() {
+        delete.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // Can completely clean the robot.
+                // Example: delete a default robot cleans three layers while delete a robot that tuns on vision delete 4 layers.
+                // It works because in the gardenController, a certain layer has been added to the pane IFF it is visible
+                controlPanelFacade.getRobots().remove(robot);
+                gardenController.updateGarden();
+            }
+        });
     }
 
     private void setDisplayComponentsVisibilityListener() {
@@ -72,11 +91,9 @@ public class SingleRobotToggle extends ContextMenu {
             pair.getValue().setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    for (Robot robot : controlPanelFacade.getRobots()) {
-                        System.out.println("-----" + robot.getPosition());
-                    }
-                    System.out.println("myself" + robot.getPosition());
-                    robot.getSensor().setGlobalRobots(controlPanelFacade.getRobots());//todo need deep copy?
+                    // No need deep copy here because the sensor will do the deep copy.
+                    // Note that the reason why we need another deep copy in the NEXT action method is because we need to manipulate on the deep copied version and apply the result to the original one after ALL ROBOT FINISHED the calculation for current state. In other word, to ensure concurrently calculation.
+                    robot.getSensor().setGlobalRobots(controlPanelFacade.getRobots());
                     pair.getKey().update();
                     gardenController.updateGarden();
                 }

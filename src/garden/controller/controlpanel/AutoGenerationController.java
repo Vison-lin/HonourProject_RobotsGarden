@@ -9,7 +9,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
+import java.awt.geom.Point2D;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class AutoGenerationController extends VBox {
@@ -55,29 +58,17 @@ public class AutoGenerationController extends VBox {
                     double maxX = (int) controlPanelFacade.getGardenController().getWidth() + 1;
                     double maxY = (int) controlPanelFacade.getGardenController().getHeight() + 1;
                     int ctr = 0;
-                    Robot initRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY));
+                    Robot currRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY));
+
+                    ArrayList<Robot> generatedRobots = new ArrayList<>();
+                    generatedRobots.add(currRobot);
 
                     //create the rest
                     for (int i = 1; i < numOfNewRobots; i++) {
                         ctr++;
-                        double xBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionX() + initRobot.getVision(), maxX);
-                        double xBoundLow = validateWithinTheEnclosingSquare(initRobot.getPositionX() - initRobot.getVision(), maxX);
-                        double yBoundUp = validateWithinTheEnclosingSquare(initRobot.getPositionY() + initRobot.getVision(), maxY);
-                        double yBoundLow = validateWithinTheEnclosingSquare(initRobot.getPositionY() - initRobot.getVision(), maxY);
-                        //check if is within the circle
-                        double distance = Double.POSITIVE_INFINITY;
-                        double currX = 0;
-                        double currY = 0;
-                        while (distance > initRobot.getVision()) {
-                            double x = initRobot.getPositionX();
-                            double y = initRobot.getPositionY();
-                            currX = random.nextInt((int) (xBoundUp - xBoundLow + 1)) + xBoundLow;
-                            currY = random.nextInt((int) (yBoundUp - yBoundLow + 1)) + yBoundLow;
-                            double differX = currX - x;
-                            double differY = currY - y;
-                            distance = Math.sqrt(Math.pow(differX, 2) + Math.pow(differY, 2));
-                        }
-                        initRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", currX, currY);
+                        Point2D.Double position = getNextRandomGeneratedRobotPosition(generatedRobots, maxX, maxY);
+                        Robot newRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", position.x, position.y);
+                        generatedRobots.add(newRobot);
                     }
                     controlPanelFacade.getGardenController().updateGarden();
                 } catch (NumberFormatException e) {
@@ -85,6 +76,30 @@ public class AutoGenerationController extends VBox {
                 }
             }
         });
+    }
+
+    private Point2D.Double getNextRandomGeneratedRobotPosition(List<Robot> robots, double maxX, double maxY) {
+        Random random = new Random();
+        double currX = 0;
+        double currY = 0;
+        Robot curr = robots.get(random.nextInt(robots.size()));//random choose one
+        double xBoundUp = validateWithinTheEnclosingSquare(curr.getPositionX() + curr.getVision(), maxX);
+        double xBoundLow = validateWithinTheEnclosingSquare(curr.getPositionX() - curr.getVision(), maxX);
+        double yBoundUp = validateWithinTheEnclosingSquare(curr.getPositionY() + curr.getVision(), maxY);
+        double yBoundLow = validateWithinTheEnclosingSquare(curr.getPositionY() - curr.getVision(), maxY);
+        //check if is within the circle
+        double distance = Double.POSITIVE_INFINITY;
+
+        while (distance > curr.getVision()) {
+            double x = curr.getPositionX();
+            double y = curr.getPositionY();
+            currX = random.nextInt((int) (xBoundUp - xBoundLow + 1)) + xBoundLow;
+            currY = random.nextInt((int) (yBoundUp - yBoundLow + 1)) + yBoundLow;
+            double differX = currX - x;
+            double differY = currY - y;
+            distance = Math.sqrt(Math.pow(differX, 2) + Math.pow(differY, 2));
+        }
+        return new Point2D.Double(currX, currY);
     }
 
     /**

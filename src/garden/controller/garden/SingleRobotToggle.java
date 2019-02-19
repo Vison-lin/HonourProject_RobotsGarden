@@ -54,7 +54,6 @@ public class SingleRobotToggle extends ContextMenu {
 
         for (DisplayAdapter displayAdapter : robot.getGraphicalDisplay().getBottomLayers()) {
             MenuItem newDisplayComponent = new MenuItem(displayAdapter.getComponentTag());
-            System.out.println(displayAdapter.getComponentTag());
             setDisplayComponentsVisibility.add(new Pair<>(displayAdapter, newDisplayComponent));
             getItems().add(newDisplayComponent);
         }
@@ -125,7 +124,6 @@ public class SingleRobotToggle extends ContextMenu {
         setVision.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println(robotVision);
                 robot.getGraphicalDisplay().setRobotVision(robotVision);
                 gardenController.updateGarden();
             }

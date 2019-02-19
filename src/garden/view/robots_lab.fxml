@@ -6,7 +6,8 @@
 <fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.HBox"
          xmlns="http://javafx.com/javafx/8.0.172-ea">
 
-    <GardenController fx:id="gardenController"/>
     <ControlPanelController fx:id="controlPanelController" fillWidth="false"/>
+    <GardenController fx:id="gardenController"/>
+
 
 </fx:root>

@@ -51,7 +51,7 @@ class MultiRobotToggle extends VBox {
         FXMLLoader fxmlLoader;
         this.robots = robots;
         try {
-            fxmlLoader = new FXMLLoader(getClass().getResource("view/robot_setting_page.fxml"));
+            fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/robot_setting_page.fxml"));
             fxmlLoader.setRoot(this);
             fxmlLoader.setController(this);
             Parent parent = fxmlLoader.load();

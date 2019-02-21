@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/HonourProject_RobotsGarden.iml" filepath="$PROJECT_DIR$/HonourProject_RobotsGarden.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/HonourProject_RobotsGarden.iml" filepath="$PROJECT_DIR$/.idea/modules/HonourProject_RobotsGarden.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/HonourProject_RobotsGarden.main.iml" filepath="$PROJECT_DIR$/.idea/modules/HonourProject_RobotsGarden.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/HonourProject_RobotsGarden.test.iml" filepath="$PROJECT_DIR$/.idea/modules/HonourProject_RobotsGarden.test.iml" />
     </modules>
   </component>
 </project>

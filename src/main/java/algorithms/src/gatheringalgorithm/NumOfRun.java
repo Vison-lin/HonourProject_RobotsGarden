@@ -1,10 +1,11 @@
-package algorithms.src.fakedalgorithmhelper;
+package algorithms.src.gatheringalgorithm;
 
 import core.StatisticData;
 
-public class mStatisticData implements StatisticData<Integer> {
+public class NumOfRun implements StatisticData<Integer> {
 
-    int ctr;
+    public static final String TAG = "NumOfRun";
+    int ctr = 0;
 
     @Override
     public void update(Integer increment) {
@@ -18,9 +19,9 @@ public class mStatisticData implements StatisticData<Integer> {
 
     @Override
     public StatisticData<Integer> deepCopy() {
-        mStatisticData data = new mStatisticData();
-        data.setCtr(this.ctr);
-        return data;
+        NumOfRun numOfRun = new NumOfRun();
+        numOfRun.setCtr(this.ctr);
+        return numOfRun;
     }
 
     @Override
@@ -30,7 +31,7 @@ public class mStatisticData implements StatisticData<Integer> {
 
     @Override
     public String getTag() {
-        return "NumOfRun";
+        return TAG;
     }
 
     public void setCtr(int ctr) {

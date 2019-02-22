@@ -12,7 +12,8 @@ import javafx.stage.Stage;
 import model.Robot;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StatisticDataDisplayHelper extends VBox {
 
@@ -37,10 +38,10 @@ public class StatisticDataDisplayHelper extends VBox {
         }
         String displayInfo = "";
         System.out.println(robot);
-        List<StatisticData> statisticDataList = gardenController.getControlPanelFacade().getStatisticDataByRobotTag(robot.getTag());
+        HashMap<String, StatisticData> statisticDataList = gardenController.getControlPanelFacade().getStatisticDataByRobotTag(robot.getTag());
 //        System.out.println(statisticDataList.get(0));
-        for (StatisticData statisticData : statisticDataList) {
-            displayInfo = displayInfo + "\n" + robot + ": " + statisticData.display();
+        for (Map.Entry<String, StatisticData> statisticData : statisticDataList.entrySet()) {
+            displayInfo = displayInfo + "\n" + statisticData.getKey() + statisticData.getValue().display();
         }
         statisticDataDisplay.setText(displayInfo);
     }

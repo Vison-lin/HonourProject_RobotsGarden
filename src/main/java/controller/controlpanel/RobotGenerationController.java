@@ -244,7 +244,7 @@ public class RobotGenerationController extends VBox {
      *
      * <br/> No need for inserting the generated robot to the global robot list again.
      *
-     * @param tag the tag of the robot
+     * @param tag the TAG of the robot
      * @param x the x coordinate of the robot
      * @param y the y coordinate of the robot
      * @return the generated robot: for further operation. Note that any modification on this robot will reflect on the screen.
@@ -267,7 +267,7 @@ public class RobotGenerationController extends VBox {
 
         if (robot.getAlgorithm() instanceof Statisticable) {
             Statisticable statisticable = (Statisticable) robot.getAlgorithm();
-            System.out.println(statisticable + "==========");
+//            System.out.println(statisticable + "==========");
             controlPanelFacade.insertToStatisticDataTempStoringList(robot.getTag(), statisticable.init());
         }
         return robot;

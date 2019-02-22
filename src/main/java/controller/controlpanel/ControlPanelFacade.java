@@ -2,11 +2,13 @@ package controller.controlpanel;
 
 
 import controller.garden.GardenController;
+import core.Statistic;
 import core.StatisticData;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import model.Robot;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ControlPanelFacade {
@@ -97,16 +99,24 @@ public class ControlPanelFacade {
         return controlPanelController.getStatisticDisplay();
     }
 
-    public List<StatisticData> getStatisticDataByRobotTag(String robotTag) {
+    public HashMap<String, StatisticData> getStatisticDataByRobotTag(String robotTag) {
         return progressController.getStatisticDataTempStoringList().get(robotTag);
     }
 
-    void insertToStatisticDataTempStoringList(String robotTag, List<StatisticData> newStatisticData) {
+    void insertToStatisticDataTempStoringList(String robotTag, HashMap<String, StatisticData> newStatisticData) {
         progressController.getStatisticDataTempStoringList().put(robotTag, newStatisticData);
     }
 
     public void removeStatisticDataByRobotTag(String robotTag) {
         progressController.getStatisticDataTempStoringList().remove(robotTag);
+    }
+
+    HashMap<String, HashMap<String, StatisticData>> getStatisticDataList() {
+        return progressController.getStatisticDataTempStoringList();
+    }
+
+    List<Statistic> getStatisticList() {
+        return controlPanelController.getStatistics();
     }
 
         /*

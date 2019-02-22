@@ -213,7 +213,7 @@ public class Robot {
 
     public void setRandomUnit(boolean randomUnit) {
         this.randomUnit = randomUnit;
-        System.out.println("random:" +randomUnit);
+//        System.out.println("random:" +randomUnit);
     }
 
     public double getStep() {

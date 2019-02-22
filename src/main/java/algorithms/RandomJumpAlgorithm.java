@@ -13,7 +13,7 @@ public class RandomJumpAlgorithm extends Algorithm {
     public Point2D.Double next(List<Robot> localRobotList) {
         Random random = new Random();
         Robot targetRobot = localRobotList.get(random.nextInt(localRobotList.size()));
-        System.out.println(targetRobot.getPositionX() + ", " + targetRobot.getPositionY());
+//        System.out.println(targetRobot.getPositionX() + ", " + targetRobot.getPositionY());
         return new Point2D.Double(targetRobot.getPositionX(), targetRobot.getPositionY());
     }
 

@@ -9,10 +9,10 @@ import core.Statisticable;
 import model.Robot;
 
 import java.awt.geom.Point2D;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
-public class FakedAlgorithm extends Algorithm implements Statisticable<Integer> {
+public class FakedAlgorithm extends Algorithm implements Statisticable {
 
     mAdapter sec;
 
@@ -46,18 +46,17 @@ public class FakedAlgorithm extends Algorithm implements Statisticable<Integer> 
     }
 
 
-
     @Override
-    public List<StatisticData<Integer>> update(List<StatisticData<Integer>> currentStatisticData) {
-
-        for (StatisticData<Integer> statisticData : currentStatisticData) {
-            statisticData.update(1);
-        }
+    public HashMap<String, StatisticData> update(HashMap<String, StatisticData> currentStatisticData) {
+        StatisticData<Integer> statisticData = currentStatisticData.get("");
+        statisticData.update(1);
         return currentStatisticData;
     }
 
     @Override
-    public List<StatisticData<Integer>> init() {
-        return Arrays.asList(new mStatisticData());
+    public HashMap<String, StatisticData> init() {
+        HashMap a = new HashMap();
+        a.put("", new mStatisticData());
+        return a;
     }
 }

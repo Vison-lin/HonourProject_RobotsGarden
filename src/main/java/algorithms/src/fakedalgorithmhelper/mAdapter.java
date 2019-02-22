@@ -16,7 +16,7 @@ public class mAdapter extends DisplayAdapter {
 
     public mAdapter() {
 
-        //create a new AdditionalAdapter and inited it with shape Circle and tag "Random move this robot".
+        //create a new AdditionalAdapter and inited it with shape Circle and TAG "Random move this robot".
         super(new Circle(27, Color.GRAY), "Random move this robot");
         //make this adapter's shape invisible.
         setVisible(false);

@@ -2,6 +2,7 @@ package controller.controlpanel;
 
 
 import core.Algorithm;
+import core.Statistic;
 import core.StatisticData;
 import core.Statisticable;
 import javafx.application.Platform;
@@ -49,16 +50,16 @@ public class ProgressController extends VBox {
     private ControlPanelFacade controlPanelFacade;
     private List<Robot> robots;
     private boolean isRunning = false;
-    private HashMap<String, List<StatisticData>> statisticDataTempStoringList = new HashMap<>();
+    private HashMap<String, HashMap<String, StatisticData>> statisticDataTempStoringList = new HashMap<>();
 
 //    private String selectedAlgorithm;//used for check if all the robots runs the same algorithm. If yes, can than run timeToTerminate.
 //    private boolean singleAlgorithm = true;
 //    private Stack<Boolean> preSingleAlgorithm = new Stack<>();
 
 
-    private Stack<Pair<List<Robot>, HashMap<String, List<StatisticData>>>> robotStackPrev = new Stack<>();
+    private Stack<Pair<List<Robot>, HashMap<String, HashMap<String, StatisticData>>>> robotStackPrev = new Stack<>();
 
-    private Stack<Pair<List<Robot>, HashMap<String, List<StatisticData>>>> robotStackNext = new Stack<>();
+    private Stack<Pair<List<Robot>, HashMap<String, HashMap<String, StatisticData>>>> robotStackNext = new Stack<>();
 
 
     public ProgressController() {
@@ -126,7 +127,7 @@ public class ProgressController extends VBox {
                 if (!robotStackPrev.empty()) {
                     addDeepCopiedRobotList(robotStackNext, robots, statisticDataTempStoringList);//store the current to the next
                     robots.removeAll(robots);//clean the current
-                    Pair<List<Robot>, HashMap<String, List<StatisticData>>> pop = robotStackPrev.pop();
+                    Pair<List<Robot>, HashMap<String, HashMap<String, StatisticData>>> pop = robotStackPrev.pop();
                     robots.addAll(pop.getKey());//restore the prev
                     statisticDataTempStoringList.clear();
                     statisticDataTempStoringList.putAll(pop.getValue());
@@ -171,7 +172,7 @@ public class ProgressController extends VBox {
 
         if (!robotStackNext.empty()) {
             robots.removeAll(robots);//clean the current
-            Pair<List<Robot>, HashMap<String, List<StatisticData>>> pop = robotStackNext.pop();
+            Pair<List<Robot>, HashMap<String, HashMap<String, StatisticData>>> pop = robotStackNext.pop();
             robots.addAll(pop.getKey());
             statisticDataTempStoringList.clear();
             statisticDataTempStoringList.putAll(pop.getValue());
@@ -216,24 +217,16 @@ public class ProgressController extends VBox {
                 boolean timeToTerminate = algorithm.timeToTerminate(this.robots);
                 if (algorithm instanceof Statisticable) {
                     Statisticable statisticable = (Statisticable) algorithm;
-                    List<StatisticData> newStatisticDataList;
+                    HashMap<String, StatisticData> newStatisticDataList;
 
-//                    if (!statisticDataTempStoringList.containsKey(curr.getTag())) {
-//                        Iterator<Map.Entry<String, List<StatisticData>>> iterator1 = statisticDataTempStoringList.entrySet().iterator();
-//                        while (iterator1.hasNext()) {
-//                            Map.Entry<String, List<StatisticData>> cur = iterator1.next();
-//                            System.out.println(cur.getKey());
-//                        }
-//                        throw new IllegalStateException("Unregistered Statisticable Robot exist! Possible caused by: unrecognized robot tag change");
-//                    }
+                    if (!statisticDataTempStoringList.containsKey(curr.getTag())) {
+                        throw new IllegalStateException("Unregistered Statisticable Robot exist! Possible caused by: unrecognized robot TAG change");
+                    }
 
-                    List<StatisticData> oldStatisticDataList = statisticDataTempStoringList.get(curr.getTag());
+                    HashMap<String, StatisticData> oldStatisticDataList = statisticDataTempStoringList.get(curr.getTag());
                     newStatisticDataList = statisticable.update(oldStatisticDataList);
                     statisticDataTempStoringList.replace(curr.getTag(), newStatisticDataList);
 
-                    for (StatisticData statisticData : newStatisticDataList) {
-                        controlPanelFacade.getStatisticDisplay().setText(statisticData.display());
-                    }
                 }
                 afterAllTerminate = afterAllTerminate && timeToTerminate;
             }
@@ -244,6 +237,11 @@ public class ProgressController extends VBox {
 //                            autoRun.setText(AUTO_RUN_BTN_TO_START);
                 controlPanelFacade.getWarning().setText("Terminated!");
             }
+            System.out.println("+++++++++++++" + statisticDataTempStoringList.values());
+            for (Statistic statistic : controlPanelFacade.getStatisticList()) {
+                Collection<HashMap<String, StatisticData>> list = controlPanelFacade.getStatisticDataList().values();
+                controlPanelFacade.getStatisticDisplay().setText(statistic.show(robots, new ArrayList<>(list)));
+            }
 
         }
         controlPanelFacade.updateGarden();
@@ -252,13 +250,13 @@ public class ProgressController extends VBox {
 
     /**
      * Deep copy the robots list and add it to either robotStackPrev or robotStackNext
-     *
      * @param robotStack either the robotStackPrev or the robotStackNext
      * @param robotList  the robot list that needed to be deep copied and added
+     * @param statisticDataList
      */
-    private void addDeepCopiedRobotList(Stack<Pair<List<Robot>, HashMap<String, List<StatisticData>>>> robotStack, List<Robot> robotList, HashMap<String, List<StatisticData>> statisticDataList) {
+    private void addDeepCopiedRobotList(Stack<Pair<List<Robot>, HashMap<String, HashMap<String, StatisticData>>>> robotStack, List<Robot> robotList, HashMap<String, HashMap<String, StatisticData>> statisticDataList) {
         Iterator<Robot> iterator = robotList.iterator();
-        Pair<List<Robot>, HashMap<String, List<StatisticData>>> deepCopied = new Pair<>(new ArrayList<>(), new HashMap<>());
+        Pair<List<Robot>, HashMap<String, HashMap<String, StatisticData>>> deepCopied = new Pair<>(new ArrayList<>(), new HashMap<>());
         while (iterator.hasNext()) {
             Robot curr = iterator.next();
             try {
@@ -270,17 +268,23 @@ public class ProgressController extends VBox {
                 System.exit(0);
             }
         }
-        Iterator<Map.Entry<String, List<StatisticData>>> iterator1 = statisticDataList.entrySet().iterator();
+        Iterator<Map.Entry<String, HashMap<String, StatisticData>>> iterator1 = statisticDataList.entrySet().iterator();
         while (iterator1.hasNext()) {
-            Map.Entry<String, List<StatisticData>> curr = iterator1.next();
-            List<StatisticData> deepCopiedDataList = new ArrayList<>();
-            Iterator<StatisticData> statisticDataIterator = curr.getValue().iterator();
+            Map.Entry<String, HashMap<String, StatisticData>> curr = iterator1.next();
+
+
+            HashMap<String, StatisticData> deepCopiedDataList = new HashMap<>();
+            Iterator<Map.Entry<String, StatisticData>> statisticDataIterator = curr.getValue().entrySet().iterator();
             while (statisticDataIterator.hasNext()) {
-                StatisticData statisticData = statisticDataIterator.next();
-                StatisticData deepCopiedData = statisticData.deepCopy();
-                deepCopiedDataList.add(deepCopiedData);
+                Map.Entry<String, StatisticData> statisticData = statisticDataIterator.next();
+                StatisticData deepCopiedData = statisticData.getValue().deepCopy();
+                deepCopiedDataList.put(
+                        statisticData.getKey(), // StatisticData TAG
+                        deepCopiedData);
             }
-            deepCopied.getValue().put(curr.getKey(), deepCopiedDataList);
+            deepCopied.getValue().put(
+                    curr.getKey(), //robot TAG
+                    deepCopiedDataList);
         }
         robotStack.add(deepCopied);
     }
@@ -317,7 +321,7 @@ public class ProgressController extends VBox {
         autoRunTimeInterval.setText("");
     }
 
-    public HashMap<String, List<StatisticData>> getStatisticDataTempStoringList() {
+    public HashMap<String, HashMap<String, StatisticData>> getStatisticDataTempStoringList() {
         return statisticDataTempStoringList;
     }
 

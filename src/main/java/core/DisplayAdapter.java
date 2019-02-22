@@ -58,7 +58,7 @@ public abstract class DisplayAdapter {
      * <br/>
      * <br/>
      * &nbsp&nbsp&nbsp&nbsp     public mAdapter() {
-     * <br/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp    //create a new AdditionalAdapter and inited it with shape Circle and tag "Random move this robot".
+     * <br/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp    //create a new AdditionalAdapter and inited it with shape Circle and TAG "Random move this robot".
      * <br/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp    super(new Circle(27, Color.GRAY), "Random move this robot");
      * <br/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp    //make this adapter's shape invisible.
      * <br/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp    setVisible(false);

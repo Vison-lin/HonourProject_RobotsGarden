@@ -1,7 +1,7 @@
 package controller.controlpanel;
 
 import controller.garden.GardenController;
-import core.Statisticable;
+import core.Statistic;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,12 +10,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.Robot;
+import statistics.LongestRun;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,6 +52,8 @@ public class ControlPanelController extends VBox {
      */
     private static List<Robot> robots = Collections.synchronizedList(new ArrayList<>());
 
+    private static List<Statistic> statistics = new ArrayList<>();
+
 
     private GardenController gardenController;
 
@@ -77,7 +81,7 @@ public class ControlPanelController extends VBox {
         this.robotGenerationController.setControlPanelFacade(controlPanelFacade);
         initNodesText();
         saveListener();
-        fakeDefaultStatisticDisplay();
+        initStatisticDisplay();
     }
 
     public ControlPanelFacade getControlPanelFacade() {
@@ -174,19 +178,17 @@ public class ControlPanelController extends VBox {
         return statisticDisplay;
     }
 
-    //todo delete
-    private void fakeDefaultStatisticDisplay() {
+    private void initStatisticDisplay() {
         statisticDisplay.setText("Hi");
-        for (Robot robot : robots) {
-            if (robot.getAlgorithm() instanceof Statisticable) {
-//                Statisticable statisticable = (Statisticable) robot.getAlgorithm();
-//                List<StatisticData> statisticData = statisticable.init();
-//                for (StatisticData statisticData1 : statisticData) {
-//                    statisticDisplay.setText(statisticData1.display());
-//                    System.out.println(statisticData1.display());
-//                }
+        //todo faked file scan for Statistic
+        statistics.add(new LongestRun());
 
-            }
+        for (Statistic statistic : statistics) {
+            statisticDisplay.setText(statistic.show(robots, Arrays.asList(controlPanelFacade.getStatisticDataList())));
         }
+    }
+
+    List<Statistic> getStatistics() {
+        return statistics;
     }
 }

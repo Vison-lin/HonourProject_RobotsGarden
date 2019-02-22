@@ -19,19 +19,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 import model.Robot;
-import model.RobotGraphicalDisplay;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Random;
 
 public class RobotSettingHelper extends VBox {
 
@@ -263,7 +260,22 @@ public class RobotSettingHelper extends VBox {
         }
         value.addAll(allAlgInfo);
         algorithmSelection.setItems(value);
-        algorithmSelection.getSelectionModel().select(0); //todo, let this display the variable which is "selectedAlgorithm".
+        AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
+        String algorithmFileName = "";
+        try {
+            List<Pair<String, String>> algorithmList = algorithmLoadingHelper.getAlgorithmList();
+            for (Pair<String, String> algName : algorithmList) {
+                if (algName.getKey().equals(selectedAlgorithm)) {
+                    algorithmFileName = algName.getValue();
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+//        algorithmSelection.getSelectionModel(); //todo, let this display the variable which is "selectedAlgorithm".
+//        System.out.println(selectedAlgorithm);
+//        System.out.println(algorithmFileName+"~~~~~");
+//        System.out.println(algorithmSelection.getSelectionModel().getSelectedIndex());
         algorithmSelection.setConverter(new StringConverter<Pair<String, String>>() {
             @Override
             public String toString(Pair<String, String> object) {

@@ -1,9 +1,9 @@
 package core;
 
-import java.util.List;
+import java.util.HashMap;
 
-public interface Statisticable<T> {
-    List<StatisticData<T>> update(List<StatisticData<T>> currentStatisticData);
+public interface Statisticable {
+    HashMap<String, StatisticData> update(HashMap<String, StatisticData> currentStatisticData);
 
-    List<StatisticData<T>> init();
+    HashMap<String, StatisticData> init();
 }

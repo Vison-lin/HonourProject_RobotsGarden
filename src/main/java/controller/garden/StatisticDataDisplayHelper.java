@@ -41,7 +41,7 @@ public class StatisticDataDisplayHelper extends VBox {
         HashMap<String, StatisticData> statisticDataList = gardenController.getControlPanelFacade().getStatisticDataByRobotTag(robot.getTag());
 //        System.out.println(statisticDataList.get(0));
         for (Map.Entry<String, StatisticData> statisticData : statisticDataList.entrySet()) {
-            displayInfo = displayInfo + "\n" + statisticData.getKey() + statisticData.getValue().display();
+            displayInfo = displayInfo + "\n" + statisticData.getKey() + ": " + statisticData.getValue().display();
         }
         statisticDataDisplay.setText(displayInfo);
     }

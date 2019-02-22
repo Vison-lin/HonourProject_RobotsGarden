@@ -15,7 +15,7 @@ public class LongestRun extends Statistic<Integer> {
     @Override
     public boolean showingCondition(List<Robot> robots) {
         for (Robot robot : robots) {
-            if (!(robot.getAlgorithm() instanceof GatheringAlgorithm) || !(robot.getAlgorithm() instanceof GatheringGoToSec)) {
+            if ((!(robot.getAlgorithm() instanceof GatheringAlgorithm)) && (!(robot.getAlgorithm() instanceof GatheringGoToSec))) {
                 return false;
             }
         }
@@ -36,6 +36,11 @@ public class LongestRun extends Statistic<Integer> {
             }
 
         }
-        return longestRun + "";
+        return "The longest run is: " + longestRun + "";
+    }
+
+    @Override
+    public void clean() {
+
     }
 }

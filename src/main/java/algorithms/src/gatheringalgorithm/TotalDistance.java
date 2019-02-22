@@ -6,7 +6,7 @@ public class TotalDistance implements StatisticData<Double> {
 
     public static final String TAG = "TotalDistance";
 
-    double distance;
+    double distance = 0;
 
     @Override
     public void update(Double increment) {
@@ -27,7 +27,7 @@ public class TotalDistance implements StatisticData<Double> {
 
     @Override
     public Double getValue() {
-        return null;
+        return distance;
     }
 
     @Override

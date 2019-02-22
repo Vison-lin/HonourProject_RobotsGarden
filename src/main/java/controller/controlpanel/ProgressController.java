@@ -133,7 +133,7 @@ public class ProgressController extends VBox {
                     statisticDataTempStoringList.putAll(pop.getValue());
                     controlPanelFacade.updateGarden();
 //                    singleAlgorithm = preSingleAlgorithm.pop();
-
+                    showStatistic();
                 }
             }
         });
@@ -176,6 +176,7 @@ public class ProgressController extends VBox {
             robots.addAll(pop.getKey());
             statisticDataTempStoringList.clear();
             statisticDataTempStoringList.putAll(pop.getValue());
+            showStatistic();
         } else {
             ArrayList<Robot> localRobotsList = new ArrayList<>();
             //deep copy (partially): Ensure each of the robot's sensor has the same copy for each step (the duration of one "next" btn click)
@@ -237,11 +238,8 @@ public class ProgressController extends VBox {
 //                            autoRun.setText(AUTO_RUN_BTN_TO_START);
                 controlPanelFacade.getWarning().setText("Terminated!");
             }
-            System.out.println("+++++++++++++" + statisticDataTempStoringList.values());
-            for (Statistic statistic : controlPanelFacade.getStatisticList()) {
-                Collection<HashMap<String, StatisticData>> list = controlPanelFacade.getStatisticDataList().values();
-                controlPanelFacade.getStatisticDisplay().setText(statistic.show(robots, new ArrayList<>(list)));
-            }
+
+            showStatistic();
 
         }
         controlPanelFacade.updateGarden();
@@ -332,6 +330,21 @@ public class ProgressController extends VBox {
 
     private void setRobots() {
         this.robots = controlPanelFacade.getRobots();
+    }
+
+    void showStatistic() {
+        String display = "";
+        for (Statistic statistic : controlPanelFacade.getStatisticList()) {
+            if (statistic.showingCondition(robots)) {
+                Collection<HashMap<String, StatisticData>> list = controlPanelFacade.getStatisticDataList().values();
+                display += statistic.show(robots, new ArrayList<>(list));
+                display += "\n";
+            }
+        }
+        if (display.equals("")) {
+            display = ControlPanelFacade.STATISTIC_UNAVAILABLE_DISPLAY;
+        }
+        controlPanelFacade.getStatisticDisplay().setText(display);
     }
 
 //    private void checkSingleAlgortihm(Robot robot) {

@@ -15,7 +15,7 @@ public class LongestDistance extends Statistic<Double> {
     @Override
     public boolean showingCondition(List<Robot> robots) {
         for (Robot robot : robots) {
-            if (!(robot.getAlgorithm() instanceof GatheringAlgorithm) || !(robot.getAlgorithm() instanceof GatheringGoToSec)) {
+            if ((!(robot.getAlgorithm() instanceof GatheringAlgorithm)) && (!(robot.getAlgorithm() instanceof GatheringGoToSec))) {
                 return false;
             }
         }
@@ -38,6 +38,11 @@ public class LongestDistance extends Statistic<Double> {
             }
 
         }
-        return longestDistance + "";
+        return "The longest distance is: " + longestDistance + "";
+    }
+
+    @Override
+    public void clean() {
+
     }
 }

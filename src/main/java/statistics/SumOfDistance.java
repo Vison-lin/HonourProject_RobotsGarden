@@ -15,7 +15,7 @@ public class SumOfDistance extends Statistic<Double> {
     @Override
     public boolean showingCondition(List<Robot> robots) {
         for (Robot robot : robots) {
-            if (!(robot.getAlgorithm() instanceof GatheringAlgorithm) || !(robot.getAlgorithm() instanceof GatheringGoToSec)) {
+            if ((!(robot.getAlgorithm() instanceof GatheringAlgorithm)) && (!(robot.getAlgorithm() instanceof GatheringGoToSec))) {
                 return false;
             }
         }
@@ -34,6 +34,11 @@ public class SumOfDistance extends Statistic<Double> {
             }
 
         }
-        return cumulativeDistance + "";
+        return "The sum of distance is: " + cumulativeDistance + "";
+    }
+
+    @Override
+    public void clean() {
+
     }
 }

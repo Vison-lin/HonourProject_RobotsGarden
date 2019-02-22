@@ -11,4 +11,6 @@ public abstract class Statistic<T> {
 
     public abstract String show(List<Robot> robots, List<Map<String, StatisticData<T>>> data);
 
+    public abstract void clean();
+
 }

@@ -10,14 +10,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.Robot;
+import statistics.LongestDistance;
 import statistics.LongestRun;
+import statistics.SumOfDistance;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -152,6 +153,7 @@ public class ControlPanelController extends VBox {
         progressController.reset();
         autoGenerationController.reset();
         warning.setText(WARING_TEXT);
+        progressController.getStatisticDataTempStoringList().clear();
     }
 
     Text getWarning() {
@@ -179,13 +181,13 @@ public class ControlPanelController extends VBox {
     }
 
     private void initStatisticDisplay() {
-        statisticDisplay.setText("Hi");
+        statisticDisplay.setText(ControlPanelFacade.STATISTIC_UNAVAILABLE_DISPLAY);
         //todo faked file scan for Statistic
         statistics.add(new LongestRun());
+        statistics.add(new LongestDistance());
+        statistics.add(new SumOfDistance());
 
-        for (Statistic statistic : statistics) {
-            statisticDisplay.setText(statistic.show(robots, Arrays.asList(controlPanelFacade.getStatisticDataList())));
-        }
+        statisticDisplay.setText(ControlPanelFacade.STATISTIC_DEFAULT_DISPLAY);
     }
 
     List<Statistic> getStatistics() {

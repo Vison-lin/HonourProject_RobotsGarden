@@ -1,18 +1,19 @@
 package algorithms;
 
 
-import algorithms.src.gatheringalgorithm.Disc;
-import algorithms.src.gatheringalgorithm.SEC;
-import algorithms.src.gatheringalgorithm.Vector;
+import algorithms.src.gatheringalgorithm.*;
 import core.Algorithm;
+import core.StatisticData;
+import core.Statisticable;
 import model.Robot;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
-public class GatheringGoToSec extends Algorithm {
+public class GatheringGoToSec extends Algorithm implements Statisticable {
 
     /**
      *  The list includes visible robots of the current robot
@@ -309,5 +310,22 @@ public class GatheringGoToSec extends Algorithm {
         }
         return isTerminate;
 
+    }
+
+    @Override
+    public HashMap<String, StatisticData> update(HashMap<String, StatisticData> currentStatisticData) {
+        StatisticData<Integer> numOfRun = currentStatisticData.get(NumOfRun.TAG);
+        StatisticData<Double> totalDistance = currentStatisticData.get(TotalDistance.TAG);
+        numOfRun.update(1);
+//        totalDistance.update(newly added distance);//todo VISION: GIVE ME NUMBER HERE!
+        return currentStatisticData;
+    }
+
+    @Override
+    public HashMap<String, StatisticData> init() {
+        HashMap<String, StatisticData> newInstance = new HashMap<>();
+        newInstance.put(NumOfRun.TAG, new NumOfRun());
+        newInstance.put(TotalDistance.TAG, new TotalDistance());
+        return newInstance;
     }
 }

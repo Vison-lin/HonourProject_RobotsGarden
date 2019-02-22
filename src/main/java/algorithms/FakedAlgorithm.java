@@ -2,6 +2,7 @@ package algorithms;
 
 
 import algorithms.src.fakedalgorithmhelper.mAdapter;
+import algorithms.src.fakedalgorithmhelper.mStatisticData;
 import core.Algorithm;
 import core.StatisticData;
 import core.Statisticable;
@@ -11,7 +12,7 @@ import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.List;
 
-public class FakedAlgorithm extends Algorithm implements Statisticable {
+public class FakedAlgorithm extends Algorithm implements Statisticable<Integer> {
 
     mAdapter sec;
 
@@ -45,8 +46,9 @@ public class FakedAlgorithm extends Algorithm implements Statisticable {
     }
 
 
+
     @Override
-    public List<StatisticData> update(List<StatisticData> currentStatisticData) {
+    public List<StatisticData<Integer>> update(List<StatisticData<Integer>> currentStatisticData) {
 
         for (StatisticData<Integer> statisticData : currentStatisticData) {
             statisticData.update(1);
@@ -55,24 +57,7 @@ public class FakedAlgorithm extends Algorithm implements Statisticable {
     }
 
     @Override
-    public List<StatisticData> init() {
-        return Arrays.asList(new StatisticData<Integer>() {
-            int ctr;
-
-            @Override
-            public void update(Integer increment) {
-                ctr = ctr + increment;
-            }
-
-            @Override
-            public String display() {
-                return ctr + "";
-            }
-
-            @Override
-            public StatisticData<Integer> deepCopy() {
-                return this;
-            }
-        });
+    public List<StatisticData<Integer>> init() {
+        return Arrays.asList(new mStatisticData());
     }
 }

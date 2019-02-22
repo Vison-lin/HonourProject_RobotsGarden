@@ -36,7 +36,6 @@ public class Vector {
         this.deltaX = p2.getX() - p1.getX();
         this.deltaY = p2.getY() - p1.getY();
         this.norm = Math.sqrt(Math.pow(this.deltaX,2)+Math.pow(this.deltaY,2));
-
     }
     /**
      * Returns the scalar product of 2 vectors with components `x` and `y`

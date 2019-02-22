@@ -66,7 +66,7 @@ public class Robot {
     public void moveTo(double x, double y) {
         Point2D.Double end = new Point2D.Double();
         end.setLocation(x,y);
-        Vector vector = new Vector(getPosition(),end);//todo ???
+        Vector vector = new Vector(getPosition(), end);//todo ??? use local method instead
         if(vector.getNorm()<= unit){
             graphicalDisplay.moveTo(x, y);
         }else{

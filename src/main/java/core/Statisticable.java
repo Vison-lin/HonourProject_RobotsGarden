@@ -2,8 +2,8 @@ package core;
 
 import java.util.List;
 
-public interface Statisticable {
-    List<StatisticData> update(List<StatisticData> currentStatisticData);
+public interface Statisticable<T> {
+    List<StatisticData<T>> update(List<StatisticData<T>> currentStatisticData);
 
-    List<StatisticData> init();
+    List<StatisticData<T>> init();
 }

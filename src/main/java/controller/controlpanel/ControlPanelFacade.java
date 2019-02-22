@@ -27,6 +27,8 @@ public class ControlPanelFacade {
 
     public static final String STATISTIC_DEFAULT_DISPLAY = "Click Next Button to See Available Statistic Data";
 
+    public static boolean ENABLE_STATISTIC = true;
+
     ControlPanelFacade(ControlPanelController controlPanelController, AutoGenerationController autoGenerationController, ProgressController progressController, RobotGenerationController robotGenerationController) {
         this.controlPanelController = controlPanelController;
         this.autoGenerationController = autoGenerationController;

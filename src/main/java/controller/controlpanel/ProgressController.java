@@ -335,7 +335,7 @@ public class ProgressController extends VBox {
     void showStatistic() {
         String display = "";
         for (Statistic statistic : controlPanelFacade.getStatisticList()) {
-            if (statistic.showingCondition(robots)) {
+            if (statistic.showingCondition(robots) && ControlPanelFacade.ENABLE_STATISTIC) {
                 Collection<HashMap<String, StatisticData>> list = controlPanelFacade.getStatisticDataList().values();
                 display += statistic.show(robots, new ArrayList<>(list));
                 display += "\n";

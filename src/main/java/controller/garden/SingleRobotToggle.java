@@ -103,6 +103,7 @@ public class SingleRobotToggle extends ContextMenu {
                 controlPanelFacade.getRobots().remove(robot);
                 gardenController.updateGarden();
                 gardenController.getControlPanelFacade().removeStatisticDataByRobotTag(robot.getTag());
+                ControlPanelFacade.ENABLE_STATISTIC = false;
             }
         });
     }

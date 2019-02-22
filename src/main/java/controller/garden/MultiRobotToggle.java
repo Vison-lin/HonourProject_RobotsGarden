@@ -1,6 +1,7 @@
 package controller.garden;
 
 
+import controller.controlpanel.ControlPanelFacade;
 import core.Statisticable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -139,7 +140,10 @@ class MultiRobotToggle extends VBox {
         deleteSelected.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                gardenController.getControlPanelFacade().getRobots().remove(selectedRobot);
+                gardenController.updateGarden();
                 gardenController.getControlPanelFacade().removeStatisticDataByRobotTag(selectedRobot.getTag());
+                ControlPanelFacade.ENABLE_STATISTIC = false;
             }
         });
         detailSetting.setOnMouseClicked(new EventHandler<MouseEvent>() {

@@ -154,6 +154,7 @@ public class ControlPanelController extends VBox {
         autoGenerationController.reset();
         warning.setText(WARING_TEXT);
         progressController.getStatisticDataTempStoringList().clear();
+        ControlPanelFacade.ENABLE_STATISTIC = true;
     }
 
     Text getWarning() {

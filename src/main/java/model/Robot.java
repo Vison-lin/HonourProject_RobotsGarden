@@ -234,6 +234,7 @@ public class Robot {
         RobotGraphicalDisplay newRobotGraphicalDisplay = this.graphicalDisplay.deepCopy();
         Robot newRobot = new Robot(newRobotGraphicalDisplay);
         Sensor newSensor = new Sensor(newRobot);
+        newRobot.setTag(this.tag);
         newRobot.setSensor(newSensor);
         newRobot.setUnit(this.getUnit());
         //deep copy algorithm: create a new algorithm instance and return it.

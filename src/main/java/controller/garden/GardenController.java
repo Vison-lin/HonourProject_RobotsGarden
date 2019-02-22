@@ -201,7 +201,6 @@ public class GardenController extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.SECONDARY) {
-                    System.out.println("Clicked");
                     //build up a local copy for further implementation: Translate position to closest int coordinate
                     Pair<Boolean, List<Robot>> overlay = filterOfRobotListWithOnlyInTheClosestPosition(robot);
                     boolean overlayExist = overlay.getKey();

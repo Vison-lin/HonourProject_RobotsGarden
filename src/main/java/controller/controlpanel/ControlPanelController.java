@@ -1,6 +1,8 @@
 package controller.controlpanel;
 
 import controller.garden.GardenController;
+import core.StatisticData;
+import core.Statisticable;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,6 +43,8 @@ public class ControlPanelController extends VBox {
     private Button SaveButton;
     @FXML
     private Text warning;
+    @FXML
+    private Text statisticDisplay;
 
     /**
      * Global robots list
@@ -74,6 +78,7 @@ public class ControlPanelController extends VBox {
         this.robotGenerationController.setControlPanelFacade(controlPanelFacade);
         initNodesText();
         saveListener();
+        fakeDefaultStatisticDisplay();
     }
 
     public ControlPanelFacade getControlPanelFacade() {
@@ -164,5 +169,25 @@ public class ControlPanelController extends VBox {
 
     void cleanMouseCoordinate() {
         mouseCoordinate.setText(DEFAULT_MOUSE_COORDINATE_DISPLAY);
+    }
+
+    public Text getStatisticDisplay() {
+        return statisticDisplay;
+    }
+
+    //todo delete
+    private void fakeDefaultStatisticDisplay() {
+        statisticDisplay.setText("Hi");
+        for (Robot robot : robots) {
+            if (robot.getAlgorithm() instanceof Statisticable) {
+                Statisticable statisticable = (Statisticable) robot.getAlgorithm();
+                List<StatisticData> statisticData = statisticable.init();
+                for (StatisticData statisticData1 : statisticData) {
+                    statisticDisplay.setText(statisticData1.display());
+                    System.out.println(statisticData1.display());
+                }
+
+            }
+        }
     }
 }

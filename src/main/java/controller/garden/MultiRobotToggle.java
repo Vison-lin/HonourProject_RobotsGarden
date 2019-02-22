@@ -38,6 +38,12 @@ class MultiRobotToggle extends VBox {
     private Button toggleVision;
 
     @FXML
+    private Button showStatistic;
+
+    @FXML
+    private Button deleteSelected;
+
+    @FXML
     private Button detailSetting;
 
     @FXML
@@ -119,6 +125,18 @@ class MultiRobotToggle extends VBox {
                     }
                 }
         );
+        showStatistic.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                new StatisticDataDisplayHelper(gardenController, selectedRobot);
+            }
+        });
+        deleteSelected.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                gardenController.getControlPanelFacade().removeStatisticDataByRobotTag(selectedRobot.getTag());
+            }
+        });
         detailSetting.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {

@@ -17,10 +17,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import javafx.util.StringConverter;
 import model.Robot;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 class MultiRobotToggle extends VBox {
@@ -42,6 +45,11 @@ class MultiRobotToggle extends VBox {
 
     @FXML
     private Button detailSetting;
+
+    @FXML
+    private Text numberRobot;
+    @FXML
+    private Text listAlgorithm;
 
     private List<Robot> robots;
 
@@ -68,11 +76,42 @@ class MultiRobotToggle extends VBox {
             e.printStackTrace();
         }
         initNodesText();
+        initialInfor(robots);
         boostRobotDropDownMenu();
     }
 
     private void initNodesText() {
         robotTag.setText("Please select one robot");
+    }
+
+    private void initialInfor(List<Robot> robots){
+        numberRobot.setText("\r\nTotal number of robots: "+robots.size());
+        List<String> alg = new ArrayList<>();
+        for(Robot robot:robots){
+             alg.add(robot.getAlgorithm().getClass().getSimpleName());
+        }
+        Collections.sort(alg);
+        String curr = alg.get(0);
+        String reuslt ="\r\n";
+        int count = 0;
+        int index =1;
+        System.out.println(alg.size());
+        for(String item: alg){
+            if(item.equals(curr)){
+                count++;
+                if (index==alg.size()) {
+                    reuslt += curr + ": " + count + "\r\n";
+                    count = 0;
+                    curr = item;
+                }
+            }else{
+                reuslt+=curr+": "+count+"\r\n";
+                count=1;
+                curr = item;
+            }
+            index++;
+        }
+        listAlgorithm.setText(reuslt);
     }
 
     private void generateRobotSettingPage() {
@@ -101,7 +140,7 @@ class MultiRobotToggle extends VBox {
         detailSetting.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                new RobotSettingHelper(gardenController);
+                new RobotSettingHelper(gardenController,selectedRobot);
             }
         });
     }

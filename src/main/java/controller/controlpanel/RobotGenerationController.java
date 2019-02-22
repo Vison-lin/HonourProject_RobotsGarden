@@ -1,6 +1,8 @@
 package controller.controlpanel;
 
 import core.Statisticable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -22,10 +25,12 @@ import model.RobotGraphicalDisplay;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Random;
 
 public class RobotGenerationController extends VBox {
 
     public static final double DEFAULT_ROBOT_VISION = 100;
+    public static final double DEFAULT_ROBOT_Radius = 10;
     public static final double DEFAULT_ROBOT_UNIT = Double.POSITIVE_INFINITY;
     public static final String DEFAULT_COLOR_TEXT = "Select an color for robots: ";
     public static final String DEFAULT_VISION_TEXT = "Select an vision for robots: ";
@@ -49,6 +54,12 @@ public class RobotGenerationController extends VBox {
     private RadioButton visionCheck;
     @FXML
     private RadioButton unitCheck;
+    @FXML
+    private RadioButton unitRandom;
+    @FXML
+    private RadioButton unitCustomize;
+    @FXML
+    private HBox settingPage;
 
     private ControlPanelFacade controlPanelFacade;
 
@@ -61,6 +72,8 @@ public class RobotGenerationController extends VBox {
     private Paint selectedRobotColor = Color.BLACK;
 
     private double selectedRobotUnit;
+
+    private boolean selectRandom = false;
 
     private List<Robot> robots;
 
@@ -95,6 +108,10 @@ public class RobotGenerationController extends VBox {
         colorText.setText(DEFAULT_COLOR_TEXT);
         visionText.setText(DEFAULT_VISION_TEXT);
         unitText.setText(DEFAULT_UNIT_TEXT);
+        unitCheck.setUserData("Infinity");
+        unitRandom.setUserData("Random");
+        unitCustomize.setUserData("Customize");
+        settingPage.setVisible(false);
 
     }
 
@@ -130,7 +147,7 @@ public class RobotGenerationController extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 if(visionCheck.isSelected()){
-                    selectedRobotVision = Math.sqrt(500*500*2);
+                    selectedRobotVision = Math.sqrt(800*800*2);
                     inputVision.setText("");
                     inputVision.setDisable(true);
 
@@ -144,21 +161,37 @@ public class RobotGenerationController extends VBox {
     }
 
     private void unitCheckListener(){
-            unitCheck.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if(unitCheck.isSelected()){
-                        inputUnit.setText("");
-                        inputUnit.setDisable(true);
-                        selectedRobotUnit = DEFAULT_ROBOT_UNIT;
+        ToggleGroup group = new ToggleGroup();
+        unitCheck.setToggleGroup(group);
+        unitCheck.setSelected(true);
+        unitRandom.setToggleGroup(group);
+        unitCustomize.setToggleGroup(group);
 
-                    }else{
-                        inputUnit.setDisable(false);
-                        inputUnit.setText("");
 
-                    }
+        group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if(group.getSelectedToggle().getUserData().toString().equals("Infinity")){
+                    inputUnit.setText("");
+                    inputUnit.setDisable(true);
+                    selectedRobotUnit = DEFAULT_ROBOT_UNIT;
+                    selectRandom = false;
+                }else if(group.getSelectedToggle().getUserData().toString().equals("Customize")){
+                    inputUnit.setText("");
+                    inputUnit.setDisable(false);
+                    selectRandom = false;
+
+                }else if(group.getSelectedToggle().getUserData().toString().equals("Random")){
+                    inputUnit.setText("");
+                    inputUnit.setDisable(true);
+                    selectRandom = true;
+
                 }
-            });
+
+
+            }
+        });
+
     }
 
 
@@ -229,6 +262,7 @@ public class RobotGenerationController extends VBox {
         robot.setTag(tag);
         algorithmLoadingHelper.assignAlgorithmToRobot(robot, selectedAlgorithm);
         robots.add(robot);//add the robot into the robots list
+        robot.setRandomUnit(selectRandom); //set the boolean whether random unit;
         robot.setUnit(selectedRobotUnit);//set the unit number for the robot;
         robot.getSensor().setGlobalRobots(robots);//pass the global list into robot sensor immediately: so that without clicking next, the robot's sensor start to scan its surroundings immediately todo add an start btn instead?
         controlPanelFacade.addListenerToGivenRobot(robot);

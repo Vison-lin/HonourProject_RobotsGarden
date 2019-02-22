@@ -2,6 +2,7 @@ package controller.controlpanel;
 
 
 import controller.garden.GardenController;
+import core.StatisticData;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import model.Robot;
@@ -88,6 +89,22 @@ public class ControlPanelFacade {
 
     void reset() {
         controlPanelController.resetAll();
+    }
+
+    Text getStatisticDisplay() {
+        return controlPanelController.getStatisticDisplay();
+    }
+
+    public List<StatisticData> getStatisticDataByRobotTag(String robotTag) {
+        return progressController.getStatisticDataTempStoringList().get(robotTag);
+    }
+
+    void insertToStatisticDataTempStoringList(String robotTag, List<StatisticData> newStatisticData) {
+        progressController.getStatisticDataTempStoringList().put(robotTag, newStatisticData);
+    }
+
+    public void removeStatisticDataByRobotTag(String robotTag) {
+        progressController.getStatisticDataTempStoringList().remove(robotTag);
     }
 
         /*

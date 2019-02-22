@@ -11,6 +11,7 @@
 
     <Text fx:id="robotTag" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textOrigin="CENTER"
           BorderPane.alignment="CENTER"/>
-    <Button fx:id="toggleVision" mnemonicParsing="false" text="Toggle vision"/>
+    <Button fx:id="showStatistic" mnemonicParsing="false" text="Toggle vision"/>
+    <Button fx:id="deleteSelected" mnemonicParsing="false" text="Toggle vision"/>
     <Button mnemonicParsing="false" text="Setting...(Fake)" fx:id="detailSetting"/>
 </fx:root>

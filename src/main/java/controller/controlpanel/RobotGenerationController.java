@@ -1,5 +1,6 @@
 package controller.controlpanel;
 
+import core.Statisticable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -231,6 +232,10 @@ public class RobotGenerationController extends VBox {
         robot.setUnit(selectedRobotUnit);//set the unit number for the robot;
         robot.getSensor().setGlobalRobots(robots);//pass the global list into robot sensor immediately: so that without clicking next, the robot's sensor start to scan its surroundings immediately todo add an start btn instead?
         controlPanelFacade.addListenerToGivenRobot(robot);
+        if (robot.getAlgorithm() instanceof Statisticable) {
+            Statisticable statisticable = (Statisticable) robot.getAlgorithm();
+            controlPanelFacade.insertToStatisticDataTempStoringList(robot.getTag(), statisticable.init());
+        }
         return robot;
     }
 

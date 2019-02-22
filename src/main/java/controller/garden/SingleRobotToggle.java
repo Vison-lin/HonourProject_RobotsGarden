@@ -3,6 +3,7 @@ package controller.garden;
 
 import controller.controlpanel.ControlPanelFacade;
 import core.DisplayAdapter;
+import core.Statisticable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
@@ -21,12 +22,14 @@ public class SingleRobotToggle extends ContextMenu {
     private static final String CHANGE_VISION = "Change Vision";
     private static final String CHANGE_COLOR = "Change Color";
     private static final String DELETION = "Delete";
+    private static final String STATISITC_INFO = "Show Statistic";
     private Robot robot;
     private Paint robotColor;
     private double robotVision;
     private MenuItem setColor;
     private MenuItem showVision;
     private MenuItem setVision;
+    private MenuItem statisticInfo;
     private MenuItem delete;
     private List<Pair<DisplayAdapter, MenuItem>> setDisplayComponentsVisibility = new ArrayList<>();
     private GardenController gardenController;
@@ -42,6 +45,7 @@ public class SingleRobotToggle extends ContextMenu {
         setColor = new MenuItem(CHANGE_COLOR);
         showVision = new MenuItem(SHOW_VISION_TO_SHOW);
         setVision = new MenuItem(CHANGE_VISION);
+        statisticInfo = new MenuItem(STATISITC_INFO);
         delete = new MenuItem(DELETION);
 
         boolean isShowingVision = !robot.getGraphicalDisplay().toggleVisionVisible();
@@ -62,14 +66,31 @@ public class SingleRobotToggle extends ContextMenu {
         setColorPickerListener();
         setVisionListener();
         showVisionListener();
+        if (robot.getAlgorithm() instanceof Statisticable) {
+            setStatisticInfoDisplayListener();
+        }
         setDeletionListener();
         setDisplayComponentsVisibilityListener();
+
 
         getItems().add(setColor);
         getItems().add(showVision);
         getItems().add(setVision);
+        if (robot.getAlgorithm() instanceof Statisticable) {
+            getItems().add(statisticInfo);
+        }
         getItems().add(delete);
 
+
+    }
+
+    private void setStatisticInfoDisplayListener() {
+        statisticInfo.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                new StatisticDataDisplayHelper(gardenController, robot);
+            }
+        });
     }
 
     private void setDeletionListener() {
@@ -81,6 +102,7 @@ public class SingleRobotToggle extends ContextMenu {
                 // It works because in the gardenController, a certain layer has been added to the pane IFF it is visible
                 controlPanelFacade.getRobots().remove(robot);
                 gardenController.updateGarden();
+                gardenController.getControlPanelFacade().removeStatisticDataByRobotTag(robot.getTag());
             }
         });
     }

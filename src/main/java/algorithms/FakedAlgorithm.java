@@ -3,12 +3,15 @@ package algorithms;
 
 import algorithms.src.fakedalgorithmhelper.mAdapter;
 import core.Algorithm;
+import core.StatisticData;
+import core.Statisticable;
 import model.Robot;
 
 import java.awt.geom.Point2D;
+import java.util.Arrays;
 import java.util.List;
 
-public class FakedAlgorithm extends Algorithm {
+public class FakedAlgorithm extends Algorithm implements Statisticable {
 
     mAdapter sec;
 
@@ -26,12 +29,8 @@ public class FakedAlgorithm extends Algorithm {
     @Override
     public Point2D.Double next(List<Robot> robots) {
 //        sec.setAlgorithm(this);
-        Point2D.Double point = new Point2D.Double();
-        point.setLocation(1, 0);
-        System.out.println("in faked" + getRobot().toString());
-        System.out.println(getRobot().getGraphicalDisplay().getBottomLayers().size());
-//        getRobot().getGraphicalDisplay().insertBottomLayer(sec);
-//        Random random = new Random();
+        Point2D.Double point = getRobot().getSensor().convertToLocal(getRobot().getPosition());
+        point.setLocation(point.getX() + 1, point.getY());
         return point;
     }
 
@@ -45,13 +44,35 @@ public class FakedAlgorithm extends Algorithm {
         return "used for developing propose only";
     }
 
+
     @Override
-    public boolean timeToTerminate(List<Robot> globalRobotList) {
-        boolean terminate = true;
-        for (Robot robot : globalRobotList) {
-            boolean t = robot.getAlgorithm().timeToTerminate(globalRobotList);
-            terminate = terminate && t;
+    public List<StatisticData> update(List<StatisticData> currentStatisticData) {
+
+        for (StatisticData<Integer> statisticData : currentStatisticData) {
+            statisticData.update(1);
         }
-        return terminate;
+        return currentStatisticData;
+    }
+
+    @Override
+    public List<StatisticData> init() {
+        return Arrays.asList(new StatisticData<Integer>() {
+            int ctr;
+
+            @Override
+            public void update(Integer increment) {
+                ctr = ctr + increment;
+            }
+
+            @Override
+            public String display() {
+                return ctr + "";
+            }
+
+            @Override
+            public StatisticData<Integer> deepCopy() {
+                return this;
+            }
+        });
     }
 }

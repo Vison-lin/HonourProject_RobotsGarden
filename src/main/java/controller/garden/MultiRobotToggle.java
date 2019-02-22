@@ -1,6 +1,7 @@
 package controller.garden;
 
 
+import core.Statisticable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -17,7 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import javafx.util.StringConverter;
 import model.Robot;
 
@@ -125,12 +125,17 @@ class MultiRobotToggle extends VBox {
                     }
                 }
         );
-        showStatistic.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                new StatisticDataDisplayHelper(gardenController, selectedRobot);
-            }
-        });
+        if (selectedRobot.getAlgorithm() instanceof Statisticable) {
+            showStatistic.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    new StatisticDataDisplayHelper(gardenController, selectedRobot);
+                }
+            });
+        } else {
+            showStatistic.setVisible(false);
+        }
+
         deleteSelected.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {

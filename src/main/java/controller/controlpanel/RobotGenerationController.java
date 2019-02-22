@@ -25,16 +25,16 @@ import model.RobotGraphicalDisplay;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Random;
 
 public class RobotGenerationController extends VBox {
 
-    public static final double DEFAULT_ROBOT_VISION = 100;
+    private static final double DEFAULT_ROBOT_VISION = 100;
+    private static final double DEFAULT_ROBOT_UNIT = Double.POSITIVE_INFINITY;
     public static final double DEFAULT_ROBOT_Radius = 10;
-    public static final double DEFAULT_ROBOT_UNIT = Double.POSITIVE_INFINITY;
-    public static final String DEFAULT_COLOR_TEXT = "Select an color for robots: ";
-    public static final String DEFAULT_VISION_TEXT = "Select an vision for robots: ";
-    public static final String DEFAULT_UNIT_TEXT = "Select an unit for robots: ";
+    private static final String DEFAULT_COLOR_TEXT = "Select an color for robots: ";
+    private static final String DEFAULT_VISION_TEXT = "Select an vision for robots: ";
+    private static final String DEFAULT_UNIT_TEXT = "Select an unit for robots: ";
+    static double ROBOT_NAME_COUNTER = 0;
 
     @FXML
     private ComboBox<Pair<String, String>> algorithmSelection;
@@ -234,11 +234,9 @@ public class RobotGenerationController extends VBox {
             @Override
             public void handle(ActionEvent event) {
                 selectedRobotColor = colorPicker.getValue();
-
             }
         });
     }
-
 
     /**
      *
@@ -266,8 +264,10 @@ public class RobotGenerationController extends VBox {
         robot.setUnit(selectedRobotUnit);//set the unit number for the robot;
         robot.getSensor().setGlobalRobots(robots);//pass the global list into robot sensor immediately: so that without clicking next, the robot's sensor start to scan its surroundings immediately todo add an start btn instead?
         controlPanelFacade.addListenerToGivenRobot(robot);
+
         if (robot.getAlgorithm() instanceof Statisticable) {
             Statisticable statisticable = (Statisticable) robot.getAlgorithm();
+            System.out.println(statisticable + "==========");
             controlPanelFacade.insertToStatisticDataTempStoringList(robot.getTag(), statisticable.init());
         }
         return robot;

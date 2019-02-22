@@ -58,8 +58,8 @@ public class AutoGenerationController extends VBox {
                     //init first one
                     double maxX = (int) controlPanelFacade.getGardenController().getWidth() + 1;
                     double maxY = (int) controlPanelFacade.getGardenController().getHeight() + 1;
-                    int ctr = 0;
-                    Robot currRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", random.nextInt((int) maxX), random.nextInt((int) maxY));
+                    double ctr = ControlPanelFacade.ROBOT_NAME_COUNTER;
+                    Robot currRobot = controlPanelFacade.robotGenerator("Auto No." + ctr + "", random.nextInt((int) maxX), random.nextInt((int) maxY));
 
                     ArrayList<Robot> generatedRobots = new ArrayList<>();
                     generatedRobots.add(currRobot);

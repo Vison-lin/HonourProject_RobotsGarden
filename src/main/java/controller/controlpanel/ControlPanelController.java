@@ -1,7 +1,6 @@
 package controller.controlpanel;
 
 import controller.garden.GardenController;
-import core.StatisticData;
 import core.Statisticable;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -180,12 +179,12 @@ public class ControlPanelController extends VBox {
         statisticDisplay.setText("Hi");
         for (Robot robot : robots) {
             if (robot.getAlgorithm() instanceof Statisticable) {
-                Statisticable statisticable = (Statisticable) robot.getAlgorithm();
-                List<StatisticData> statisticData = statisticable.init();
-                for (StatisticData statisticData1 : statisticData) {
-                    statisticDisplay.setText(statisticData1.display());
-                    System.out.println(statisticData1.display());
-                }
+//                Statisticable statisticable = (Statisticable) robot.getAlgorithm();
+//                List<StatisticData> statisticData = statisticable.init();
+//                for (StatisticData statisticData1 : statisticData) {
+//                    statisticDisplay.setText(statisticData1.display());
+//                    System.out.println(statisticData1.display());
+//                }
 
             }
         }

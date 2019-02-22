@@ -218,15 +218,14 @@ public class ProgressController extends VBox {
                     Statisticable statisticable = (Statisticable) algorithm;
                     List<StatisticData> newStatisticDataList;
 
-                    if (!statisticDataTempStoringList.containsKey(curr.getTag())) {
-                        Iterator<Map.Entry<String, List<StatisticData>>> iterator1 = statisticDataTempStoringList.entrySet().iterator();
-                        while (iterator1.hasNext()) {
-                            Map.Entry<String, List<StatisticData>> cur = iterator1.next();
-                            System.out.println(cur.getKey());
-                        }
-                        System.out.println("===" + curr.getTag());
-                        throw new IllegalStateException("Unregistered Statisticable Robot exist! Possible caused by: unrecognized robot tag change");
-                    }
+//                    if (!statisticDataTempStoringList.containsKey(curr.getTag())) {
+//                        Iterator<Map.Entry<String, List<StatisticData>>> iterator1 = statisticDataTempStoringList.entrySet().iterator();
+//                        while (iterator1.hasNext()) {
+//                            Map.Entry<String, List<StatisticData>> cur = iterator1.next();
+//                            System.out.println(cur.getKey());
+//                        }
+//                        throw new IllegalStateException("Unregistered Statisticable Robot exist! Possible caused by: unrecognized robot tag change");
+//                    }
 
                     List<StatisticData> oldStatisticDataList = statisticDataTempStoringList.get(curr.getTag());
                     newStatisticDataList = statisticable.update(oldStatisticDataList);

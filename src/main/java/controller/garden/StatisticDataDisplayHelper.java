@@ -36,10 +36,11 @@ public class StatisticDataDisplayHelper extends VBox {
             throw new RuntimeException(e);
         }
         String displayInfo = "";
-        System.out.println();
+        System.out.println(robot);
         List<StatisticData> statisticDataList = gardenController.getControlPanelFacade().getStatisticDataByRobotTag(robot.getTag());
+//        System.out.println(statisticDataList.get(0));
         for (StatisticData statisticData : statisticDataList) {
-            displayInfo = displayInfo + "\n" + statisticData.display();
+            displayInfo = displayInfo + "\n" + robot + ": " + statisticData.display();
         }
         statisticDataDisplay.setText(displayInfo);
     }

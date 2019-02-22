@@ -19,6 +19,8 @@ public class ControlPanelFacade {
 
     private RobotGenerationController robotGenerationController;
 
+    public static double ROBOT_NAME_COUNTER = RobotGenerationController.ROBOT_NAME_COUNTER;
+
     ControlPanelFacade(ControlPanelController controlPanelController, AutoGenerationController autoGenerationController, ProgressController progressController, RobotGenerationController robotGenerationController) {
         this.controlPanelController = controlPanelController;
         this.autoGenerationController = autoGenerationController;

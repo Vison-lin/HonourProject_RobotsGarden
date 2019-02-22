@@ -4,13 +4,18 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.121">
 
-    <ComboBox fx:id="overlayRobotSelection" prefWidth="150.0" BorderPane.alignment="CENTER"/>
+<fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
 
-    <Text fx:id="robotTag" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textOrigin="CENTER"
-          BorderPane.alignment="CENTER"/>
-    <Button fx:id="toggleVision" mnemonicParsing="false" text="Toggle vision"/>
-    <Button mnemonicParsing="false" text="Setting...(Fake)" fx:id="detailSetting"/>
+    <ComboBox fx:id="overlayRobotSelection" prefWidth="150.0" BorderPane.alignment="CENTER" />
+
+    <Text fx:id="robotTag" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textOrigin="CENTER" BorderPane.alignment="CENTER" />
+   <Line endX="100.0" startX="-100.0" />
+   <Text fx:id="numberRobot" strokeType="OUTSIDE" strokeWidth="0.0" text="numberRobot" />
+   <Text fx:id="listAlgorithm" strokeType="OUTSIDE" strokeWidth="0.0" text="listAlgorithm" />
+   <Line endX="100.0" startX="-100.0" />
+    <Button fx:id="toggleVision" mnemonicParsing="false" text="Toggle vision" />
+    <Button fx:id="detailSetting" mnemonicParsing="false" text="Setting...(Fake)" />
 </fx:root>

@@ -8,6 +8,7 @@ import core.AlgorithmClassLoader;
 
 import java.awt.geom.Point2D;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Class that represent Robot object.
@@ -39,9 +40,19 @@ public class Robot {
     private Algorithm algorithm;
 
     /**
-     *  The unit number of robot which control the amount of the step of moiving
+     *  The distance of moving of robot.
      */
     private double unit;
+
+    /**
+     *  The unit number of robot which control the amount of the step of moiving.
+     */
+    private double step;
+
+    /**
+     *  Check whether unit is a randomm number.
+     */
+    private boolean randomUnit;
 
 
     /**
@@ -67,6 +78,13 @@ public class Robot {
         Point2D.Double end = new Point2D.Double();
         end.setLocation(x,y);
         Vector vector = new Vector(getPosition(),end);//todo ???
+        if(isRandomUnit()){
+                Random ran = new Random();
+                int num = (int)(vector.getNorm()/graphicalDisplay.getRobotBody().getRadius());
+                if(num>=1) {
+                    this.unit = graphicalDisplay.getRobotBody().getRadius() * (1 + ran.nextInt(num));
+                }
+        }
         if(vector.getNorm()<= unit){
             graphicalDisplay.moveTo(x, y);
         }else{
@@ -189,7 +207,23 @@ public class Robot {
 
     public  double getUnit(){return  unit;}
 
-    public void setUnit(Double unit){this.unit = graphicalDisplay.getRobotBody().getRadius()*unit;}
+    public boolean isRandomUnit() {
+        return randomUnit;
+    }
+
+    public void setRandomUnit(boolean randomUnit) {
+        this.randomUnit = randomUnit;
+        System.out.println("random:" +randomUnit);
+    }
+
+    public double getStep() {
+        return step;
+    }
+
+    public void setUnit(Double unit){
+        this.step = unit;
+        this.unit = graphicalDisplay.getRobotBody().getRadius()*unit;
+    }
 
     /**
      * Deep copy the robot object. Note that it does not deep copy neither the algorithm that assigned to this robot nor the global robot list that passed into the sensor.

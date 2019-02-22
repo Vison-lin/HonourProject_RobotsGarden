@@ -30,6 +30,11 @@ public class GatheringAlgorithm extends Algorithm implements Statisticable {
      */
     private SEC sec;
 
+    /**
+     *  The distance of moving of current robot
+     */
+    private double distance;
+
 
     public GatheringAlgorithm() {
 
@@ -70,6 +75,8 @@ public class GatheringAlgorithm extends Algorithm implements Statisticable {
         Point2D.Double currRobot  = new Point2D.Double();
         currRobot.setLocation(0.0,0.0);
         Point2D.Double connectedCenter = getConnectedCenter(range,C.getCenter(),currRobot,rs);
+        Vector goal = new Vector(currRobot,connectedCenter);
+        distance = goal.getNorm();
 
 //        double unit = getRobot().getUnit();
 ////        if(unit<=Math.sqrt(C.getrSquared())){
@@ -352,7 +359,7 @@ public class GatheringAlgorithm extends Algorithm implements Statisticable {
         StatisticData<Integer> numOfRun = currentStatisticData.get(NumOfRun.TAG);
         StatisticData<Double> totalDistance = currentStatisticData.get(TotalDistance.TAG);
         numOfRun.update(1);
-//        totalDistance.update(newly added distance);//todo VISION: GIVE ME NUMBER HERE!
+        totalDistance.update(distance);
         return currentStatisticData;
     }
 

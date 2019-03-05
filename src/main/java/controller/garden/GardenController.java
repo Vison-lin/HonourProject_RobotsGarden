@@ -88,11 +88,12 @@ public class GardenController extends VBox {
         double y = coordinate.getY();
         double cursorX = currentCursorPosition.getX();
         double cursorY = currentCursorPosition.getY();
-        System.out.println("The cursor position is: " + cursorX + ", " + cursorY);
+//        System.out.println("The cursor position is: " + cursorX + ", " + cursorY);
         double newX = (cursorX + zoomingFactor * (x - cursorX));
         double newY = (cursorY + zoomingFactor * (y - cursorY));
         graphicalPoint.setLocation(newX, newY);
-
+        System.out.println(zoomingFactor == 1);
+//        System.out.println(x==graphicalPoint.getX() && y==graphicalPoint.getY());
         return graphicalPoint;
     }
 
@@ -364,18 +365,16 @@ public class GardenController extends VBox {
                 currentCursorPosition.setLocation(event.getX(), event.getY());
 
                 double scrollAmount = event.getDeltaY();
+                isScrollingUp = scrollAmount >= 0;
 //                System.out.println(scrollAmount%4);
-                zoomingFactor = zoomingFactor + (scrollAmount % 4) * 0.1;//todo mouse? touch pad?
+//                zoomingFactor = zoomingFactor + (scrollAmount % 3) * 0.1;//todo mouse? touch pad?
+//                System.out.println(scrollAmount+": "+(scrollAmount % 3) * 0.1);
+
 //                System.out.println(zoomingFactor+":"+(scrollAmount%4)*0.1);
-                if (zoomingFactor < 0) {
-                    zoomingFactor = 0;
-                }
-                if (zoomingFactor > 1) {
-                    zoomingFactor = 1;
-                }
+
 
                 //detect scrolling direction
-                isScrollingUp = scrollAmount >= 0;
+
 
 //                System.out.println(zoomingFactor);
 
@@ -383,9 +382,17 @@ public class GardenController extends VBox {
                 double intentStrokeWidth = defaultAxisStrokeWidth;
 
                 if (isScrollingUp) {
+                    zoomingFactor += 0.1;
                     intentStrokeWidth = xAxis.getStrokeWidth() + strokeWidthIncrement;
                 } else {
+                    zoomingFactor -= 0.1;
                     intentStrokeWidth = xAxis.getStrokeWidth() - strokeWidthIncrement;
+                }
+                if (zoomingFactor < 0) {
+                    zoomingFactor = 0;
+                }
+                if (zoomingFactor > 1) {
+                    zoomingFactor = 1;
                 }
 
                 for (Robot robot : controlPanelFacade.getRobots()) {

@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -96,7 +95,7 @@ public class RobotGenerationController extends VBox {
     public RobotGenerationController() {
 
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/control_panel_component/robot_customization_control_new.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/control_panel_component/robot_customization.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 

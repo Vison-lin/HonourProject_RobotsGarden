@@ -96,17 +96,18 @@ public class Robot {
             coordinate = new Point2D.Double(x, y);
             Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);//todo to be enabled after the zooming implemented
             graphicalDisplay.moveTo(positionForGraphicalDisplay);//todo to be enabled after the zooming implemented
-//            graphicalDisplay.moveTo(x, y);
+//            graphicalDisplay.moveTo(coordinate);
         }else{
             end = vector.resize(unit).getEnd();
             coordinate = new Point2D.Double(end.getX(), end.getY());
             Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);//todo to be enabled after the zooming implemented
             graphicalDisplay.moveTo(positionForGraphicalDisplay);//todo to be enabled after the zooming implemented
-//            graphicalDisplay.moveTo(end.getX(), end.getY());
+//            graphicalDisplay.moveTo(coordinate);
 
         }
 
-        System.out.println(coordinate);
+        System.out.println("orig: " + coordinate);
+        System.out.println("graphcial: " + graphicalDisplay.getRobotPosition().getTranslateX() + ", " + graphicalDisplay.getRobotPosition().getTranslateY());
 
     }
 

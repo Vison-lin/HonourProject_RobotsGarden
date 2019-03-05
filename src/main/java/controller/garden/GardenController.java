@@ -88,9 +88,11 @@ public class GardenController extends VBox {
         double y = coordinate.getY();
         double cursorX = currentCursorPosition.getX();
         double cursorY = currentCursorPosition.getY();
+        System.out.println("The cursor position is: " + cursorX + ", " + cursorY);
         double newX = (cursorX + zoomingFactor * (x - cursorX));
         double newY = (cursorY + zoomingFactor * (y - cursorY));
         graphicalPoint.setLocation(newX, newY);
+
         return graphicalPoint;
     }
 
@@ -222,7 +224,8 @@ public class GardenController extends VBox {
         garden.getChildren().addAll(robotsPosition);
 
         //redraw the coordinate
-        drawXYAxis();
+        garden.getChildren().add(xAxis);
+        garden.getChildren().add(yAxis);
 
         //remove unnecessary info (to ensure obliviousness <- KEY OF THE PROJECT)
 //        for (Robot robot : controlPanelController.getRobots()) {
@@ -246,7 +249,7 @@ public class GardenController extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 controlPanelFacade.setMouseCoordinate(event.getX(), event.getY());
-                currentCursorPosition.setLocation(event.getX(), event.getY());
+//                currentCursorPosition.setLocation(event.getX(), event.getY());
             }
         });
     }
@@ -357,6 +360,9 @@ public class GardenController extends VBox {
         garden.setOnScroll(new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
+
+                currentCursorPosition.setLocation(event.getX(), event.getY());
+
                 double scrollAmount = event.getDeltaY();
 //                System.out.println(scrollAmount%4);
                 zoomingFactor = zoomingFactor + (scrollAmount % 4) * 0.1;//todo mouse? touch pad?

@@ -288,21 +288,22 @@ public class ProgressController extends VBox {
     }
 
     private Point2D.Double boundaryCheck(Point2D.Double point) {
-        //negative check
-        if (point.getX() < 0) {
-            point.setLocation(0, point.getY());
-        }
-        if (point.getY() < 0) {
-            point.setLocation(point.getX(), 0);
-        }
-
-        //boundary check
-        if (point.getX() > controlPanelFacade.getGardenController().getGarden().getWidth()) {
-            point.setLocation(controlPanelFacade.getGardenController().getGarden().getWidth(), point.getY());
-        }
-        if (point.getY() > controlPanelFacade.getGardenController().getGarden().getHeight()) {
-            point.setLocation(point.getX(), controlPanelFacade.getGardenController().getGarden().getHeight());
-        }
+//        //negative check
+//        if (point.getX() < 0) {
+//            point.setLocation(0, point.getY());
+//        }
+//        if (point.getY() < 0) {
+//            point.setLocation(point.getX(), 0);
+//        }
+//
+//        //boundary check
+//        if (point.getX() > controlPanelFacade.getGardenController().getGarden().getWidth()) {
+//            point.setLocation(controlPanelFacade.getGardenController().getGarden().getWidth(), point.getY());
+//        }
+//        if (point.getY() > controlPanelFacade.getGardenController().getGarden().getHeight()) {
+//            point.setLocation(point.getX(), controlPanelFacade.getGardenController().getGarden().getHeight());
+//        }
+//        return point;
         return point;
     }
 

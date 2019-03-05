@@ -117,6 +117,7 @@ public class SingleRobotToggle extends ContextMenu {
                     // Note that the reason why we need another deep copy in the NEXT action method is because we need to manipulate on the deep copied version and apply the result to the original one after ALL ROBOT FINISHED the calculation for current state. In other word, to ensure concurrently calculation.
                     robot.getSensor().setGlobalRobots(controlPanelFacade.getRobots());
                     pair.getKey().update();
+//                    pair.getKey().getDisplayPattern()//todo adjust display
                     gardenController.updateGarden();
                 }
             });

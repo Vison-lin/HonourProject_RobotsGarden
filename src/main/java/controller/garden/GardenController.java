@@ -12,9 +12,12 @@ import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.util.Pair;
 import model.Robot;
 import model.RobotGraphicalDisplay;
@@ -41,6 +44,20 @@ public class GardenController extends VBox {
 
     private double nameCtr = ControlPanelFacade.ROBOT_NAME_COUNTER;
 
+    private static double zoomingFactor = 1;
+
+    private static Point2D.Double currentCursorPosition = new Point2D.Double(0, 0);
+
+    private static double defaultAxisStrokeWidth = 3;
+
+    private static double strokeWidthIncrement = 0.5;
+
+    private static boolean isScrollingUp = false;
+
+    private Line xAxis;
+
+    private Line yAxis;
+
     /**
      * The garden instance
      */
@@ -56,10 +73,88 @@ public class GardenController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+//        garden.setBorder();
+        drawXYAxis();
         robotsInitBooster();
         gardenMouseHoverListener();
         gardenMouseMoveOutListener();
+        gardenMouseScrollListener();
 
+    }
+
+    public static Point2D.Double adjustCoordinate(Point2D.Double coordinate) {
+        Point2D.Double graphicalPoint = new Point2D.Double();
+        double x = coordinate.getX();
+        double y = coordinate.getY();
+        double cursorX = currentCursorPosition.getX();
+        double cursorY = currentCursorPosition.getY();
+        double newX = (cursorX + zoomingFactor * (x - cursorX));
+        double newY = (cursorY + zoomingFactor * (y - cursorY));
+        graphicalPoint.setLocation(newX, newY);
+        return graphicalPoint;
+    }
+
+    private void drawXYAxis() {
+        xAxis = new Line();//LineBuilder.create()
+        xAxis.setStartX(0);
+        xAxis.setStartY(0);
+        xAxis.setEndX(garden.getPrefWidth() - defaultAxisStrokeWidth);
+        xAxis.setEndY(0);
+        xAxis.setFill(Color.BLACK);
+        xAxis.setStrokeWidth(defaultAxisStrokeWidth);
+        xAxis.setTranslateX(defaultAxisStrokeWidth / 2);
+        xAxis.setTranslateY(garden.getPrefHeight() / 2);
+        garden.getChildren().add(xAxis);
+
+        yAxis = new Line();//LineBuilder.create()
+        yAxis.setStartX(0);
+        yAxis.setStartY(0);
+        yAxis.setEndX(0);
+        yAxis.setEndY(garden.getPrefHeight() - defaultAxisStrokeWidth);
+        yAxis.setFill(Color.BLACK);
+        yAxis.setStrokeWidth(defaultAxisStrokeWidth);
+        yAxis.setTranslateX(garden.getPrefWidth() / 2);
+        yAxis.setTranslateY(defaultAxisStrokeWidth / 2);
+        garden.getChildren().add(yAxis);
+    }
+
+    /**
+     * Get the size of the robots that display on the screen
+     *
+     * @return size of the robots
+     */
+    public static double getRobotSize() {
+        return ROBOT_SIZE;
+    }
+
+    /**
+     * Set the size of the robots that display on the screen
+     *
+     * @param robotSize size of the robots. Throw IllegalArgumentException if the size is not bigger than 0.
+     */
+    public static void setRobotSize(double robotSize) {
+        if (robotSize <= 0) {
+            throw new IllegalArgumentException("The robot size must bigger than 0");
+        }
+        ROBOT_SIZE = robotSize;
+    }
+
+    /**
+     * Init the robots: add on click to the pane(garden) so wherever click the pane, a new robots will be created.
+     */
+    private void robotsInitBooster() {
+        //set onClickListener for creating robots
+        garden.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getButton() == MouseButton.PRIMARY) {// add listener for left click
+                    Robot robot = controlPanelFacade.robotGenerator("No." + nameCtr, event.getX(), event.getY());
+                    nameCtr++;
+                    //adding to the graph
+                    updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
+                }
+            }
+        });
     }
 
     public void updateGarden() {
@@ -126,46 +221,21 @@ public class GardenController extends VBox {
         //ensure the position is always in front of anything
         garden.getChildren().addAll(robotsPosition);
 
+        //redraw the coordinate
+        drawXYAxis();
+
         //remove unnecessary info (to ensure obliviousness <- KEY OF THE PROJECT)
 //        for (Robot robot : controlPanelController.getRobots()) {
 //            robot.getGraphicalDisplay().cleanBottomLayers();//todo why change color of position will change directly?
 //        }
     }
 
-    /**
-     * Get the size of the robots that display on the screen
-     *
-     * @return size of the robots
-     */
-    public static double getRobotSize() {
-        return ROBOT_SIZE;
-    }
-
-    /**
-     * Set the size of the robots that display on the screen
-     *
-     * @param robotSize size of the robots. Throw IllegalArgumentException if the size is not bigger than 0.
-     */
-    public static void setRobotSize(double robotSize) {
-        if (robotSize <= 0) {
-            throw new IllegalArgumentException("The robot size must bigger than 0");
-        }
-        ROBOT_SIZE = robotSize;
-    }
-
-    /**
-     * Init the robots: add on click to the pane(garden) so wherever click the pane, a new robots will be created.
-     */
-    private void robotsInitBooster() {
-        //set onClickListener for creating robots
-        garden.setOnMouseClicked(new EventHandler<MouseEvent>() {
+    private void gardenMouseMoveOutListener() {
+        garden.hoverProperty().addListener(new ChangeListener<Boolean>() {
             @Override
-            public void handle(MouseEvent event) {
-                if (event.getButton() == MouseButton.PRIMARY) {// add listener for left click
-                    Robot robot = controlPanelFacade.robotGenerator("No." + nameCtr, event.getX(), event.getY());
-                    nameCtr++;
-                    //adding to the graph
-                    updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (!newValue) {
+                    controlPanelFacade.cleanMouseCoordinate();
                 }
             }
         });
@@ -176,17 +246,7 @@ public class GardenController extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 controlPanelFacade.setMouseCoordinate(event.getX(), event.getY());
-            }
-        });
-    }
-
-    private void gardenMouseMoveOutListener() {
-        garden.hoverProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (!newValue) {
-                    controlPanelFacade.cleanMouseCoordinate();
-                }
+                currentCursorPosition.setLocation(event.getX(), event.getY());
             }
         });
     }
@@ -291,6 +351,74 @@ public class GardenController extends VBox {
 
     public void setControlPanelFacade(ControlPanelFacade controlPanelFacade) {
         this.controlPanelFacade = controlPanelFacade;
+    }
+
+    private void gardenMouseScrollListener() {
+        garden.setOnScroll(new EventHandler<ScrollEvent>() {
+            @Override
+            public void handle(ScrollEvent event) {
+                double scrollAmount = event.getDeltaY();
+//                System.out.println(scrollAmount%4);
+                zoomingFactor = zoomingFactor + (scrollAmount % 4) * 0.1;//todo mouse? touch pad?
+//                System.out.println(zoomingFactor+":"+(scrollAmount%4)*0.1);
+                if (zoomingFactor < 0) {
+                    zoomingFactor = 0;
+                }
+                if (zoomingFactor > 1) {
+                    zoomingFactor = 1;
+                }
+
+                //detect scrolling direction
+                isScrollingUp = scrollAmount >= 0;
+
+//                System.out.println(zoomingFactor);
+
+
+                double intentStrokeWidth = defaultAxisStrokeWidth;
+
+                if (isScrollingUp) {
+                    intentStrokeWidth = xAxis.getStrokeWidth() + strokeWidthIncrement;
+                } else {
+                    intentStrokeWidth = xAxis.getStrokeWidth() - strokeWidthIncrement;
+                }
+
+                for (Robot robot : controlPanelFacade.getRobots()) {
+                    robot.getGraphicalDisplay().moveTo(adjustCoordinate(robot.getPosition()));
+                    if (isScrollingUp) {
+                        robot.getGraphicalDisplay().setRatioScale(zoomingFactor);
+                    } else {
+
+                        robot.getGraphicalDisplay().setRatioScale(-zoomingFactor);
+                    }
+                }
+
+                //ensure the axis's size is reasonable
+                if (intentStrokeWidth >= defaultAxisStrokeWidth) {
+                    intentStrokeWidth = defaultAxisStrokeWidth;
+                } else if (intentStrokeWidth <= 0) {
+                    intentStrokeWidth = 0.1;
+                }
+                xAxis.setStrokeWidth(intentStrokeWidth);
+                yAxis.setStrokeWidth(intentStrokeWidth);
+                Point2D.Double xPosition = adjustCoordinate(new Point2D.Double(defaultAxisStrokeWidth / 2, garden.getPrefHeight() / 2));
+                Point2D.Double yPosition = adjustCoordinate(new Point2D.Double(garden.getPrefWidth() / 2, defaultAxisStrokeWidth / 2));
+                double differXAxisStart = intentStrokeWidth / 2 - xPosition.getX();
+                double differXAxisEnd = intentStrokeWidth / 2 + xPosition.getX();
+                double differYAxisStart = intentStrokeWidth / 2 - yPosition.getY();
+                double differYAxisEnd = intentStrokeWidth / 2 + yPosition.getY();
+                xAxis.setTranslateX(xPosition.getX());
+                xAxis.setTranslateY(xPosition.getY());
+                yAxis.setTranslateX(yPosition.getX());
+                yAxis.setTranslateY(yPosition.getY());
+                xAxis.setStartX(differXAxisStart);
+                xAxis.setEndX(garden.getPrefWidth() - differXAxisEnd);
+                yAxis.setStartY(differYAxisStart);
+                yAxis.setEndY(garden.getPrefHeight() - differYAxisEnd);
+
+//                xAxis.setStartY(differXAxisEnd);
+//                System.out.println(xAxis.getStartX());
+            }
+        });
     }
 
 }

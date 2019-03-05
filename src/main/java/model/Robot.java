@@ -3,6 +3,7 @@ package model;
 
 import algorithms.DefaultAlgorithm;
 import algorithms.src.gatheringalgorithm.Vector;
+import controller.garden.GardenController;
 import core.Algorithm;
 import core.AlgorithmClassLoader;
 
@@ -50,9 +51,14 @@ public class Robot {
     private double step;
 
     /**
-     *  Check whether unit is a randomm number.
+     *  Check whether unit is a random number.
      */
     private boolean randomUnit;
+
+    /*
+     *  The coordinate that represent the robot position: in Point2D.Double form
+     */
+    private Point2D.Double coordinate;//todo change!
 
 
     /**
@@ -65,6 +71,7 @@ public class Robot {
         this.sensor = new Sensor(this);
         this.algorithm = new DefaultAlgorithm();
         this.unit = Double.POSITIVE_INFINITY;
+        this.coordinate = new Point2D.Double(0, 0);
         algorithm.setRobot(this);
     }
 
@@ -77,23 +84,29 @@ public class Robot {
     public void moveTo(double x, double y) {
         Point2D.Double end = new Point2D.Double();
         end.setLocation(x,y);
-        Vector vector = new Vector(getPosition(),end);//todo ???
+        Vector vector = new Vector(getPosition(), end);//todo Localized!!!
         if(isRandomUnit()){
-                Random ran = new Random();
-                int num = (int)(vector.getNorm()/graphicalDisplay.getRobotBody().getRadius());
-                if(num>=1) {
-                    this.unit = graphicalDisplay.getRobotBody().getRadius() * (1 + ran.nextInt(num));
-                }
+            Random ran = new Random();
+            int num = (int) (vector.getNorm() / graphicalDisplay.getRobotBody().getRadius());
+            if (num >= 1) {
+                this.unit = graphicalDisplay.getRobotBody().getRadius() * (1 + ran.nextInt(num));
+            }
         }
         if(vector.getNorm()<= unit){
-            graphicalDisplay.moveTo(x, y);
+            coordinate = new Point2D.Double(x, y);
+            Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);//todo to be enabled after the zooming implemented
+            graphicalDisplay.moveTo(positionForGraphicalDisplay);//todo to be enabled after the zooming implemented
+//            graphicalDisplay.moveTo(x, y);
         }else{
             end = vector.resize(unit).getEnd();
-            graphicalDisplay.moveTo(end.getX(), end.getY());
+            coordinate = new Point2D.Double(end.getX(), end.getY());
+            Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);//todo to be enabled after the zooming implemented
+            graphicalDisplay.moveTo(positionForGraphicalDisplay);//todo to be enabled after the zooming implemented
+//            graphicalDisplay.moveTo(end.getX(), end.getY());
 
         }
 
-
+        System.out.println(coordinate);
 
     }
 
@@ -160,7 +173,8 @@ public class Robot {
      * @return the x of the robot's position
      */
     public double getPositionX() {
-        return graphicalDisplay.getRobotPosition().getTranslateX();
+        return coordinate.getX();
+//        return graphicalDisplay.getRobotPosition().getTranslateX();
     }
 
     /**
@@ -170,7 +184,8 @@ public class Robot {
      * @return the y of the robot's position
      */
     public double getPositionY() {
-        return graphicalDisplay.getRobotPosition().getTranslateY();
+        return coordinate.getY();
+//        return graphicalDisplay.getRobotPosition().getTranslateY();
     }
 
     /**
@@ -183,9 +198,7 @@ public class Robot {
      * @return the NEW point2D.Double object represent the coordinate.
      */
     public Point2D.Double getPosition() {
-        Point2D.Double point = new Point2D.Double();
-        point.setLocation(getPositionX(), getPositionY());
-        return point;
+        return coordinate;
     }
 
     public Algorithm getAlgorithm() {
@@ -235,6 +248,7 @@ public class Robot {
         Robot newRobot = new Robot(newRobotGraphicalDisplay);
         Sensor newSensor = new Sensor(newRobot);
         newRobot.setTag(this.tag);
+        newRobot.moveTo(this.coordinate.getX(), this.coordinate.getY());
         newRobot.setSensor(newSensor);
         newRobot.setUnit(this.getUnit());
         //deep copy algorithm: create a new algorithm instance and return it.

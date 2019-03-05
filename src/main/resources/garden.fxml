@@ -5,6 +5,7 @@
 <fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.121">
     <children>
         <Pane fx:id="garden" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-              prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: green;"/>
+              prefHeight="800.0" prefWidth="800.0"
+              style="-fx-background-color: green; -fx-border-radius: 0; -fx-border-width:0;"/>
     </children>
 </fx:root>

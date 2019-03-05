@@ -3,25 +3,30 @@ package core;
 
 import javafx.scene.shape.Shape;
 
-public abstract class DisplayAdapter {
+import java.awt.geom.Point2D;
 
-    private Shape displayPattern;
+public abstract class DisplayAdapter<T extends Shape> {
+
+    private T displayPattern;
 
     private boolean isVisible;
 
     private String componentTag;
 
-    public DisplayAdapter(Shape displayPattern, String componentTag) {
+    private Point2D.Double absolutePosition;
+
+    public DisplayAdapter(T displayPattern, String componentTag) {
         this.displayPattern = displayPattern;
         this.isVisible = false;
         this.componentTag = componentTag;
+        this.absolutePosition = new Point2D.Double(0, 0);
     }
 
-    public Shape getDisplayPattern() {
+    public T getDisplayPattern() {
         return this.displayPattern;
     }
 
-    public void setDisplayPattern(Shape displayPattern) {
+    public void setDisplayPattern(T displayPattern) {
         this.displayPattern = displayPattern;
     }
 
@@ -44,9 +49,7 @@ public abstract class DisplayAdapter {
     /**
      * Method to be called when user clicked the corresponding trigger on the robot toggle.
      * <br/>
-     * By default, it is used to trigger the visibility of robot only.
-     * <br/>
-     * However, it can also be used to do action between steps (between click next button). For example, one can use this method to recompute and move robot to a new position by:
+     * It is used to do action between steps (between click next button). For example, one can use this method to recompute and move robot to a new position by:
      * <br/>
      * <br/>
      * public class mAdapter extends DisplayAdapter {
@@ -78,9 +81,7 @@ public abstract class DisplayAdapter {
      * <br/>
      * }
      */
-    public void update() {
-        setVisible(!isVisible);
-    }
+    public abstract void update();
 
     /**
      *
@@ -92,5 +93,26 @@ public abstract class DisplayAdapter {
     public void moveTo(double x, double y) {
         getDisplayPattern().setTranslateX(x);
         getDisplayPattern().setTranslateY(y);
+        absolutePosition.setLocation(x, y);
+    }
+
+    /**
+     * Change the display of the the displayPattern for each scroll in order to support ZOOMING. More specific, each time the user scroll the mouse, change the display of the pattern.
+     * <br/>
+     * This method often used to change the size of the displayPattern.
+     * <br/>
+     * For example, to increase the radius width for each scroll:
+     * <br/>
+     * getDisplayPattern().setRadius(getDisplayPattern().getRadius() + increment);
+     *
+     * @param increment the increment of the stroke for the display pattern (shape). The stroke will decrease if the increment is a negative number
+     */
+    public void zoomingReactor(double increment) {
+        displayPattern.setScaleX(increment);
+        displayPattern.setScaleY(increment);
+    }
+
+    public Point2D.Double getAbsolutePosition() {
+        return absolutePosition;
     }
 }

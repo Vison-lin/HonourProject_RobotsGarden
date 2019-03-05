@@ -8,7 +8,7 @@ import javafx.scene.shape.Circle;
 
 import java.util.Random;
 
-public class mAdapter extends DisplayAdapter {
+public class mAdapter extends DisplayAdapter<Circle> {
 
     private Random random = new Random();
 
@@ -31,9 +31,7 @@ public class mAdapter extends DisplayAdapter {
     //Core method, to move the robot to a random position
     @Override
     public void update() {
-        System.out.println(isVisible());
         moveTo(algorithm.getRobot().getPositionX(), algorithm.getRobot().getPositionY());
         algorithm.getRobot().moveTo(random.nextInt(150), random.nextInt(150));
     }
-
 }

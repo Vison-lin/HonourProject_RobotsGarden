@@ -13,7 +13,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SEC extends DisplayAdapter {
+public class SEC extends DisplayAdapter<Circle> {
 
     private double centreX;
 
@@ -80,7 +80,7 @@ public class SEC extends DisplayAdapter {
         }else if(tag.equals("gotocenter")){
             point = goToCenter.calculateSEC(new ArrayList<>(local), algorithm.getRobot().getVision());
         }
-        point = algorithm.getRobot().getSensor().convertToGlobal(point);
+        point = algorithm.getRobot().getSensor().convertToGlobal(point);//todo avoid here!
         setDisplayPattern(new Circle(radius,Color.LIGHTGREEN));
         moveTo(point.x, point.y);
     }

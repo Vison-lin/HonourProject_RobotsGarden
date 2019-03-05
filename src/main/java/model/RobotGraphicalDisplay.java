@@ -1,11 +1,13 @@
 package model;
 
 
+import controller.garden.GardenController;
 import core.DisplayAdapter;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,10 +138,11 @@ public class RobotGraphicalDisplay {
     /**
      * Move robotBody, robotPosition, and selectedRobotVision to the same position at the same time
      *
-     * @param x the new x
-     * @param y the new y
+     * @param newPosition the new position for the ENTIRE graphicalDisplay
      */
-    public void moveTo(double x, double y) {
+    public void moveTo(Point2D.Double newPosition) {
+        double x = newPosition.getX();
+        double y = newPosition.getY();
         this.robotBody.setTranslateX(x);
         this.robotBody.setTranslateY(y);
 
@@ -151,6 +154,12 @@ public class RobotGraphicalDisplay {
 
         this.robotBorder.setTranslateX(x);
         this.robotBorder.setTranslateY(y);
+
+        for (DisplayAdapter displayAdapter : this.layers) {
+            Point2D.Double newCoordinate = GardenController.adjustCoordinate(displayAdapter.getAbsolutePosition());
+            displayAdapter.getDisplayPattern().setTranslateX(newCoordinate.getX());
+            displayAdapter.getDisplayPattern().setTranslateY(newCoordinate.getY());
+        }
     }
     /**
      *  Change the color of robot body
@@ -217,6 +226,9 @@ public class RobotGraphicalDisplay {
         newRobotVision.setTranslateY(this.robotVision.getTranslateY());
         deepCopyFillHelper(newRobotVision, red4, green4, blue4, opacity4);
 
+        // No need to implement deep copy for DisplayAdapter because the displayAdapter should be ignored in each step.
+        // Keep in mind that the DisplayAdapters are registered each time the algorithm created and the algorithm has been created each time the robot deep copied.
+
         return new RobotGraphicalDisplay(newRobotPosition, newRobotBody, newRobotBorder, newRobotVision, this.visionVisible);
 
     }
@@ -244,5 +256,26 @@ public class RobotGraphicalDisplay {
 
     public void cleanBottomLayers() {
         this.layers.clear();
+    }
+
+    public void setRatioScale(double scale) {
+//        robotPosition.setRadius(robotPosition.getRadius() + scale);
+//        robotBody.setRadius(robotBody.getRadius() + scale);
+//        robotBorder.setRadius(robotBorder.getRadius() + scale);
+//        robotVision.setRadius(robotVision.getRadius() + scale);
+        robotPosition.setScaleX(scale);
+        robotPosition.setScaleY(scale);
+
+        robotBody.setScaleX(scale);
+        robotBody.setScaleY(scale);
+
+        robotBorder.setScaleX(scale);
+        robotBorder.setScaleY(scale);
+
+        robotVision.setScaleX(scale);
+        robotVision.setScaleY(scale);
+        for (DisplayAdapter layer : layers) {
+            layer.zoomingReactor(scale);
+        }
     }
 }

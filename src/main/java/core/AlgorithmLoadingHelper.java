@@ -1,8 +1,6 @@
-package controller.controlpanel;
+package core;
 
 
-import core.Algorithm;
-import core.AlgorithmClassLoader;
 import javafx.util.Pair;
 import model.Robot;
 

@@ -90,10 +90,10 @@ public class ProgressSectionController extends VBox {
     }
 
     private void autoRunListener() {
-        autoRunSpeed.setMin(0);
+        autoRunSpeed.setMin(1);
         autoRunSpeed.setMax(5000);
-        autoRunSpeed.setMajorTickUnit(500);
-        autoRunSpeed.setMinorTickCount(10);
+//        autoRunSpeed.setMajorTickUnit(500);
+//        autoRunSpeed.setMinorTickCount(10);
         autoRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -338,17 +338,19 @@ public class ProgressSectionController extends VBox {
         this.robots = controlPanelFacade.getRobots();
     }
 
-    void showStatistic() {
+    private void showStatistic() {
         String display = "";
         for (Statistic statistic : controlPanelFacade.getStatisticList()) {
             if (statistic.showingCondition(robots) && ControlPanelFacade.ENABLE_STATISTIC) {
                 Collection<HashMap<String, StatisticData>> list = controlPanelFacade.getStatisticDataList().values();
-                display += statistic.show(robots, new ArrayList<>(list));
+                display += statistic.tag();
+                display += ": ";
+                display += statistic.result(robots, new ArrayList<>(list));
                 display += "\n";
             }
         }
         if (display.equals("")) {
-            display = ControlPanelFacade.STATISTIC_UNAVAILABLE_DISPLAY;
+            display = StatisticPageController.STATISTIC_UNAVAILABLE_DISPLAY;
         }
         controlPanelFacade.getStatisticDisplay().setText(display);
     }

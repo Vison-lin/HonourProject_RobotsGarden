@@ -23,7 +23,7 @@ public class SumOfDistance extends Statistic<Double> {
     }
 
     @Override
-    public String show(List<Robot> robots, List<Map<String, StatisticData<Double>>> data) {
+    public double result(List<Robot> robots, List<Map<String, StatisticData<Double>>> data) {
         double cumulativeDistance = 0;
         Iterator<Map<String, StatisticData<Double>>> iteratorIterator = data.iterator();
         while (iteratorIterator.hasNext()) {
@@ -34,7 +34,12 @@ public class SumOfDistance extends Statistic<Double> {
             }
 
         }
-        return "The sum of distance is: " + cumulativeDistance + "";
+        return cumulativeDistance;
+    }
+
+    @Override
+    public String tag() {
+        return "Sum of distance";
     }
 
     @Override

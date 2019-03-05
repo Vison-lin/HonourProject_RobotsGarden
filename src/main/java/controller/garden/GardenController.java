@@ -14,10 +14,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
 import model.Robot;
 import model.RobotGraphicalDisplay;
@@ -74,6 +76,7 @@ public class GardenController extends VBox {
             throw new RuntimeException(e);
         }
 //        garden.setBorder();
+        clipChildren(garden);
         drawXYAxis();
         robotsInitBooster();
         gardenMouseHoverListener();
@@ -431,6 +434,18 @@ public class GardenController extends VBox {
 //                xAxis.setStartY(differXAxisEnd);
 //                System.out.println(xAxis.getStartX());
             }
+        });
+    }
+
+    public void clipChildren(Region region) {
+        final Rectangle clipPane = new Rectangle();
+        region.setClip(clipPane);
+
+        // In case we want to make a resizable pane we need to update
+        // our clipPane dimensions
+        region.layoutBoundsProperty().addListener((ov, oldValue, newValue) -> {
+            clipPane.setWidth(newValue.getWidth());
+            clipPane.setHeight(newValue.getHeight());
         });
     }
 

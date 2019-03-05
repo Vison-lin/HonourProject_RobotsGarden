@@ -20,21 +20,15 @@ public class ControlPanelFacade {
     private RobotGenerationPageController robotGenerationPageController;
     private StatisticPageController statisticPageController;
     private SettingPageController settingPageController;
-    private GeneralPageController generalPageController;
-
-    public static final String STATISTIC_UNAVAILABLE_DISPLAY = "No Statistic Available!";
-
-    public static final String STATISTIC_DEFAULT_DISPLAY = "Click Next Button to See Available Statistic Data";
 
     public static boolean ENABLE_STATISTIC = true;
 
-    ControlPanelFacade(ControlPanelController controlPanelController, ProgressSectionController progressSectionController, RobotGenerationPageController robotGenerationPageController, StatisticPageController statisticPageController, SettingPageController settingPageController, GeneralPageController generalPageController) {
+    ControlPanelFacade(ControlPanelController controlPanelController, ProgressSectionController progressSectionController, RobotGenerationPageController robotGenerationPageController, StatisticPageController statisticPageController, SettingPageController settingPageController) {
         this.controlPanelController = controlPanelController;
         this.progressSectionController = progressSectionController;
         this.robotGenerationPageController = robotGenerationPageController;
         this.statisticPageController = statisticPageController;
         this.settingPageController = settingPageController;
-        this.generalPageController = generalPageController;
     }
 
     /*

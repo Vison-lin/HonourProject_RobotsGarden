@@ -35,9 +35,6 @@ public class ControlPanelController extends VBox {
     private SettingPageController settingPageController;
 
     @FXML
-    private GeneralPageController generalPageController;
-
-    @FXML
     private Text statuscontrolText;
     @FXML
     private Text autogenerateText;
@@ -47,10 +44,6 @@ public class ControlPanelController extends VBox {
 //    private Button SaveButton;
     @FXML
     private Text warning;
-
-
-    @FXML
-    private Button generalPageBtn;
 
     @FXML
     private Button robotCustomizationPageBtn;
@@ -89,32 +82,23 @@ public class ControlPanelController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        controlPanelFacade = new ControlPanelFacade(this, progressSectionController, robotGenerationPageController, statisticPageController, settingPageController, generalPageController);
+        controlPanelFacade = new ControlPanelFacade(this, progressSectionController, robotGenerationPageController, statisticPageController, settingPageController);
         this.progressSectionController.setControlPanelFacade(controlPanelFacade);
 //        this.autoGenerationController.setControlPanelFacade(controlPanelFacade);
         this.robotGenerationPageController.setControlPanelFacade(controlPanelFacade);
         this.statisticPageController.setControlPanelFacade(controlPanelFacade);
         this.settingPageController.setControlPanelFacade(controlPanelFacade);
-        this.generalPageController.setControlPanelFacade(controlPanelFacade);
         initNodesText();
 
         //set the default page as general page
         disableAllPages();
-        enableGeneralPage();
+        enableRobotGenerationPage();
 //        saveListener();
 
         pageSwitchingHandler();
     }
 
     private void pageSwitchingHandler() {
-
-        generalPageBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                disableAllPages();
-                enableGeneralPage();
-            }
-        });
 
         robotCustomizationPageBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -235,16 +219,6 @@ public class ControlPanelController extends VBox {
         mouseCoordinate.setText(DEFAULT_MOUSE_COORDINATE_DISPLAY);
     }
 
-    private void disableGeneralPage() {
-        generalPageController.setManaged(false);
-        generalPageController.setVisible(false);
-    }
-
-    private void enableGeneralPage() {
-        generalPageController.setManaged(true);
-        generalPageController.setVisible(true);
-    }
-
     private void disableSettingPage() {
         settingPageController.setManaged(false);
         settingPageController.setVisible(false);
@@ -276,7 +250,6 @@ public class ControlPanelController extends VBox {
     }
 
     private void disableAllPages() {
-        disableGeneralPage();
         disableRobotGenerationPage();
         disableStatisticPage();
         disableSettingPage();

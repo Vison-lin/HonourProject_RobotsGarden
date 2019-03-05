@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import controller.controlpanel.*?>
+<?import controller.controlpanel.ProgressSectionController?>
+<?import controller.controlpanel.RobotGenerationPageController?>
+<?import controller.controlpanel.SettingPageController?>
+<?import controller.controlpanel.StatisticPageController?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -13,13 +16,11 @@
         <ProgressSectionController fx:id="progressSectionController"/>
         <HBox>
             <children>
-                <Button fx:id="generalPageBtn" mnemonicParsing="false" text="General"/>
                 <Button fx:id="robotCustomizationPageBtn" mnemonicParsing="false" text="Robot"/>
                 <Button fx:id="statisticPageBtn" mnemonicParsing="false" text="Statistic"/>
                 <Button fx:id="settingPageBtn" mnemonicParsing="false" text="Setting"/>
             </children>
         </HBox>
-        <GeneralPageController fx:id="generalPageController"/>
         <RobotGenerationPageController fx:id="robotGenerationPageController"/>
         <StatisticPageController fx:id="statisticPageController"/>
         <SettingPageController fx:id="settingPageController"/>

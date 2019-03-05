@@ -23,7 +23,7 @@ public class LongestRun extends Statistic<Integer> {
     }
 
     @Override
-    public String show(List<Robot> robots, List<Map<String, StatisticData<Integer>>> data) {
+    public double result(List<Robot> robots, List<Map<String, StatisticData<Integer>>> data) {
         int longestRun = 0;
         Iterator<Map<String, StatisticData<Integer>>> iteratorIterator = data.iterator();
         while (iteratorIterator.hasNext()) {
@@ -36,7 +36,12 @@ public class LongestRun extends Statistic<Integer> {
             }
 
         }
-        return "The longest run is: " + longestRun + "";
+        return longestRun;
+    }
+
+    @Override
+    public String tag() {
+        return "Longest Run";
     }
 
     @Override

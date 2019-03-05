@@ -16,6 +16,9 @@ import java.util.List;
 public class StatisticPageController extends VBox {
 
     private static List<Statistic> statistics = new ArrayList<>();
+    public static final String STATISTIC_UNAVAILABLE_DISPLAY = "No Statistic Available!";
+    public static final String STATISTIC_DEFAULT_DISPLAY = "Click Next Button to See Available Statistic Data";
+
     @FXML
     private Text statisticDisplay;
     private ControlPanelFacade controlPanelFacade;
@@ -40,13 +43,13 @@ public class StatisticPageController extends VBox {
     }
 
     private void initStatisticDisplay() {
-        statisticDisplay.setText(ControlPanelFacade.STATISTIC_UNAVAILABLE_DISPLAY);
+        statisticDisplay.setText(STATISTIC_UNAVAILABLE_DISPLAY);
         //todo faked file scan for Statistic
         statistics.add(new LongestRun());
         statistics.add(new LongestDistance());
         statistics.add(new SumOfDistance());
 
-        statisticDisplay.setText(ControlPanelFacade.STATISTIC_DEFAULT_DISPLAY);
+        statisticDisplay.setText(STATISTIC_DEFAULT_DISPLAY);
     }
 
     List<Statistic> getStatistics() {

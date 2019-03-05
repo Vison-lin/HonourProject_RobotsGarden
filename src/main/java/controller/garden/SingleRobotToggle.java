@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Paint;
 import javafx.util.Pair;
 import model.Robot;
@@ -19,16 +20,14 @@ public class SingleRobotToggle extends ContextMenu {
 
     private static final String SHOW_VISION_TO_SHOW = "show vision";
     private static final String SHOW_VISION_TO_NOT_SHOW = "Hide vision";
-    private static final String CHANGE_VISION = "Change Vision";
+    private static final String SETTING_PAGE = "Setting";
     private static final String CHANGE_COLOR = "Change Color";
     private static final String DELETION = "Delete";
     private static final String STATISITC_INFO = "Show Statistic";
     private Robot robot;
-    private Paint robotColor;
-    private double robotVision;
     private MenuItem setColor;
     private MenuItem showVision;
-    private MenuItem setVision;
+    private MenuItem showSetting;
     private MenuItem statisticInfo;
     private MenuItem delete;
     private List<Pair<DisplayAdapter, MenuItem>> setDisplayComponentsVisibility = new ArrayList<>();
@@ -38,13 +37,10 @@ public class SingleRobotToggle extends ContextMenu {
     SingleRobotToggle(GardenController gardenController, Robot robot, ControlPanelFacade controlPanelFacade) {
         this.gardenController = gardenController;
         this.robot = robot;
-        this.robotColor = controlPanelFacade.getSelectedRobotColor();
-        this.robotVision = controlPanelFacade.getSelectedRobotVision();
         this.controlPanelFacade = controlPanelFacade;
 
-        setColor = new MenuItem(CHANGE_COLOR);
         showVision = new MenuItem(SHOW_VISION_TO_SHOW);
-        setVision = new MenuItem(CHANGE_VISION);
+        showSetting = new MenuItem(SETTING_PAGE);
         statisticInfo = new MenuItem(STATISITC_INFO);
         delete = new MenuItem(DELETION);
 
@@ -63,7 +59,6 @@ public class SingleRobotToggle extends ContextMenu {
         }
 
 
-        setColorPickerListener();
         setVisionListener();
         showVisionListener();
         if (robot.getAlgorithm() instanceof Statisticable) {
@@ -72,10 +67,8 @@ public class SingleRobotToggle extends ContextMenu {
         setDeletionListener();
         setDisplayComponentsVisibilityListener();
 
-
-        getItems().add(setColor);
         getItems().add(showVision);
-        getItems().add(setVision);
+        getItems().add(showSetting);
         if (robot.getAlgorithm() instanceof Statisticable) {
             getItems().add(statisticInfo);
         }
@@ -123,15 +116,6 @@ public class SingleRobotToggle extends ContextMenu {
         }
     }
 
-    private void setColorPickerListener() {
-        setColor.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                robot.getGraphicalDisplay().setColor(robotColor);
-                //no need to call update because it changed the node directly.
-            }
-        });
-    }
 
     private void showVisionListener() {
         showVision.setOnAction(new EventHandler<ActionEvent>() {
@@ -144,11 +128,10 @@ public class SingleRobotToggle extends ContextMenu {
     }
 
     private void setVisionListener() {
-        setVision.setOnAction(new EventHandler<ActionEvent>() {
+        showSetting.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                robot.getGraphicalDisplay().setRobotVision(robotVision);
-                gardenController.updateGarden();
+                new RobotSettingHelper(gardenController,robot);
             }
         });
     }

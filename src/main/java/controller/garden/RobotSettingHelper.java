@@ -172,9 +172,10 @@ public class RobotSettingHelper extends VBox {
     }
 
     private void inputVisionListener() {
-        inputVision.setOnAction(new EventHandler<ActionEvent>() {
+
+        inputVision.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void handle(ActionEvent event) {
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try {
                     selectedRobotVision = Integer.valueOf(inputVision.getText());//todo must press return to trigger, beeter way? use int or double?
                 } catch (NumberFormatException e) {
@@ -183,12 +184,13 @@ public class RobotSettingHelper extends VBox {
 
             }
         });
+
     }
 
     private void inputUnitListener(){
-        inputUnit.setOnAction(new EventHandler<ActionEvent>() {
+        inputUnit.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void handle(ActionEvent event) {
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try{
                     selectedRobotUnit = Double.valueOf(inputUnit.getText());
                 }catch (NumberFormatException e){
@@ -198,13 +200,40 @@ public class RobotSettingHelper extends VBox {
         });
     }
 
+//    private void inputVisionListener() {
+//        inputVision.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                try {
+//                    selectedRobotVision = Integer.valueOf(inputVision.getText());//todo must press return to trigger, beeter way? use int or double?
+//                } catch (NumberFormatException e) {
+//                    warning.setText("Robot Vision must be an int");
+//                }
+//
+//            }
+//        });
+//    }
+//
+//    private void inputUnitListener(){
+//        inputUnit.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                try{
+//                    selectedRobotUnit = Double.valueOf(inputUnit.getText());
+//                }catch (NumberFormatException e){
+//                    warning.setText("Robot unit number must be an int or double");
+//                }
+//            }
+//        });
+//    }
+
     private void visionCheckListener(){
         visionCheck.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if(visionCheck.isSelected()){
                     selectedRobotVision = Math.sqrt(800*800*2);
-                    inputVision.setText("");
+                    //inputVision.setText("");
                     inputVision.setDisable(true);
 
                 }else{

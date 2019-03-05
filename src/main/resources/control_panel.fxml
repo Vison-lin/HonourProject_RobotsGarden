@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import controller.controlpanel.AutoGenerationController?>
 <?import controller.controlpanel.ProgressController?>
 <?import controller.controlpanel.RobotGenerationController?>
 <?import javafx.scene.control.Button?>
@@ -12,12 +11,6 @@
         <Text fx:id="statuscontrolText" strokeType="OUTSIDE" strokeWidth="0.0" text="Status Control"/>
 
         <ProgressController fx:id="progressController"/>
-
-        <Text fx:id="autogenerateText" strokeType="OUTSIDE" strokeWidth="0.0" text="Auto generate"/>
-
-        <AutoGenerationController fx:id="autoGenerationController"/>
-
-        <Text fx:id="customizeText" strokeType="OUTSIDE" strokeWidth="0.0" text="Customize Robots"/>
 
         <RobotGenerationController fx:id="robotGenerationController"/>
 

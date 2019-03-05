@@ -14,9 +14,7 @@ import java.util.List;
 public class ControlPanelFacade {
 
     private ControlPanelController controlPanelController;
-
-    private AutoGenerationController autoGenerationController;
-
+    
     private ProgressController progressController;
 
     private RobotGenerationController robotGenerationController;
@@ -29,9 +27,8 @@ public class ControlPanelFacade {
 
     public static boolean ENABLE_STATISTIC = true;
 
-    ControlPanelFacade(ControlPanelController controlPanelController, AutoGenerationController autoGenerationController, ProgressController progressController, RobotGenerationController robotGenerationController) {
+    ControlPanelFacade(ControlPanelController controlPanelController,  ProgressController progressController, RobotGenerationController robotGenerationController) {
         this.controlPanelController = controlPanelController;
-        this.autoGenerationController = autoGenerationController;
         this.progressController = progressController;
         this.robotGenerationController = robotGenerationController;
     }

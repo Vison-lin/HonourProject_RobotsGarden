@@ -22,18 +22,22 @@ import javafx.util.StringConverter;
 import model.Robot;
 import model.RobotGraphicalDisplay;
 
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class RobotGenerationController extends VBox {
 
     private static final double DEFAULT_ROBOT_VISION = 100;
     private static final double DEFAULT_ROBOT_UNIT = Double.POSITIVE_INFINITY;
     public static final double DEFAULT_ROBOT_Radius = 10;
-    private static final String DEFAULT_COLOR_TEXT = "Select an color for robots: ";
-    private static final String DEFAULT_VISION_TEXT = "Select an vision for robots: ";
-    private static final String DEFAULT_UNIT_TEXT = "Select an unit for robots: ";
+    private static final String DEFAULT_COLOR_TEXT = "Color of robot body";
+    private static final String DEFAULT_VISION_TEXT = "Vision of robot";
+    private static final String DEFAULT_UNIT_TEXT = "Pace ";
+    private static final String RANDOM_CREATE_ROBOT_BUTTON = "Random Create Connected Robots";
     static double ROBOT_NAME_COUNTER = 0;
 
     @FXML
@@ -59,7 +63,19 @@ public class RobotGenerationController extends VBox {
     @FXML
     private RadioButton unitCustomize;
     @FXML
-    private HBox settingPage;
+    private RadioButton clickGenerate;
+    @FXML
+    private RadioButton autoGenerate;
+    @FXML
+    private RadioButton visionCustomize;
+    @FXML
+    private VBox autoGenerateBox;
+    @FXML
+    private Button randomCreateRobots;
+    @FXML
+    private TextField numberOfAutoCreatedRobots;
+
+
 
     private ControlPanelFacade controlPanelFacade;
 
@@ -80,7 +96,7 @@ public class RobotGenerationController extends VBox {
     public RobotGenerationController() {
 
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/control_panel_component/robot_customization_control.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/control_panel_component/robot_customization_control_new.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
@@ -90,20 +106,24 @@ public class RobotGenerationController extends VBox {
             throw new RuntimeException(e);
         }
         initNodesText();
+        randomCreateConnectedRobotsBtnListener();
         inputVisionListener();
         inputUnitListener();
         colorPickerListener();
         visionCheckListener();
+        generateCheckListener();
         unitCheckListener();
         algorithmSelectionInit();
         algorithmSelectionListener();
     }
 
     private void initNodesText() {
+        randomCreateRobots.setText(RANDOM_CREATE_ROBOT_BUTTON);
         inputVision.setText(DEFAULT_ROBOT_VISION + "");
         selectedRobotVision = DEFAULT_ROBOT_VISION;
         inputUnit.setText("");
         inputUnit.setDisable(true);
+        autoGenerateBox.setDisable(true);
         selectedRobotUnit = DEFAULT_ROBOT_UNIT;
         colorText.setText(DEFAULT_COLOR_TEXT);
         visionText.setText(DEFAULT_VISION_TEXT);
@@ -111,14 +131,18 @@ public class RobotGenerationController extends VBox {
         unitCheck.setUserData("Infinity");
         unitRandom.setUserData("Random");
         unitCustomize.setUserData("Customize");
-        settingPage.setVisible(false);
+        visionCustomize.setUserData("Customize");
+        visionCheck.setUserData("Infinity");
+        clickGenerate.setUserData("Click");
+        autoGenerate.setUserData("Auto");
 
     }
 
     private void inputVisionListener() {
-        inputVision.setOnAction(new EventHandler<ActionEvent>() {
+
+        inputVision.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void handle(ActionEvent event) {
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try {
                     selectedRobotVision = Integer.valueOf(inputVision.getText());//todo must press return to trigger, beeter way? use int or double?
                 } catch (NumberFormatException e) {
@@ -127,12 +151,13 @@ public class RobotGenerationController extends VBox {
 
             }
         });
+
     }
 
     private void inputUnitListener(){
-        inputUnit.setOnAction(new EventHandler<ActionEvent>() {
+        inputUnit.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void handle(ActionEvent event) {
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try{
                     selectedRobotUnit = Double.valueOf(inputUnit.getText());
                 }catch (NumberFormatException e){
@@ -142,22 +167,56 @@ public class RobotGenerationController extends VBox {
         });
     }
 
-    private void visionCheckListener(){
-        visionCheck.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if(visionCheck.isSelected()){
-                    selectedRobotVision = Math.sqrt(800*800*2);
-                    inputVision.setText("");
-                    inputVision.setDisable(true);
 
-                }else{
+    private void generateCheckListener(){
+        ToggleGroup group = new ToggleGroup();
+        autoGenerate.setToggleGroup(group);
+        clickGenerate.setSelected(true);
+        clickGenerate.setToggleGroup(group);
+
+        group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if(group.getSelectedToggle().getUserData().toString().equals("Auto")){
+                    autoGenerateBox.setDisable(false);//todo disable click generate function
+                }else if(group.getSelectedToggle().getUserData().toString().equals("Click")){
+                    autoGenerateBox.setDisable(true);
+
+
+                }
+
+
+            }
+        });
+
+    }
+
+
+    private void visionCheckListener(){
+        ToggleGroup group = new ToggleGroup();
+        visionCheck.setToggleGroup(group);
+        visionCustomize.setSelected(true);
+        visionCustomize.setToggleGroup(group);
+
+        group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if(group.getSelectedToggle().getUserData().toString().equals("Infinity")){
+                    selectedRobotVision = Math.sqrt(800*800*2);
+                    //inputVision.setText("");
+                    inputVision.setDisable(true);
+                }else if(group.getSelectedToggle().getUserData().toString().equals("Customize")){
                     inputVision.setDisable(false);
                     inputVision.setText(DEFAULT_ROBOT_VISION+"");
                     selectedRobotVision = DEFAULT_ROBOT_VISION;
+
                 }
+
+
             }
         });
+
+
     }
 
     private void unitCheckListener(){
@@ -273,6 +332,84 @@ public class RobotGenerationController extends VBox {
         return robot;
     }
 
+    /****************** Auto Generate ******************************/
+
+    private void randomCreateConnectedRobotsBtnListener() {
+        randomCreateRobots.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                try {
+                    int numOfNewRobots = Integer.valueOf(numberOfAutoCreatedRobots.getText());
+
+                    Random random = new Random();
+
+                    //init first one
+                    double maxX = (int) controlPanelFacade.getGardenController().getWidth() + 1;
+                    double maxY = (int) controlPanelFacade.getGardenController().getHeight() + 1;
+                    double ctr = ControlPanelFacade.ROBOT_NAME_COUNTER;
+                    Robot currRobot = controlPanelFacade.robotGenerator("Auto No." + ctr + "", random.nextInt((int) maxX), random.nextInt((int) maxY));
+
+                    ArrayList<Robot> generatedRobots = new ArrayList<>();
+                    generatedRobots.add(currRobot);
+
+                    //create the rest
+                    for (int i = 1; i < numOfNewRobots; i++) {
+                        ctr++;
+                        Point2D.Double position = getNextRandomGeneratedRobotPosition(generatedRobots, maxX, maxY);
+                        Robot newRobot = controlPanelFacade.robotGenerator(" =>" + ctr + "<= ", position.x, position.y);
+                        generatedRobots.add(newRobot);
+                    }
+                    controlPanelFacade.getGardenController().updateGarden();
+                } catch (NumberFormatException e) {
+                    controlPanelFacade.getWarning().setText("The Number of Random Created Robots Must Be an Integer!!!");
+                }
+            }
+        });
+    }
+
+    private Point2D.Double getNextRandomGeneratedRobotPosition(List<Robot> robots, double maxX, double maxY) {
+        Random random = new Random();
+        double currX = 0;
+        double currY = 0;
+        Robot curr = robots.get(random.nextInt(robots.size()));//random choose one
+        double xBoundUp = validateWithinTheEnclosingSquare(curr.getPositionX() + curr.getVision(), maxX);
+        double xBoundLow = validateWithinTheEnclosingSquare(curr.getPositionX() - curr.getVision(), maxX);
+        double yBoundUp = validateWithinTheEnclosingSquare(curr.getPositionY() + curr.getVision(), maxY);
+        double yBoundLow = validateWithinTheEnclosingSquare(curr.getPositionY() - curr.getVision(), maxY);
+        //check if is within the circle
+        double distance = Double.POSITIVE_INFINITY;
+
+        while (distance > curr.getVision()) {
+            double x = curr.getPositionX();
+            double y = curr.getPositionY();
+            currX = random.nextInt((int) (xBoundUp - xBoundLow + 1)) + xBoundLow;
+            currY = random.nextInt((int) (yBoundUp - yBoundLow + 1)) + yBoundLow;
+            double differX = currX - x;
+            double differY = currY - y;
+            distance = Math.sqrt(Math.pow(differX, 2) + Math.pow(differY, 2));
+        }
+        return new Point2D.Double(currX, currY);
+    }
+
+    /**
+     * Validate if the point is within the square that encloses the circle.
+     *
+     * @param original the point
+     * @param bound    the radius
+     * @return validated value
+     */
+    private double validateWithinTheEnclosingSquare(double original, double bound) {
+        if (original >= bound) {
+            original = bound;
+        } else if (original <= 0) {
+            original = 0;
+        }
+        return original;
+    }
+
+
+
     public void setControlPanelFacade(ControlPanelFacade controlPanelFacade) {
         this.controlPanelFacade = controlPanelFacade;
         setRobots();
@@ -313,7 +450,8 @@ public class RobotGenerationController extends VBox {
         selectedRobotColor = Color.BLACK;
         visionCheck.setSelected(false);
         unitCheck.setSelected(true);
-
+        randomCreateRobots.setDisable(false);
+        numberOfAutoCreatedRobots.setText("");
         algorithmSelection.getSelectionModel().select(0);
     }
 

@@ -34,8 +34,6 @@ public class ControlPanelController extends VBox {
     @FXML
     private ProgressController progressController;
     @FXML
-    private AutoGenerationController autoGenerationController;
-    @FXML
     private Text statuscontrolText;
     @FXML
     private Text autogenerateText;
@@ -76,9 +74,9 @@ public class ControlPanelController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        controlPanelFacade = new ControlPanelFacade(this, autoGenerationController, progressController, robotGenerationController);
+        controlPanelFacade = new ControlPanelFacade(this, progressController, robotGenerationController);
         this.progressController.setControlPanelFacade(controlPanelFacade);
-        this.autoGenerationController.setControlPanelFacade(controlPanelFacade);
+//        this.autoGenerationController.setControlPanelFacade(controlPanelFacade);
         this.robotGenerationController.setControlPanelFacade(controlPanelFacade);
         initNodesText();
         saveListener();
@@ -91,8 +89,8 @@ public class ControlPanelController extends VBox {
 
     private void initNodesText() {
         statuscontrolText.setText(STATUS_CONTROL_TEXT);
-        autogenerateText.setText(AUTO_GENERATE_TEXT);
-        customizeText.setText(CUSTOMIZE_ROBOTS_TEXT);
+//        autogenerateText.setText(AUTO_GENERATE_TEXT);
+//        customizeText.setText(CUSTOMIZE_ROBOTS_TEXT);
         SaveButton.setText(SAVE_BUTTON);
         warning.setText(WARING_TEXT);
         mouseCoordinate.setText(DEFAULT_MOUSE_COORDINATE_DISPLAY);
@@ -151,7 +149,7 @@ public class ControlPanelController extends VBox {
         robotGenerationController.reset();
         //clean prev and next
         progressController.reset();
-        autoGenerationController.reset();
+//        autoGenerationController.reset();
         warning.setText(WARING_TEXT);
         progressController.getStatisticDataTempStoringList().clear();
         ControlPanelFacade.ENABLE_STATISTIC = true;

@@ -1,7 +1,7 @@
 package controller.controlpanel;
 
 import controller.garden.GardenController;
-import core.Statistic;
+import core.AlgorithmLoadingHelper;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,14 +10,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.Robot;
-import statistics.LongestDistance;
-import statistics.LongestRun;
-import statistics.SumOfDistance;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,33 +26,54 @@ public class ControlPanelController extends VBox {
 
     private static final String DEFAULT_MOUSE_COORDINATE_DISPLAY = "( --, -- )";
     @FXML
-    private ProgressController progressController;
+    private ProgressSectionController progressSectionController;
+
+    @FXML
+    private StatisticPageController statisticPageController;
+
+    @FXML
+    private SettingPageController settingPageController;
+
+    @FXML
+    private GeneralPageController generalPageController;
+
     @FXML
     private Text statuscontrolText;
     @FXML
     private Text autogenerateText;
     @FXML
     private Text customizeText;
-    @FXML
-    private Button SaveButton;
+    //    @FXML
+//    private Button SaveButton;
     @FXML
     private Text warning;
+
+
     @FXML
-    private Text statisticDisplay;
+    private Button generalPageBtn;
+
+    @FXML
+    private Button robotCustomizationPageBtn;
+
+    @FXML
+    private Button statisticPageBtn;
+
+    @FXML
+    private Button settingPageBtn;
 
     /**
      * Global robots list
      */
     private static List<Robot> robots = Collections.synchronizedList(new ArrayList<>());
 
-    private static List<Statistic> statistics = new ArrayList<>();
+
 
 
     private GardenController gardenController;
 
 
     @FXML
-    private RobotGenerationController robotGenerationController;
+    private RobotGenerationPageController robotGenerationPageController;
     @FXML
     private Text mouseCoordinate;
 
@@ -74,13 +89,58 @@ public class ControlPanelController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        controlPanelFacade = new ControlPanelFacade(this, progressController, robotGenerationController);
-        this.progressController.setControlPanelFacade(controlPanelFacade);
+        controlPanelFacade = new ControlPanelFacade(this, progressSectionController, robotGenerationPageController, statisticPageController, settingPageController, generalPageController);
+        this.progressSectionController.setControlPanelFacade(controlPanelFacade);
 //        this.autoGenerationController.setControlPanelFacade(controlPanelFacade);
-        this.robotGenerationController.setControlPanelFacade(controlPanelFacade);
+        this.robotGenerationPageController.setControlPanelFacade(controlPanelFacade);
+        this.statisticPageController.setControlPanelFacade(controlPanelFacade);
+        this.settingPageController.setControlPanelFacade(controlPanelFacade);
+        this.generalPageController.setControlPanelFacade(controlPanelFacade);
         initNodesText();
-        saveListener();
-        initStatisticDisplay();
+
+        //set the default page as general page
+        disableAllPages();
+        enableGeneralPage();
+//        saveListener();
+
+        pageSwitchingHandler();
+    }
+
+    private void pageSwitchingHandler() {
+
+        generalPageBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                disableAllPages();
+                enableGeneralPage();
+            }
+        });
+
+        robotCustomizationPageBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                disableAllPages();
+                enableRobotGenerationPage();
+            }
+        });
+
+        statisticPageBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                disableAllPages();
+                enableStatisticPage();
+            }
+        });
+
+        settingPageBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                disableAllPages();
+                enableSettingPage();
+            }
+        });
+
+
     }
 
     public ControlPanelFacade getControlPanelFacade() {
@@ -91,37 +151,37 @@ public class ControlPanelController extends VBox {
         statuscontrolText.setText(STATUS_CONTROL_TEXT);
 //        autogenerateText.setText(AUTO_GENERATE_TEXT);
 //        customizeText.setText(CUSTOMIZE_ROBOTS_TEXT);
-        SaveButton.setText(SAVE_BUTTON);
+//        SaveButton.setText(SAVE_BUTTON);
         warning.setText(WARING_TEXT);
         mouseCoordinate.setText(DEFAULT_MOUSE_COORDINATE_DISPLAY);
     }
 
-    private void saveListener(){
-        SaveButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if(robots.size()!=0){
-                File f = new File("C:/Users/user/Desktop/a.txt");
-                try {
-                    FileOutputStream fop = new FileOutputStream(f);
-                    OutputStreamWriter writer = new OutputStreamWriter(fop);
-                    for(Robot robot:robots){
-
-                        writer.append("Tag: " + robot.getTag() + ", Algorithm: ??, " + "selectedRobotVision: " + (int) robot.getVision());
-                        writer.append("\r\n");
-
-                    }
-                    writer.close();
-                    fop.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            }
-        });
-
-
-    }
+//    private void saveListener(){
+//        SaveButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                if(robots.size()!=0){
+//                File f = new File("C:/Users/user/Desktop/a.txt");
+//                try {
+//                    FileOutputStream fop = new FileOutputStream(f);
+//                    OutputStreamWriter writer = new OutputStreamWriter(fop);
+//                    for(Robot robot:robots){
+//
+//                        writer.append("Tag: " + robot.getTag() + ", Algorithm: ??, " + "selectedRobotVision: " + (int) robot.getVision());
+//                        writer.append("\r\n");
+//
+//                    }
+//                    writer.close();
+//                    fop.close();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            }
+//        });
+//
+//
+//    }
 
     /**
      * get the list of robots.
@@ -146,12 +206,12 @@ public class ControlPanelController extends VBox {
         robots.clear();
         gardenController.getGarden().getChildren().removeAll(gardenController.getGarden().getChildren());
         gardenController.updateGarden();
-        robotGenerationController.reset();
+        robotGenerationPageController.reset();
         //clean prev and next
-        progressController.reset();
+        progressSectionController.reset();
 //        autoGenerationController.reset();
         warning.setText(WARING_TEXT);
-        progressController.getStatisticDataTempStoringList().clear();
+        progressSectionController.getStatisticDataTempStoringList().clear();
         ControlPanelFacade.ENABLE_STATISTIC = true;
     }
 
@@ -175,21 +235,51 @@ public class ControlPanelController extends VBox {
         mouseCoordinate.setText(DEFAULT_MOUSE_COORDINATE_DISPLAY);
     }
 
-    public Text getStatisticDisplay() {
-        return statisticDisplay;
+    private void disableGeneralPage() {
+        generalPageController.setManaged(false);
+        generalPageController.setVisible(false);
     }
 
-    private void initStatisticDisplay() {
-        statisticDisplay.setText(ControlPanelFacade.STATISTIC_UNAVAILABLE_DISPLAY);
-        //todo faked file scan for Statistic
-        statistics.add(new LongestRun());
-        statistics.add(new LongestDistance());
-        statistics.add(new SumOfDistance());
-
-        statisticDisplay.setText(ControlPanelFacade.STATISTIC_DEFAULT_DISPLAY);
+    private void enableGeneralPage() {
+        generalPageController.setManaged(true);
+        generalPageController.setVisible(true);
     }
 
-    List<Statistic> getStatistics() {
-        return statistics;
+    private void disableSettingPage() {
+        settingPageController.setManaged(false);
+        settingPageController.setVisible(false);
     }
+
+    private void enableSettingPage() {
+        settingPageController.setManaged(true);
+        settingPageController.setVisible(true);
+    }
+
+    private void disableStatisticPage() {
+        statisticPageController.setManaged(false);
+        statisticPageController.setVisible(false);
+    }
+
+    private void enableStatisticPage() {
+        statisticPageController.setManaged(true);
+        statisticPageController.setVisible(true);
+    }
+
+    private void disableRobotGenerationPage() {
+        robotGenerationPageController.setManaged(false);
+        robotGenerationPageController.setVisible(false);
+    }
+
+    private void enableRobotGenerationPage() {
+        robotGenerationPageController.setManaged(true);
+        robotGenerationPageController.setVisible(true);
+    }
+
+    private void disableAllPages() {
+        disableGeneralPage();
+        disableRobotGenerationPage();
+        disableStatisticPage();
+        disableSettingPage();
+    }
+
 }

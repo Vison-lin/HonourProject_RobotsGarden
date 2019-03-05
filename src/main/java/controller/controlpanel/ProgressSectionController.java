@@ -11,7 +11,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -22,7 +22,7 @@ import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.*;
 
-public class ProgressController extends VBox {
+public class ProgressSectionController extends VBox {
 
     private static final String AUTO_RUN_BTN_TO_START = "Start Auto Run";
     private static final String AUTO_RUN_BTN_TO_STOP = "STOP";
@@ -41,11 +41,12 @@ public class ProgressController extends VBox {
     @FXML
     private Button autoRun;
     @FXML
-    private TextField autoRunTimeInterval;
+//    private TextField autoRunTimeInterval;
+    private Slider autoRunSpeed;
     @FXML
-    private Text autoText;
+    private Text autoRunHintText;
     @FXML
-    private Text autotimeText;
+//    private Text autotimeText;
 
     private ControlPanelFacade controlPanelFacade;
     private List<Robot> robots;
@@ -62,7 +63,7 @@ public class ProgressController extends VBox {
     private Stack<Pair<List<Robot>, HashMap<String, HashMap<String, StatisticData>>>> robotStackNext = new Stack<>();
 
 
-    public ProgressController() {
+    public ProgressSectionController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/control_panel_component/progress_control.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -84,11 +85,15 @@ public class ProgressController extends VBox {
         prev.setText(PREV_BUTTON);
         next.setText(NEXT_BUTTON);
         clean.setText(CLEAN_BUTTON);
-        autoText.setText(AUTO_TEXT);
-        autotimeText.setText(AUTO_TIME_TEXT);
+        autoRunHintText.setText(AUTO_TEXT);
+//        autotimeText.setText(AUTO_TIME_TEXT);
     }
 
     private void autoRunListener() {
+        autoRunSpeed.setMin(0);
+        autoRunSpeed.setMax(5000);
+        autoRunSpeed.setMajorTickUnit(500);
+        autoRunSpeed.setMinorTickCount(10);
         autoRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -102,8 +107,8 @@ public class ProgressController extends VBox {
                         protected Void call() throws InterruptedException {
                             while (isRunning) {
                                 try {
-                                    int timeInterval = Integer.valueOf(autoRunTimeInterval.getText());
-                                    Platform.runLater(ProgressController.this::nextAction);//update in UI thread
+                                    int timeInterval = (int) autoRunSpeed.getValue();// Note: by cast, 6.99 -> 6
+                                    Platform.runLater(ProgressSectionController.this::nextAction);//update in UI thread
                                     Thread.sleep(timeInterval);
                                 } catch (NumberFormatException e) {
                                     controlPanelFacade.getWarning().setText("Invalid Input! The ms must be an integer!");
@@ -317,7 +322,7 @@ public class ProgressController extends VBox {
         clean.setDisable(false);
         autoRun.setDisable(false);
         autoRun.setText(AUTO_RUN_BTN_TO_START);
-        autoRunTimeInterval.setText("");
+//        autoRunTimeInterval.setText("");
     }
 
     public HashMap<String, HashMap<String, StatisticData>> getStatisticDataTempStoringList() {

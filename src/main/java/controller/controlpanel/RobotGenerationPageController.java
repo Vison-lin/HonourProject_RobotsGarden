@@ -1,5 +1,6 @@
 package controller.controlpanel;
 
+import core.AlgorithmLoadingHelper;
 import core.Statisticable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RobotGenerationController extends VBox {
+public class RobotGenerationPageController extends VBox {
 
     private static final double DEFAULT_ROBOT_VISION = 100;
     private static final double DEFAULT_ROBOT_UNIT = Double.POSITIVE_INFINITY;
@@ -92,7 +93,7 @@ public class RobotGenerationController extends VBox {
 
     private List<Robot> robots;
 
-    public RobotGenerationController() {
+    public RobotGenerationPageController() {
 
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/control_panel_component/robot_customization.fxml"));

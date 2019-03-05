@@ -14,12 +14,13 @@ import java.util.List;
 public class ControlPanelFacade {
 
     private ControlPanelController controlPanelController;
-    
-    private ProgressController progressController;
 
-    private RobotGenerationController robotGenerationController;
-
-    public static double ROBOT_NAME_COUNTER = RobotGenerationController.ROBOT_NAME_COUNTER;
+    public static double ROBOT_NAME_COUNTER = RobotGenerationPageController.ROBOT_NAME_COUNTER;
+    private ProgressSectionController progressSectionController;
+    private RobotGenerationPageController robotGenerationPageController;
+    private StatisticPageController statisticPageController;
+    private SettingPageController settingPageController;
+    private GeneralPageController generalPageController;
 
     public static final String STATISTIC_UNAVAILABLE_DISPLAY = "No Statistic Available!";
 
@@ -27,10 +28,13 @@ public class ControlPanelFacade {
 
     public static boolean ENABLE_STATISTIC = true;
 
-    ControlPanelFacade(ControlPanelController controlPanelController,  ProgressController progressController, RobotGenerationController robotGenerationController) {
+    ControlPanelFacade(ControlPanelController controlPanelController, ProgressSectionController progressSectionController, RobotGenerationPageController robotGenerationPageController, StatisticPageController statisticPageController, SettingPageController settingPageController, GeneralPageController generalPageController) {
         this.controlPanelController = controlPanelController;
-        this.progressController = progressController;
-        this.robotGenerationController = robotGenerationController;
+        this.progressSectionController = progressSectionController;
+        this.robotGenerationPageController = robotGenerationPageController;
+        this.statisticPageController = statisticPageController;
+        this.settingPageController = settingPageController;
+        this.generalPageController = generalPageController;
     }
 
     /*
@@ -47,15 +51,15 @@ public class ControlPanelFacade {
     }
 
     public double getSelectedRobotVision() {
-        return robotGenerationController.getSelectedRobotVision();
+        return robotGenerationPageController.getSelectedRobotVision();
     }
 
     public Paint getSelectedRobotColor() {
-        return robotGenerationController.getSelectedRobotColor();
+        return robotGenerationPageController.getSelectedRobotColor();
     }
 
     public Robot robotGenerator(String new_robot, double x, double y) {
-        return this.robotGenerationController.robotGenerator(new_robot, x, y);
+        return this.robotGenerationPageController.robotGenerator(new_robot, x, y);
     }
 
     public void setMouseCoordinate(double x, double y) {
@@ -99,27 +103,27 @@ public class ControlPanelFacade {
     }
 
     Text getStatisticDisplay() {
-        return controlPanelController.getStatisticDisplay();
+        return statisticPageController.getStatisticDisplay();
     }
 
     public HashMap<String, StatisticData> getStatisticDataByRobotTag(String robotTag) {
-        return progressController.getStatisticDataTempStoringList().get(robotTag);
+        return progressSectionController.getStatisticDataTempStoringList().get(robotTag);
     }
 
     void insertToStatisticDataTempStoringList(String robotTag, HashMap<String, StatisticData> newStatisticData) {
-        progressController.getStatisticDataTempStoringList().put(robotTag, newStatisticData);
+        progressSectionController.getStatisticDataTempStoringList().put(robotTag, newStatisticData);
     }
 
     public void removeStatisticDataByRobotTag(String robotTag) {
-        progressController.getStatisticDataTempStoringList().remove(robotTag);
+        progressSectionController.getStatisticDataTempStoringList().remove(robotTag);
     }
 
     HashMap<String, HashMap<String, StatisticData>> getStatisticDataList() {
-        return progressController.getStatisticDataTempStoringList();
+        return progressSectionController.getStatisticDataTempStoringList();
     }
 
     List<Statistic> getStatisticList() {
-        return controlPanelController.getStatistics();
+        return statisticPageController.getStatistics();
     }
 
         /*

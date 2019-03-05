@@ -1,8 +1,8 @@
 package controller.garden;
 
 
-import controller.controlpanel.AlgorithmLoadingHelper;
 import controller.controlpanel.ControlPanelFacade;
+import core.AlgorithmLoadingHelper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;

@@ -43,7 +43,7 @@
                     <HBox alignment="CENTER" style="-fx-spacing: 1em; -fx-padding: 1em;">
                         <children>
                             <Button fx:id="drag" mnemonicParsing="false" style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/drag.png); -fx-background-size: contain;" />
-                            <Button fx:id="create" mnemonicParsing="false" style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/clickToAddRobot.png); -fx-background-size: contain;" />
+                            <Button fx:id="create" mnemonicParsing="false" style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/clickToAddRobot_new.png); -fx-background-size: contain;" />
                         </children>
                     </HBox>
                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Operation:" />

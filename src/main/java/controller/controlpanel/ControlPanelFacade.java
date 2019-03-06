@@ -14,7 +14,7 @@ import java.util.List;
 public class ControlPanelFacade {
 
     private ControlPanelController controlPanelController;
-    
+
     private ProgressController progressController;
 
     private RobotGenerationController robotGenerationController;

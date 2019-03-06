@@ -97,7 +97,7 @@ public class RobotGenerationPageController extends VBox {
     public RobotGenerationPageController() {
 
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/control_panel_component/robot_customization.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/control_panel_component/robot_customization.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 

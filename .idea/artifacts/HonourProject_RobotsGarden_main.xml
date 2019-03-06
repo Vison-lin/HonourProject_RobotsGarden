@@ -16,6 +16,7 @@
       <element id="archive" name="HonourProject_RobotsGarden_main.jar">
         <element id="module-output" name="HonourProject_RobotsGarden.main" />
       </element>
+      <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources" />
     </root>
   </artifact>
 </component>

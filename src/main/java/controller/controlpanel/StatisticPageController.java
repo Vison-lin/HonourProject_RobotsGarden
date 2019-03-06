@@ -24,7 +24,7 @@ public class StatisticPageController extends VBox {
     private ControlPanelFacade controlPanelFacade;
 
     public StatisticPageController() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/control_panel_component/statistic.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/control_panel_component/statistic.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 

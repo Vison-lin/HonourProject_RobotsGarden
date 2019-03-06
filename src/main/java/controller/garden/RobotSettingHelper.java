@@ -100,7 +100,7 @@ public class RobotSettingHelper extends VBox {
         FXMLLoader fxmlLoader;
         this.robots = robots;
         try {
-            fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/robot_setting.fxml"));
+            fxmlLoader = new FXMLLoader(getClass().getResource("/robot_setting.fxml"));
             fxmlLoader.setRoot(this);
             fxmlLoader.setController(this);
             Parent parent = fxmlLoader.load();

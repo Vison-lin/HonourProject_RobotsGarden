@@ -68,7 +68,7 @@ public class ProgressSectionController extends VBox {
 
 
     public ProgressSectionController() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/control_panel_component/progress_control.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/control_panel_component/progress_control.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 

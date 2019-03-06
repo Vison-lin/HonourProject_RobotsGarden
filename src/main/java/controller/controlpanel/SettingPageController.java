@@ -9,7 +9,7 @@ public class SettingPageController extends VBox {
     private ControlPanelFacade controlPanelFacade;
 
     public SettingPageController() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/control_panel_component/setting.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/control_panel_component/setting.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 

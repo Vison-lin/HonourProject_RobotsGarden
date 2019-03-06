@@ -21,7 +21,7 @@ public class RobotsLabController extends HBox {
     private ControlPanelFacade controlPanelFacade;
 
     public RobotsLabController() {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../resources/robots_lab.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/robots_lab.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
         try {

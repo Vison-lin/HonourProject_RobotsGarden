@@ -81,7 +81,8 @@ public class SEC extends DisplayAdapter<Circle> {
             point = goToCenter.calculateSEC(new ArrayList<>(local), algorithm.getRobot().getVision());
         }
         point = algorithm.getRobot().getSensor().convertToGlobal(point);//todo FRED： avoid here!
-        setDisplayPattern(new Circle(radius,Color.LIGHTGREEN));
+//        setDisplayPattern(new Circle(radius,Color.LIGHTGREEN));
+        getDisplayPattern().setRadius(radius);
         moveTo(point.x, point.y);
     }
 }

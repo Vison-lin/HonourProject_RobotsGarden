@@ -28,7 +28,7 @@ public class ProgressSectionController extends VBox {
     private static final String CLEAN_BUTTON = "CLEAN";
     //    private static final String AUTO_TEXT = "Speed: ";
     private static final String AUTO_TIME_TEXT = " ms";
-    public static RightClickFunction rightClickFunction = RightClickFunction.Drag;
+    public static RightClickFunction rightClickFunction = RightClickFunction.CreateRobot;
 
     @FXML
     private Button prev;

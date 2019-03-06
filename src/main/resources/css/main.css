@@ -1,0 +1,8 @@
+/*Set the color of the tabPane header from gray to white*/
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #f4f4f4;
+}
+
+#settingPageController, #statisticPageController, #robotGenerationPageController {
+    -fx-background-color: #f7f7f7;
+}

@@ -1,10 +1,7 @@
 package controller.controlpanel;
 
 
-import core.Algorithm;
-import core.Statistic;
-import core.StatisticData;
-import core.Statisticable;
+import core.RightClickFunction;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
@@ -13,10 +10,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.util.Pair;
-import model.Robot;
+import model.*;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
@@ -24,13 +21,14 @@ import java.util.*;
 
 public class ProgressSectionController extends VBox {
 
-    private static final String AUTO_RUN_BTN_TO_START = "Start Auto Run";
+    private static final String AUTO_RUN_BTN_TO_START = "Auto Run";
     private static final String AUTO_RUN_BTN_TO_STOP = "STOP";
     private static final String PREV_BUTTON = "PREV";
     private static final String NEXT_BUTTON = "NEXT";
     private static final String CLEAN_BUTTON = "CLEAN";
-    private static final String AUTO_TEXT = "Auto run in: ";
+    //    private static final String AUTO_TEXT = "Speed: ";
     private static final String AUTO_TIME_TEXT = " ms";
+    public static RightClickFunction rightClickFunction = RightClickFunction.Drag;
 
     @FXML
     private Button prev;
@@ -44,14 +42,20 @@ public class ProgressSectionController extends VBox {
 //    private TextField autoRunTimeInterval;
     private Slider autoRunSpeed;
     @FXML
-    private Text autoRunHintText;
-    @FXML
+    private Pane autoRunHintText;
+    //    @FXML
 //    private Text autotimeText;
+    @FXML
+    private Button drag;
+
+    @FXML
+    private Button create;
 
     private ControlPanelFacade controlPanelFacade;
     private List<Robot> robots;
     private boolean isRunning = false;
     private HashMap<String, HashMap<String, StatisticData>> statisticDataTempStoringList = new HashMap<>();
+    private boolean afterAllTerminate = false;
 
 //    private String selectedAlgorithm;//used for check if all the robots runs the same algorithm. If yes, can than run timeToTerminate.
 //    private boolean singleAlgorithm = true;
@@ -78,36 +82,66 @@ public class ProgressSectionController extends VBox {
         prevBtnListener();
         nextBtnListener();
         cleanBtnListener();
+        rightClickFunctionSwitcherListener();
+    }
+
+    private void rightClickFunctionSwitcherListener() {
+        drag.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                rightClickFunction = RightClickFunction.Drag;
+            }
+        });
+        create.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                rightClickFunction = RightClickFunction.CreateRobot;
+                System.out.println("-=-");
+                System.out.println(rightClickFunction);
+            }
+        });
     }
 
     private void initNodesText() {
-        autoRun.setText(AUTO_RUN_BTN_TO_START);
-        prev.setText(PREV_BUTTON);
-        next.setText(NEXT_BUTTON);
-        clean.setText(CLEAN_BUTTON);
-        autoRunHintText.setText(AUTO_TEXT);
+//        autoRun.setText(AUTO_RUN_BTN_TO_START);
+//        prev.setText(PREV_BUTTON);
+//        next.setText(NEXT_BUTTON);
+//        clean.setText(CLEAN_BUTTON);
+//        autoRunHintText.setText(AUTO_TEXT);
 //        autotimeText.setText(AUTO_TIME_TEXT);
     }
 
     private void autoRunListener() {
-        autoRunSpeed.setMin(1);
+        autoRunSpeed.setMin(0);
         autoRunSpeed.setMax(5000);
-//        autoRunSpeed.setMajorTickUnit(500);
-//        autoRunSpeed.setMinorTickCount(10);
+        autoRunSpeed.setValue(2500);
+        autoRunSpeed.setMajorTickUnit(500);
+        autoRunSpeed.setMinorTickCount(10);
+        autoRunSpeed.setShowTickMarks(true);
         autoRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (isRunning) {//if is already auto running, stop it
                     isRunning = false;
-                    autoRun.setText(AUTO_RUN_BTN_TO_START);
+                    autoRun.setStyle("-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/autorun.png); -fx-background-size: contain;");
+                    prev.setDisable(false);
+                    if (!afterAllTerminate) {
+                        next.setDisable(false);
+                    }
+                    drag.setDisable(false);
+                    create.setDisable(false);
+                    clean.setDisable(false);
+                    autoRunSpeed.setDisable(false);
                 } else {
+                    System.out.println("===");
                     isRunning = true;
+                    autoRun.setStyle("-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/stop.png); -fx-background-size: contain;");
                     Task task = new Task<Void>() {//create a new task
                         @Override
                         protected Void call() throws InterruptedException {
                             while (isRunning) {
                                 try {
-                                    int timeInterval = (int) autoRunSpeed.getValue();// Note: by cast, 6.99 -> 6
+                                    int timeInterval = (int) autoRunSpeed.getValue() + 1;// Note: by cast, 6.99 -> 6
                                     Platform.runLater(ProgressSectionController.this::nextAction);//update in UI thread
                                     Thread.sleep(timeInterval);
                                 } catch (NumberFormatException e) {
@@ -115,10 +149,26 @@ public class ProgressSectionController extends VBox {
                                     isRunning = false;
                                 }
                             }
+
+                            prev.setDisable(false);
+                            if (!afterAllTerminate) {
+                                next.setDisable(false);
+                            }
+                            drag.setDisable(false);
+                            create.setDisable(false);
+                            clean.setDisable(false);
+                            autoRunSpeed.setDisable(false);
+                            autoRun.setStyle("-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/autorun.png); -fx-background-size: contain;");
                             return null;
                         }
                     };
-                    autoRun.setText(AUTO_RUN_BTN_TO_STOP);//todo disable other Btn
+                    prev.setDisable(true);
+                    next.setDisable(true);
+                    drag.setDisable(true);
+                    create.setDisable(true);
+                    clean.setDisable(true);
+                    autoRunSpeed.setDisable(true);
+                    //todo FRED: Disable more btns?
                     new Thread(task).start();
                 }
             }
@@ -216,7 +266,7 @@ public class ProgressSectionController extends VBox {
 
             Iterator<Robot> robotIterator3 = robots.iterator();
 
-            boolean afterAllTerminate = true;
+            afterAllTerminate = true;
             while (robotIterator3.hasNext()) {
                 Robot curr = robotIterator3.next();
                 Algorithm algorithm = curr.getAlgorithm();
@@ -239,6 +289,7 @@ public class ProgressSectionController extends VBox {
 
             if (afterAllTerminate) {
                 next.setDisable(true);
+                isRunning = false;
 //                prev.setDisable(true);
 //                            autoRun.setText(AUTO_RUN_BTN_TO_START);
                 controlPanelFacade.getWarning().setText("Terminated!");
@@ -321,7 +372,7 @@ public class ProgressSectionController extends VBox {
         next.setDisable(false);
         clean.setDisable(false);
         autoRun.setDisable(false);
-        autoRun.setText(AUTO_RUN_BTN_TO_START);
+        autoRun.setStyle("-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/autorun.png); -fx-background-size: contain;");
 //        autoRunTimeInterval.setText("");
     }
 

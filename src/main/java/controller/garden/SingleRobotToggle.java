@@ -2,14 +2,14 @@ package controller.garden;
 
 
 import controller.controlpanel.ControlPanelFacade;
-import core.DisplayAdapter;
-import core.Statisticable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.util.Pair;
+import model.DisplayAdapter;
 import model.Robot;
+import model.Statisticable;
 
 import java.util.ArrayList;
 import java.util.List;

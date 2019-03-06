@@ -1,6 +1,6 @@
 package algorithms.src.fakedalgorithmhelper;
 
-import core.StatisticData;
+import model.StatisticData;
 
 public class mStatisticData implements StatisticData<Integer> {
 

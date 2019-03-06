@@ -2,11 +2,9 @@ package controller.controlpanel;
 
 import controller.garden.GardenController;
 import core.AlgorithmLoadingHelper;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.Robot;
@@ -35,8 +33,6 @@ public class ControlPanelController extends VBox {
     private SettingPageController settingPageController;
 
     @FXML
-    private Text statuscontrolText;
-    @FXML
     private Text autogenerateText;
     @FXML
     private Text customizeText;
@@ -46,13 +42,13 @@ public class ControlPanelController extends VBox {
     private Text warning;
 
     @FXML
-    private Button robotCustomizationPageBtn;
+    private Tab robotCustomizationPageBtn;
 
     @FXML
-    private Button statisticPageBtn;
+    private Tab statisticPageBtn;
 
     @FXML
-    private Button settingPageBtn;
+    private Tab settingPageBtn;
 
     /**
      * Global robots list
@@ -91,48 +87,47 @@ public class ControlPanelController extends VBox {
         initNodesText();
 
         //set the default page as general page
-        disableAllPages();
-        enableRobotGenerationPage();
+//        disableAllPages();
+//        enableRobotGenerationPage();
 //        saveListener();
 
-        pageSwitchingHandler();
+//        pageSwitchingHandler();
     }
 
-    private void pageSwitchingHandler() {
-
-        robotCustomizationPageBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                disableAllPages();
-                enableRobotGenerationPage();
-            }
-        });
-
-        statisticPageBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                disableAllPages();
-                enableStatisticPage();
-            }
-        });
-
-        settingPageBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                disableAllPages();
-                enableSettingPage();
-            }
-        });
-
-
-    }
+//    private void pageSwitchingHandler() {
+//
+//        robotCustomizationPageBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                disableAllPages();
+//                enableRobotGenerationPage();
+//            }
+//        });
+//
+//        statisticPageBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                disableAllPages();
+//                enableStatisticPage();
+//            }
+//        });
+//
+//        settingPageBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                disableAllPages();
+//                enableSettingPage();
+//            }
+//        });
+//
+//
+//    }
 
     public ControlPanelFacade getControlPanelFacade() {
         return controlPanelFacade;
     }
 
     private void initNodesText() {
-        statuscontrolText.setText(STATUS_CONTROL_TEXT);
 //        autogenerateText.setText(AUTO_GENERATE_TEXT);
 //        customizeText.setText(CUSTOMIZE_ROBOTS_TEXT);
 //        SaveButton.setText(SAVE_BUTTON);
@@ -219,40 +214,40 @@ public class ControlPanelController extends VBox {
         mouseCoordinate.setText(DEFAULT_MOUSE_COORDINATE_DISPLAY);
     }
 
-    private void disableSettingPage() {
-        settingPageController.setManaged(false);
-        settingPageController.setVisible(false);
-    }
-
-    private void enableSettingPage() {
-        settingPageController.setManaged(true);
-        settingPageController.setVisible(true);
-    }
-
-    private void disableStatisticPage() {
-        statisticPageController.setManaged(false);
-        statisticPageController.setVisible(false);
-    }
-
-    private void enableStatisticPage() {
-        statisticPageController.setManaged(true);
-        statisticPageController.setVisible(true);
-    }
-
-    private void disableRobotGenerationPage() {
-        robotGenerationPageController.setManaged(false);
-        robotGenerationPageController.setVisible(false);
-    }
-
-    private void enableRobotGenerationPage() {
-        robotGenerationPageController.setManaged(true);
-        robotGenerationPageController.setVisible(true);
-    }
-
-    private void disableAllPages() {
-        disableRobotGenerationPage();
-        disableStatisticPage();
-        disableSettingPage();
-    }
+//    private void disableSettingPage() {
+//        settingPageController.setManaged(false);
+//        settingPageController.setVisible(false);
+//    }
+//
+//    private void enableSettingPage() {
+//        settingPageController.setManaged(true);
+//        settingPageController.setVisible(true);
+//    }
+//
+//    private void disableStatisticPage() {
+//        statisticPageController.setManaged(false);
+//        statisticPageController.setVisible(false);
+//    }
+//
+//    private void enableStatisticPage() {
+//        statisticPageController.setManaged(true);
+//        statisticPageController.setVisible(true);
+//    }
+//
+//    private void disableRobotGenerationPage() {
+//        robotGenerationPageController.setManaged(false);
+//        robotGenerationPageController.setVisible(false);
+//    }
+//
+//    private void enableRobotGenerationPage() {
+//        robotGenerationPageController.setManaged(true);
+//        robotGenerationPageController.setVisible(true);
+//    }
+//
+//    private void disableAllPages() {
+//        disableRobotGenerationPage();
+//        disableStatisticPage();
+//        disableSettingPage();
+//    }
 
 }

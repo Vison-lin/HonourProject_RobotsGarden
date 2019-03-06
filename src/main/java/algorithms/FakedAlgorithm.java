@@ -3,10 +3,10 @@ package algorithms;
 
 import algorithms.src.fakedalgorithmhelper.mAdapter;
 import algorithms.src.fakedalgorithmhelper.mStatisticData;
-import core.Algorithm;
-import core.StatisticData;
-import core.Statisticable;
+import model.Algorithm;
 import model.Robot;
+import model.StatisticData;
+import model.Statisticable;
 
 import java.awt.geom.Point2D;
 import java.util.HashMap;

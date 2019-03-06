@@ -1,6 +1,6 @@
 package algorithms.src.gatheringalgorithm;
 
-import core.StatisticData;
+import model.StatisticData;
 
 public class TotalDistance implements StatisticData<Double> {
 

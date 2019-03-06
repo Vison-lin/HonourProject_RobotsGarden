@@ -1,6 +1,8 @@
 package core;
 
 
+import model.Algorithm;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class AlgorithmClassLoader {
      * Give the name of the algorithm, return a new instance of that algorithm.
      * <br/>
      * <br/>Note that all the algorithms must:
-     * <br/><li>extends garden.core.Algorithm</li>
+     * <br/><li>extends garden.model.Algorithm</li>
      * <br/><li><strong>be placed under garden.algorithms. path</strong></li>
      * <br/><li>have a accessible default constructor</li>
      * <br/><li>not be an abstract class</li>
@@ -33,7 +35,7 @@ public class AlgorithmClassLoader {
             return (Algorithm) ClassLoader.getSystemClassLoader().loadClass(name).getConstructor().newInstance();
             //runtime exceptions: nothing to do with it: programmer must handle the incorrect implementation.
         } catch (ClassCastException e) {
-            throw new ClassCastException("The class " + algName + " cannot be cast to garden.core.Algorithm. All the algorithms must extends garden.core.Algorithm");
+            throw new ClassCastException("The class " + algName + " cannot be cast to garden.model.Algorithm. All the algorithms must extends garden.model.Algorithm");
         } catch (ClassNotFoundException e) {
             //checked exception
             throw new ClassNotFoundException("Algorithm: " + name + " not founded. All the Algorithms must be placed under " + PATH_TO_ALGORITHMS);
@@ -52,8 +54,8 @@ public class AlgorithmClassLoader {
      * Give the algorithm's class, return a new instance of that algorithm.
      * <br/>
      * <br/>Note that all the algorithms must:
-     * <br/><li>extends garden.core.Algorithm</li>
-     * <br/><li><strong>be regisitered</strong></li>//todo ???
+     * <br/><li>extends garden.model.Algorithm</li>
+     * <br/><li><strong>be registered</strong></li>//todo FRED: HOW to store/load???
      * <br/><li>have a accessible default constructor</li>
      * <br/><li>not be an abstract class</li>
      *

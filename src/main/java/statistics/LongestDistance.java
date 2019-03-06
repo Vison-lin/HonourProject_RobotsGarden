@@ -3,9 +3,9 @@ package statistics;
 import algorithms.GatheringAlgorithm;
 import algorithms.GatheringGoToSec;
 import algorithms.src.gatheringalgorithm.TotalDistance;
-import core.Statistic;
-import core.StatisticData;
 import model.Robot;
+import model.Statistic;
+import model.StatisticData;
 
 import java.util.Iterator;
 import java.util.List;

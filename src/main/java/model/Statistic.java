@@ -1,6 +1,4 @@
-package core;
-
-import model.Robot;
+package model;
 
 import java.util.List;
 import java.util.Map;

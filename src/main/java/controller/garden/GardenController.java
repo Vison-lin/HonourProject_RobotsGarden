@@ -2,7 +2,7 @@ package controller.garden;
 
 
 import controller.controlpanel.ControlPanelFacade;
-import core.DisplayAdapter;
+import core.RightClickFunction;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -21,6 +21,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
+import model.DisplayAdapter;
 import model.Robot;
 import model.RobotGraphicalDisplay;
 
@@ -43,8 +44,6 @@ public class GardenController extends VBox {
     private ControlPanelFacade controlPanelFacade;
 
     private GardenController gardenController = this;
-
-    private double nameCtr = ControlPanelFacade.ROBOT_NAME_COUNTER;
 
     private static double zoomingFactor = 1;
 
@@ -82,7 +81,7 @@ public class GardenController extends VBox {
         gardenMouseHoverListener();
         gardenMouseMoveOutListener();
         gardenMouseScrollListener();
-
+        System.out.println(garden.getBackground());
     }
 
     public static Point2D.Double adjustCoordinate(Point2D.Double coordinate) {
@@ -153,9 +152,9 @@ public class GardenController extends VBox {
         garden.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.getButton() == MouseButton.PRIMARY) {// add listener for left click
-                    Robot robot = controlPanelFacade.robotGenerator("No." + nameCtr, event.getX(), event.getY());
-                    nameCtr++;
+                if (event.getButton() == MouseButton.PRIMARY && controlPanelFacade.getCurrentRightClickFunction() == RightClickFunction.CreateRobot) {// add listener for left click
+                    Robot robot = controlPanelFacade.robotGenerator("No." + controlPanelFacade.getRobotNameCounter(), event.getX(), event.getY());
+                    controlPanelFacade.increaseRobotNameCounter();
                     //adding to the graph
                     updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
                 }
@@ -233,7 +232,7 @@ public class GardenController extends VBox {
 
         //remove unnecessary info (to ensure obliviousness <- KEY OF THE PROJECT)
 //        for (Robot robot : controlPanelController.getRobots()) {
-//            robot.getGraphicalDisplay().cleanBottomLayers();//todo why change color of position will change directly?
+//            robot.getGraphicalDisplay().cleanBottomLayers();//todo FRED: why change color of position will change directly?
 //        }
     }
 
@@ -369,18 +368,6 @@ public class GardenController extends VBox {
 
                 double scrollAmount = event.getDeltaY();
                 isScrollingUp = scrollAmount >= 0;
-//                System.out.println(scrollAmount%4);
-//                zoomingFactor = zoomingFactor + (scrollAmount % 3) * 0.1;//todo mouse? touch pad?
-//                System.out.println(scrollAmount+": "+(scrollAmount % 3) * 0.1);
-
-//                System.out.println(zoomingFactor+":"+(scrollAmount%4)*0.1);
-
-
-                //detect scrolling direction
-
-
-//                System.out.println(zoomingFactor);
-
 
                 double intentStrokeWidth = defaultAxisStrokeWidth;
 

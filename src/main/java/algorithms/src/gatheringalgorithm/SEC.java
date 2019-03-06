@@ -3,10 +3,10 @@ package algorithms.src.gatheringalgorithm;
 
 import algorithms.GatheringAlgorithm;
 import algorithms.GatheringGoToSec;
-import core.Algorithm;
-import core.DisplayAdapter;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import model.Algorithm;
+import model.DisplayAdapter;
 import model.Robot;
 
 import java.awt.geom.Point2D;
@@ -80,7 +80,7 @@ public class SEC extends DisplayAdapter<Circle> {
         }else if(tag.equals("gotocenter")){
             point = goToCenter.calculateSEC(new ArrayList<>(local), algorithm.getRobot().getVision());
         }
-        point = algorithm.getRobot().getSensor().convertToGlobal(point);//todo avoid here!
+        point = algorithm.getRobot().getSensor().convertToGlobal(point);//todo FRED： avoid here!
         setDisplayPattern(new Circle(radius,Color.LIGHTGREEN));
         moveTo(point.x, point.y);
     }

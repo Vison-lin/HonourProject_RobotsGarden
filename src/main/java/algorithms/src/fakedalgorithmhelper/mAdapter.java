@@ -1,10 +1,10 @@
 package algorithms.src.fakedalgorithmhelper;
 
 
-import core.Algorithm;
-import core.DisplayAdapter;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import model.Algorithm;
+import model.DisplayAdapter;
 
 import java.util.Random;
 

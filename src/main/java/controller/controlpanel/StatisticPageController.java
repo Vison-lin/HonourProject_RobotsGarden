@@ -1,10 +1,10 @@
 package controller.controlpanel;
 
-import core.Statistic;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import model.Statistic;
 import statistics.LongestDistance;
 import statistics.LongestRun;
 import statistics.SumOfDistance;
@@ -44,7 +44,7 @@ public class StatisticPageController extends VBox {
 
     private void initStatisticDisplay() {
         statisticDisplay.setText(STATISTIC_UNAVAILABLE_DISPLAY);
-        //todo faked file scan for Statistic
+        //todo FRED: faked file scan for Statistic
         statistics.add(new LongestRun());
         statistics.add(new LongestDistance());
         statistics.add(new SumOfDistance());

@@ -2,11 +2,12 @@ package controller.controlpanel;
 
 
 import controller.garden.GardenController;
-import core.Statistic;
-import core.StatisticData;
+import core.RightClickFunction;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import model.Robot;
+import model.Statistic;
+import model.StatisticData;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,8 @@ public class ControlPanelFacade {
 
     private ControlPanelController controlPanelController;
 
-    public static double ROBOT_NAME_COUNTER = RobotGenerationPageController.ROBOT_NAME_COUNTER;
+    //    public static double ROBOT_NAME_COUNTER = RobotGenerationPageController.ROBOT_NAME_COUNTER;
+//    public static RightClickFunction rightClickFunction = ProgressSectionController.rightClickFunction;
     private ProgressSectionController progressSectionController;
     private RobotGenerationPageController robotGenerationPageController;
     private StatisticPageController statisticPageController;
@@ -62,6 +64,22 @@ public class ControlPanelFacade {
 
     public void cleanMouseCoordinate() {
         controlPanelController.cleanMouseCoordinate();
+    }
+
+    public double getRobotNameCounter() {
+        return RobotGenerationPageController.ROBOT_NAME_COUNTER;
+    }
+
+    public void increaseRobotNameCounter() {
+        RobotGenerationPageController.ROBOT_NAME_COUNTER++;
+    }
+
+    public RightClickFunction getCurrentRightClickFunction() {
+        return ProgressSectionController.rightClickFunction;
+    }
+
+    public void setRightClickFunction(RightClickFunction rightClickFunction) {
+        ProgressSectionController.rightClickFunction = rightClickFunction;
     }
 
     /*

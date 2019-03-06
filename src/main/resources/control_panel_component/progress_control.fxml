@@ -1,57 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Text?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1" prefHeight="60.0" type="javafx.scene.layout.VBox"
-         xmlns="http://javafx.com/javafx/8.0.172-ea">
+
+<fx:root prefHeight="60.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <HBox style="-fx-spacing: 1em;">
         <children>
-            <VBox alignment="CENTER" prefHeight="200.0">
+            <VBox alignment="CENTER" prefHeight="210.0" prefWidth="240.0">
                 <children>
 
                     <HBox alignment="CENTER" style="-fx-spacing: 3em; -fx-padding: 3em;">
                         <children>
-                            <Button fx:id="prev" alignment="CENTER" mnemonicParsing="false"
-                                    style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/prev.png); -fx-background-size: contain;"/>
-                            <Button fx:id="autoRun" alignment="CENTER" mnemonicParsing="false"
-                                    style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/autorun.png); -fx-background-size: contain;"/>
-                            <Button fx:id="next" alignment="CENTER" mnemonicParsing="false"
-                                    style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/next.png); -fx-background-size: contain;"/>
+                            <Button fx:id="prev" alignment="CENTER" mnemonicParsing="false" style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/prev.png); -fx-background-size: contain;">
+                        <HBox.margin>
+                           <Insets />
+                        </HBox.margin></Button>
+                            <Button fx:id="autoRun" alignment="CENTER" mnemonicParsing="false" style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/autorun.png); -fx-background-size: contain;" />
+                            <Button fx:id="next" alignment="CENTER" mnemonicParsing="false" style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/next.png); -fx-background-size: contain;" />
 
                         </children>
+                  <VBox.margin>
+                     <Insets />
+                  </VBox.margin>
                     </HBox>
                     <HBox alignment="CENTER_LEFT" style="-fx-spacing: 3em; -fx-padding: 1em;">
                         <children>
-                            <Pane fx:id="autoRunHint"
-                                  style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/speed.png); -fx-background-size: contain;"/>
-                            <Slider fx:id="autoRunSpeed"/>
+                            <Pane fx:id="autoRunHint" style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/speed.png); -fx-background-size: contain;" />
+                            <Slider fx:id="autoRunSpeed" />
                         </children>
                     </HBox>
                 </children>
             </VBox>
+         <Line endY="211.0" stroke="#a2d08f" strokeWidth="2.0" />
             <VBox alignment="CENTER_LEFT">
                 <children>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Control:"/>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Control:" />
                     <HBox alignment="CENTER" style="-fx-spacing: 1em; -fx-padding: 1em;">
                         <children>
-                            <Button fx:id="drag" mnemonicParsing="false"
-                                    style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/drag.png); -fx-background-size: contain;"/>
-                            <Button fx:id="create" mnemonicParsing="false"
-                                    style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/clickToAddRobot.png); -fx-background-size: contain;"/>
+                            <Button fx:id="drag" mnemonicParsing="false" style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/drag.png); -fx-background-size: contain;" />
+                            <Button fx:id="create" mnemonicParsing="false" style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/clickToAddRobot.png); -fx-background-size: contain;" />
                         </children>
                     </HBox>
-                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Operation:"/>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Operation:" />
                     <HBox style="-fx-spacing: 1em; -fx-padding: 1em;">
                         <children>
                             <!--<TextField fx:id="autoRunTimeInterval" />-->
-                            <Button fx:id="clean" mnemonicParsing="false"
-                                    style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/clean.png); -fx-background-size: contain;"/>
+                            <Button fx:id="clean" mnemonicParsing="false" style="-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/clean.png); -fx-background-size: contain;" />
                         </children>
                     </HBox>
                 </children>
             </VBox>
         </children>
     </HBox>
+   <Line endX="383.0" startX="-100.0" stroke="#a2d08f" strokeWidth="2.0" />
 
 </fx:root>

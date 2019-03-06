@@ -183,7 +183,7 @@ public class RobotGenerationPageController extends VBox {
                     controlPanelFacade.setRightClickFunction(RightClickFunction.Drag);
                 }else if(group.getSelectedToggle().getUserData().toString().equals("Click")){
                     autoGenerateBox.setDisable(true);
-
+                    controlPanelFacade.setRightClickFunction(RightClickFunction.CreateRobot);
 
                 }
 

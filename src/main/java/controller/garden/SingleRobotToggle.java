@@ -16,7 +16,7 @@ import java.util.List;
 
 public class SingleRobotToggle extends ContextMenu {
 
-    private static final String SHOW_VISION_TO_SHOW = "result vision";
+    private static final String SHOW_VISION_TO_SHOW = "Show vision";
     private static final String SHOW_VISION_TO_NOT_SHOW = "Hide vision";
     private static final String SETTING_PAGE = "Setting";
     private static final String CHANGE_COLOR = "Change Color";

@@ -1,8 +1,8 @@
 package controller.garden;
 
 
-import controller.controlpanel.AlgorithmLoadingHelper;
 import controller.controlpanel.ControlPanelFacade;
+import core.AlgorithmLoadingHelper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -100,7 +100,7 @@ public class RobotSettingHelper extends VBox {
         FXMLLoader fxmlLoader;
         this.robots = robots;
         try {
-            fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/control_panel_component/robot_customization_control.fxml"));
+            fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/robot_setting.fxml"));
             fxmlLoader.setRoot(this);
             fxmlLoader.setController(this);
             Parent parent = fxmlLoader.load();
@@ -177,7 +177,7 @@ public class RobotSettingHelper extends VBox {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try {
-                    selectedRobotVision = Integer.valueOf(inputVision.getText());//todo must press return to trigger, beeter way? use int or double?
+                    selectedRobotVision = Integer.valueOf(inputVision.getText());//todo VISON: must press return to trigger, better way? use int or double?
                 } catch (NumberFormatException e) {
                     warning.setText("Robot Vision must be an int");
                 }
@@ -200,12 +200,14 @@ public class RobotSettingHelper extends VBox {
         });
     }
 
+    //todo Vison: Duplicated CODE HERE?
+
 //    private void inputVisionListener() {
 //        inputVision.setOnAction(new EventHandler<ActionEvent>() {
 //            @Override
 //            public void handle(ActionEvent event) {
 //                try {
-//                    selectedRobotVision = Integer.valueOf(inputVision.getText());//todo must press return to trigger, beeter way? use int or double?
+//                    selectedRobotVision = Integer.valueOf(inputVision.getText());//todo VISON: must press return to trigger, beeter way? use int or double?
 //                } catch (NumberFormatException e) {
 //                    warning.setText("Robot Vision must be an int");
 //                }
@@ -301,7 +303,7 @@ public class RobotSettingHelper extends VBox {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
-//        algorithmSelection.getSelectionModel(); //todo, let this display the variable which is "selectedAlgorithm".
+//        algorithmSelection.getSelectionModel(); //todo FRED & VISON: let this display the variable which is "selectedAlgorithm". 你是要我显示当前robot的alg吗？
 //        System.out.println(selectedAlgorithm);
 //        System.out.println(algorithmFileName+"~~~~~");
 //        System.out.println(algorithmSelection.getSelectionModel().getSelectedIndex());

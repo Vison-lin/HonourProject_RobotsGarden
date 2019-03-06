@@ -2,23 +2,21 @@ package controller.garden;
 
 
 import controller.controlpanel.ControlPanelFacade;
-import core.DisplayAdapter;
-import core.Statisticable;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Paint;
 import javafx.util.Pair;
+import model.DisplayAdapter;
 import model.Robot;
+import model.Statisticable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SingleRobotToggle extends ContextMenu {
 
-    private static final String SHOW_VISION_TO_SHOW = "show vision";
+    private static final String SHOW_VISION_TO_SHOW = "result vision";
     private static final String SHOW_VISION_TO_NOT_SHOW = "Hide vision";
     private static final String SETTING_PAGE = "Setting";
     private static final String CHANGE_COLOR = "Change Color";

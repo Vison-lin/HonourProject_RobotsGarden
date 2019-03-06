@@ -2,7 +2,6 @@ package model;
 
 
 import controller.garden.GardenController;
-import core.DisplayAdapter;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;

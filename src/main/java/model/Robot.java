@@ -4,7 +4,6 @@ package model;
 import algorithms.DefaultAlgorithm;
 import algorithms.src.gatheringalgorithm.Vector;
 import controller.garden.GardenController;
-import core.Algorithm;
 import core.AlgorithmClassLoader;
 
 import java.awt.geom.Point2D;
@@ -58,7 +57,7 @@ public class Robot {
     /*
      *  The coordinate that represent the robot position: in Point2D.Double form
      */
-    private Point2D.Double coordinate;//todo change!
+    private Point2D.Double coordinate;
 
 
     /**
@@ -84,7 +83,7 @@ public class Robot {
     public void moveTo(double x, double y) {
         Point2D.Double end = new Point2D.Double();
         end.setLocation(x,y);
-        Vector vector = new Vector(getPosition(), end);//todo Localized!!!
+        Vector vector = new Vector(getPosition(), end);//todo VISION: Localized!!!
         if(isRandomUnit()){
             Random ran = new Random();
             int num = (int) (vector.getNorm() / graphicalDisplay.getRobotBody().getRadius());
@@ -94,19 +93,14 @@ public class Robot {
         }
         if(vector.getNorm()<= unit){
             coordinate = new Point2D.Double(x, y);
-            Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);//todo to be enabled after the zooming implemented
-            graphicalDisplay.moveTo(positionForGraphicalDisplay);//todo to be enabled after the zooming implemented
-//            graphicalDisplay.moveTo(x, y);
+            Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);
+            graphicalDisplay.moveTo(positionForGraphicalDisplay);
         }else{
             end = vector.resize(unit).getEnd();
             coordinate = new Point2D.Double(end.getX(), end.getY());
-            Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);//todo to be enabled after the zooming implemented
-            graphicalDisplay.moveTo(positionForGraphicalDisplay);//todo to be enabled after the zooming implemented
-//            graphicalDisplay.moveTo(end.getX(), end.getY());
-
+            Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);
+            graphicalDisplay.moveTo(positionForGraphicalDisplay);
         }
-
-        System.out.println(coordinate);
 
     }
 
@@ -271,7 +265,7 @@ public class Robot {
      * <strong>Clean everything that happened in the previous step: to simulate DISTRIBUTIVE COMPUTING</strong>
      */
     public void iForgot() {
-        this.getGraphicalDisplay().cleanBottomLayers();//todo why change color of position will change directly?
+        this.getGraphicalDisplay().cleanBottomLayers();//todo FRED: why change color of position will change directly?
         //deep copy algorithm: to ensure algorithm itself cannot store historical data. Do this later to ensure each time the algorithm's constructor can be called.
         try {
             Algorithm algorithm = AlgorithmClassLoader.getAlgorithmInstanceByName(this.getAlgorithm().getClass().getSimpleName());

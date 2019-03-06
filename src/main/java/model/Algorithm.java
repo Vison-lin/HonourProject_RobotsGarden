@@ -1,7 +1,5 @@
-package core;
+package model;
 
-
-import model.Robot;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;

@@ -2,7 +2,6 @@ package controller.garden;
 
 
 import controller.controlpanel.ControlPanelFacade;
-import core.Statisticable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,6 +20,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import model.Robot;
+import model.Statisticable;
 
 import java.io.IOException;
 import java.util.ArrayList;

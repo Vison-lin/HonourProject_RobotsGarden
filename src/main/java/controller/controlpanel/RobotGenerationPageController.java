@@ -1,6 +1,7 @@
 package controller.controlpanel;
 
-import core.Statisticable;
+import core.AlgorithmLoadingHelper;
+import core.RightClickFunction;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -11,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -21,6 +21,7 @@ import javafx.util.Pair;
 import javafx.util.StringConverter;
 import model.Robot;
 import model.RobotGraphicalDisplay;
+import model.Statisticable;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RobotGenerationController extends VBox {
+public class RobotGenerationPageController extends VBox {
 
     private static final double DEFAULT_ROBOT_VISION = 100;
     private static final double DEFAULT_ROBOT_UNIT = Double.POSITIVE_INFINITY;
@@ -38,7 +39,7 @@ public class RobotGenerationController extends VBox {
     private static final String DEFAULT_VISION_TEXT = "Vision of robot";
     private static final String DEFAULT_UNIT_TEXT = "Pace ";
     private static final String RANDOM_CREATE_ROBOT_BUTTON = "Random Create Connected Robots";
-    static double ROBOT_NAME_COUNTER = 0;
+    public static double ROBOT_NAME_COUNTER = 0;
 
     @FXML
     private ComboBox<Pair<String, String>> algorithmSelection;
@@ -93,10 +94,10 @@ public class RobotGenerationController extends VBox {
 
     private List<Robot> robots;
 
-    public RobotGenerationController() {
+    public RobotGenerationPageController() {
 
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/control_panel_component/robot_customization_control_new.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../../resources/control_panel_component/robot_customization.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
 
@@ -144,7 +145,7 @@ public class RobotGenerationController extends VBox {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try {
-                    selectedRobotVision = Integer.valueOf(inputVision.getText());//todo must press return to trigger, beeter way? use int or double?
+                    selectedRobotVision = Integer.valueOf(inputVision.getText());//todo VISON: must press enter key to trigger, better way? also, for the vision, use int or double?
                 } catch (NumberFormatException e) {
                     controlPanelFacade.getWarning().setText("Robot Vision must be an int");
                 }
@@ -169,7 +170,7 @@ public class RobotGenerationController extends VBox {
 
 
     private void generateCheckListener(){
-        ToggleGroup group = new ToggleGroup();
+        ToggleGroup group = new ToggleGroup();//todo Vison：用一个有意义的名字！
         autoGenerate.setToggleGroup(group);
         clickGenerate.setSelected(true);
         clickGenerate.setToggleGroup(group);
@@ -178,7 +179,8 @@ public class RobotGenerationController extends VBox {
             @Override
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
                 if(group.getSelectedToggle().getUserData().toString().equals("Auto")){
-                    autoGenerateBox.setDisable(false);//todo disable click generate function
+                    autoGenerateBox.setDisable(false);
+                    controlPanelFacade.setRightClickFunction(RightClickFunction.Drag);
                 }else if(group.getSelectedToggle().getUserData().toString().equals("Click")){
                     autoGenerateBox.setDisable(true);
 
@@ -254,7 +256,7 @@ public class RobotGenerationController extends VBox {
     }
 
 
-    private void algorithmSelectionInit() {//todo how to deal with no algorithm found?
+    private void algorithmSelectionInit() {//todo FRED: how to deal with no algorithm found?
         ObservableList<Pair<String, String>> value = FXCollections.observableArrayList();
         List<Pair<String, String>> allAlgInfo = null;
         try {
@@ -347,7 +349,7 @@ public class RobotGenerationController extends VBox {
                     //init first one
                     double maxX = (int) controlPanelFacade.getGardenController().getWidth() + 1;
                     double maxY = (int) controlPanelFacade.getGardenController().getHeight() + 1;
-                    double ctr = ControlPanelFacade.ROBOT_NAME_COUNTER;
+                    double ctr = ROBOT_NAME_COUNTER;
                     Robot currRobot = controlPanelFacade.robotGenerator("Auto No." + ctr + "", random.nextInt((int) maxX), random.nextInt((int) maxY));
 
                     ArrayList<Robot> generatedRobots = new ArrayList<>();

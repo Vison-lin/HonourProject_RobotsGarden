@@ -1,7 +1,7 @@
 package algorithms;
 
 
-import core.Algorithm;
+import model.Algorithm;
 import model.Robot;
 
 import java.awt.geom.Point2D;

@@ -1,22 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import controller.controlpanel.ProgressController?>
-<?import controller.controlpanel.RobotGenerationController?>
-<?import javafx.scene.control.Button?>
+<?import controller.controlpanel.ProgressSectionController?>
+<?import controller.controlpanel.RobotGenerationPageController?>
+<?import controller.controlpanel.SettingPageController?>
+<?import controller.controlpanel.StatisticPageController?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.*?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="500.0" type="javafx.scene.layout.VBox"
+<?import javafx.scene.text.Text?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.layout.VBox"
          xmlns="http://javafx.com/javafx/8.0.172-ea">
     <children>
-        <Text fx:id="statuscontrolText" strokeType="OUTSIDE" strokeWidth="0.0" text="Status Control"/>
 
-        <ProgressController fx:id="progressController"/>
+        <ProgressSectionController fx:id="progressSectionController"/>
+        <TabPane style="-fx-background-color: white;" stylesheets="@css/main.css" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab fx:id="robotCustomizationPageBtn" text="Robot">
+                    <content>
+                        <RobotGenerationPageController fx:id="robotGenerationPageController"/>
+                    </content>
+                </Tab>
+                <Tab fx:id="statisticPageBtn" text="Statistic">
+                    <content>
+                        <StatisticPageController fx:id="statisticPageController"/>
+                    </content>
+                </Tab>
+                <Tab fx:id="settingPageBtn" text="Setting">
+                    <content>
+                        <SettingPageController fx:id="settingPageController"/>
+                    </content>
+                </Tab>
 
-        <RobotGenerationController fx:id="robotGenerationController"/>
+            </tabs>
+        </TabPane>
 
-        <Button fx:id="SaveButton" mnemonicParsing="false" text="Save" />
+        <!--<Line endX="399.0" startX="-100.0" stroke="#8a8a8a" style="-fx-opacity: 0.3;">-->
+        <!--<VBox.margin>-->
+        <!--<Insets bottom="5.0" top="10.0" />-->
+        <!--</VBox.margin></Line>-->
+
+
+        <!--<Button fx:id="SaveButton" mnemonicParsing="false" text="Save" />-->
         <Text fx:id="warning" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"/>
         <Text fx:id="mouseCoordinate"/>
-        <Text fx:id="statisticDisplay"/>
+
     </children>
 </fx:root>

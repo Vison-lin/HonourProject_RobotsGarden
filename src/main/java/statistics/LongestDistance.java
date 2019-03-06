@@ -3,9 +3,9 @@ package statistics;
 import algorithms.GatheringAlgorithm;
 import algorithms.GatheringGoToSec;
 import algorithms.src.gatheringalgorithm.TotalDistance;
-import core.Statistic;
-import core.StatisticData;
 import model.Robot;
+import model.Statistic;
+import model.StatisticData;
 
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +23,7 @@ public class LongestDistance extends Statistic<Double> {
     }
 
     @Override
-    public String show(List<Robot> robots, List<Map<String, StatisticData<Double>>> data) {
+    public double result(List<Robot> robots, List<Map<String, StatisticData<Double>>> data) {
         double longestDistance = 0;
         Iterator<Map<String, StatisticData<Double>>> iteratorIterator = data.iterator();
         while (iteratorIterator.hasNext()) {
@@ -38,7 +38,12 @@ public class LongestDistance extends Statistic<Double> {
             }
 
         }
-        return "The longest distance is: " + longestDistance + "";
+        return longestDistance;
+    }
+
+    @Override
+    public String tag() {
+        return "Longest Distance";
     }
 
     @Override

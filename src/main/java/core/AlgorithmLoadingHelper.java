@@ -1,9 +1,8 @@
-package controller.controlpanel;
+package core;
 
 
-import core.Algorithm;
-import core.AlgorithmClassLoader;
 import javafx.util.Pair;
+import model.Algorithm;
 import model.Robot;
 
 import java.io.File;
@@ -32,7 +31,7 @@ public class AlgorithmLoadingHelper {
         String algPath = basePath + "/src/main/java/algorithms";
 
 
-        //todo how to place the algorithm??
+        //todo FRED: how to place the algorithm??
         /*
         TO RETRIVE FROM JAR FILE
         Things left: how to load an instance from .class file? URLClassLoader?
@@ -79,7 +78,7 @@ public class AlgorithmLoadingHelper {
         }
 
 //        if (algorithmList.size() == 0) {
-//            throw new IllegalStateException("No Algorithm Found: You have to have at least one algorithm to run the program. All the garden.algorithms must extend garden.core.Algorithm and have to be placed under /src/garden/garden.algorithms folder.");
+//            throw new IllegalStateException("No Algorithm Found: You have to have at least one algorithm to run the program. All the garden.algorithms must extend garden.model.Algorithm and have to be placed under /src/garden/garden.algorithms folder.");
 //        }
 
         return algorithmList;

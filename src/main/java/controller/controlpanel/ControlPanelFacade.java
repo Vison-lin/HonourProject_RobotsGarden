@@ -2,11 +2,12 @@ package controller.controlpanel;
 
 
 import controller.garden.GardenController;
-import core.Statistic;
-import core.StatisticData;
+import core.RightClickFunction;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import model.Robot;
+import model.Statistic;
+import model.StatisticData;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,22 +16,21 @@ public class ControlPanelFacade {
 
     private ControlPanelController controlPanelController;
 
-    private ProgressController progressController;
-
-    private RobotGenerationController robotGenerationController;
-
-    public static double ROBOT_NAME_COUNTER = RobotGenerationController.ROBOT_NAME_COUNTER;
-
-    public static final String STATISTIC_UNAVAILABLE_DISPLAY = "No Statistic Available!";
-
-    public static final String STATISTIC_DEFAULT_DISPLAY = "Click Next Button to See Available Statistic Data";
+    //    public static double ROBOT_NAME_COUNTER = RobotGenerationPageController.ROBOT_NAME_COUNTER;
+//    public static RightClickFunction rightClickFunction = ProgressSectionController.rightClickFunction;
+    private ProgressSectionController progressSectionController;
+    private RobotGenerationPageController robotGenerationPageController;
+    private StatisticPageController statisticPageController;
+    private SettingPageController settingPageController;
 
     public static boolean ENABLE_STATISTIC = true;
 
-    ControlPanelFacade(ControlPanelController controlPanelController,  ProgressController progressController, RobotGenerationController robotGenerationController) {
+    ControlPanelFacade(ControlPanelController controlPanelController, ProgressSectionController progressSectionController, RobotGenerationPageController robotGenerationPageController, StatisticPageController statisticPageController, SettingPageController settingPageController) {
         this.controlPanelController = controlPanelController;
-        this.progressController = progressController;
-        this.robotGenerationController = robotGenerationController;
+        this.progressSectionController = progressSectionController;
+        this.robotGenerationPageController = robotGenerationPageController;
+        this.statisticPageController = statisticPageController;
+        this.settingPageController = settingPageController;
     }
 
     /*
@@ -47,15 +47,15 @@ public class ControlPanelFacade {
     }
 
     public double getSelectedRobotVision() {
-        return robotGenerationController.getSelectedRobotVision();
+        return robotGenerationPageController.getSelectedRobotVision();
     }
 
     public Paint getSelectedRobotColor() {
-        return robotGenerationController.getSelectedRobotColor();
+        return robotGenerationPageController.getSelectedRobotColor();
     }
 
     public Robot robotGenerator(String new_robot, double x, double y) {
-        return this.robotGenerationController.robotGenerator(new_robot, x, y);
+        return this.robotGenerationPageController.robotGenerator(new_robot, x, y);
     }
 
     public void setMouseCoordinate(double x, double y) {
@@ -64,6 +64,22 @@ public class ControlPanelFacade {
 
     public void cleanMouseCoordinate() {
         controlPanelController.cleanMouseCoordinate();
+    }
+
+    public double getRobotNameCounter() {
+        return RobotGenerationPageController.ROBOT_NAME_COUNTER;
+    }
+
+    public void increaseRobotNameCounter() {
+        RobotGenerationPageController.ROBOT_NAME_COUNTER++;
+    }
+
+    public RightClickFunction getCurrentRightClickFunction() {
+        return ProgressSectionController.rightClickFunction;
+    }
+
+    public void setRightClickFunction(RightClickFunction rightClickFunction) {
+        ProgressSectionController.rightClickFunction = rightClickFunction;
     }
 
     /*
@@ -99,27 +115,27 @@ public class ControlPanelFacade {
     }
 
     Text getStatisticDisplay() {
-        return controlPanelController.getStatisticDisplay();
+        return statisticPageController.getStatisticDisplay();
     }
 
     public HashMap<String, StatisticData> getStatisticDataByRobotTag(String robotTag) {
-        return progressController.getStatisticDataTempStoringList().get(robotTag);
+        return progressSectionController.getStatisticDataTempStoringList().get(robotTag);
     }
 
     void insertToStatisticDataTempStoringList(String robotTag, HashMap<String, StatisticData> newStatisticData) {
-        progressController.getStatisticDataTempStoringList().put(robotTag, newStatisticData);
+        progressSectionController.getStatisticDataTempStoringList().put(robotTag, newStatisticData);
     }
 
     public void removeStatisticDataByRobotTag(String robotTag) {
-        progressController.getStatisticDataTempStoringList().remove(robotTag);
+        progressSectionController.getStatisticDataTempStoringList().remove(robotTag);
     }
 
     HashMap<String, HashMap<String, StatisticData>> getStatisticDataList() {
-        return progressController.getStatisticDataTempStoringList();
+        return progressSectionController.getStatisticDataTempStoringList();
     }
 
     List<Statistic> getStatisticList() {
-        return controlPanelController.getStatistics();
+        return statisticPageController.getStatistics();
     }
 
         /*

@@ -37,7 +37,10 @@
                     </HBox>
                 </children>
             </VBox>
-         <Line endY="211.0" stroke="#a2d08f" strokeWidth="2.0" />
+         <Line endY="190.0" stroke="#b2c6aa" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0">
+            <HBox.margin>
+               <Insets top="10.0" />
+            </HBox.margin></Line>
             <VBox alignment="CENTER_LEFT">
                 <children>
                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Control:" />
@@ -58,6 +61,9 @@
             </VBox>
         </children>
     </HBox>
-   <Line endX="383.0" startX="-100.0" stroke="#a2d08f" strokeWidth="2.0" />
+   <Line endX="370.0" startX="-100.0" stroke="#b2c6aa" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="2.0">
+      <VBox.margin>
+         <Insets left="5.0" />
+      </VBox.margin></Line>
 
 </fx:root>

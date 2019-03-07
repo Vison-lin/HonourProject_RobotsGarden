@@ -145,7 +145,7 @@ public class RobotGenerationPageController extends VBox {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 try {
-                    selectedRobotVision = Integer.valueOf(inputVision.getText());//todo VISON: must press enter key to trigger, better way? also, for the vision, use int or double?
+                    selectedRobotVision = Integer.valueOf(inputVision.getText());
                 } catch (NumberFormatException e) {
                     controlPanelFacade.getWarning().setText("Robot Vision must be an int");
                 }
@@ -170,18 +170,18 @@ public class RobotGenerationPageController extends VBox {
 
 
     private void generateCheckListener(){
-        ToggleGroup group = new ToggleGroup();//todo Vison：用一个有意义的名字！
-        autoGenerate.setToggleGroup(group);
+        ToggleGroup clickCheckGroup = new ToggleGroup();
+        autoGenerate.setToggleGroup(clickCheckGroup);
         clickGenerate.setSelected(true);
-        clickGenerate.setToggleGroup(group);
+        clickGenerate.setToggleGroup(clickCheckGroup);
 
-        group.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+        clickCheckGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                if(group.getSelectedToggle().getUserData().toString().equals("Auto")){
+                if(clickCheckGroup.getSelectedToggle().getUserData().toString().equals("Auto")){
                     autoGenerateBox.setDisable(false);
                     controlPanelFacade.setRightClickFunction(RightClickFunction.Drag);
-                }else if(group.getSelectedToggle().getUserData().toString().equals("Click")){
+                }else if(clickCheckGroup.getSelectedToggle().getUserData().toString().equals("Click")){
                     autoGenerateBox.setDisable(true);
                     controlPanelFacade.setRightClickFunction(RightClickFunction.CreateRobot);
 

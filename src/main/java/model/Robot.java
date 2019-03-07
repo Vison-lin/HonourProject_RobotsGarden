@@ -2,7 +2,6 @@ package model;
 
 
 import algorithms.DefaultAlgorithm;
-import algorithms.src.gatheringalgorithm.Vector;
 import controller.garden.GardenController;
 import core.AlgorithmClassLoader;
 
@@ -83,26 +82,72 @@ public class Robot {
     public void moveTo(double x, double y) {
         Point2D.Double end = new Point2D.Double();
         end.setLocation(x,y);
-        Vector vector = new Vector(getPosition(), end);//todo VISION: Localized!!!
+        //Vector vector = new Vector(getPosition(), end);
+        double norm = calculateNorm(getPosition(),end);
         if(isRandomUnit()){
             Random ran = new Random();
-            int num = (int) (vector.getNorm() / graphicalDisplay.getRobotBody().getRadius());
+            int num = (int) (norm/ graphicalDisplay.getRobotBody().getRadius());
             if (num >= 1) {
                 this.unit = graphicalDisplay.getRobotBody().getRadius() * (1 + ran.nextInt(num));
             }
         }
-        if(vector.getNorm()<= unit){
+        if(norm<= unit){
             coordinate = new Point2D.Double(x, y);
             Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);
             graphicalDisplay.moveTo(positionForGraphicalDisplay);
         }else{
-            end = vector.resize(unit).getEnd();
+            end = resize(norm,getPosition(),end);
             coordinate = new Point2D.Double(end.getX(), end.getY());
             Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);
             graphicalDisplay.moveTo(positionForGraphicalDisplay);
         }
 
     }
+
+
+
+    /**
+     * Resizes a Vector of norm "x" to a norm of "newNorm" (keeping the same orientation)
+     *
+     * @param newNorm the new norm of the vector
+     * @param p1 Start point of the vector
+     * @param p2 End point of the vector
+     */
+    public Point2D.Double resize(double newNorm,Point2D.Double p1, Point2D.Double p2){
+
+        double deltaX = p2.getX() - p1.getX();
+        double deltaY = p2.getY() - p1.getY();
+        double norm = Math.sqrt(Math.pow(deltaX,2)+Math.pow(deltaY,2));
+
+        Point2D.Double res = new Point2D.Double();
+        res = p2;
+        if(norm!=newNorm){
+            double newDeltaX = deltaX*newNorm/norm;
+            double newDeltaY = deltaY*newNorm/norm;
+            Point2D.Double newEnd= new Point2D.Double();
+            newEnd.setLocation(p1.getX()+newDeltaX,p1.getY()+newDeltaY);
+            res = newEnd;
+            return res;
+        }
+        return res;
+
+    }
+
+    /**
+     *  This method is used to calculate the distance between two points.
+     *
+     * @param p1
+     * @param p2
+     * @return
+     */
+    private double calculateNorm(Point2D.Double p1, Point2D.Double p2){
+        double deltaX = p2.getX() - p1.getX();
+        double deltaY = p2.getY() - p1.getY();
+        double norm = Math.sqrt(Math.pow(deltaX,2)+Math.pow(deltaY,2));
+
+        return norm;
+    }
+
 
     /**
      *

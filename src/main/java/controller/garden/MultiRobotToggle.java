@@ -51,6 +51,8 @@ class MultiRobotToggle extends VBox {
     private Text numberRobot;
     @FXML
     private Text listAlgorithm;
+    @FXML
+    private VBox listBox;
 
     private List<Robot> robots;
 
@@ -70,7 +72,7 @@ class MultiRobotToggle extends VBox {
             fxmlLoader.setRoot(this);
             fxmlLoader.setController(this);
             Parent parent = fxmlLoader.load();
-            Scene dialogScene = new Scene(parent, 200, 400);
+            Scene dialogScene = new Scene(parent);
             dialog.setScene(dialogScene);
             dialog.show();
         } catch (IOException e) {
@@ -86,7 +88,7 @@ class MultiRobotToggle extends VBox {
     }
 
     private void initialInfor(List<Robot> robots){
-        numberRobot.setText("\r\nTotal number of robots: "+robots.size());
+        numberRobot.setText("Total number of robots: "+robots.size());
         List<String> alg = new ArrayList<>();
         for(Robot robot:robots){
              alg.add(robot.getAlgorithm().getClass().getSimpleName());
@@ -96,7 +98,6 @@ class MultiRobotToggle extends VBox {
         String reuslt ="\r\n";
         int count = 0;
         int index =1;
-        System.out.println(alg.size());
         for(String item: alg){
             if(item.equals(curr)){
                 count++;
@@ -106,12 +107,13 @@ class MultiRobotToggle extends VBox {
                     curr = item;
                 }
             }else{
-                reuslt+=curr+": "+count+"\r\n";
+                reuslt+=curr+": "+count+"\r\n"+"\r\n";
                 count=1;
                 curr = item;
             }
             index++;
         }
+        listBox.setPrefHeight(30*robots.size());
         listAlgorithm.setText(reuslt);
     }
 
@@ -127,6 +129,7 @@ class MultiRobotToggle extends VBox {
                 }
         );
         if (selectedRobot.getAlgorithm() instanceof Statisticable) {
+            showStatistic.setDisable(false);
             showStatistic.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -134,7 +137,7 @@ class MultiRobotToggle extends VBox {
                 }
             });
         } else {
-            showStatistic.setVisible(false);
+            showStatistic.setDisable(true);
         }
 
         deleteSelected.setOnMouseClicked(new EventHandler<MouseEvent>() {

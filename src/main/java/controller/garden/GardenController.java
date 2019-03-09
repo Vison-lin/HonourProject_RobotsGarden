@@ -3,6 +3,7 @@ package controller.garden;
 
 import controller.controlpanel.ControlPanelFacade;
 import core.RightClickFunction;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -49,7 +50,7 @@ public class GardenController extends VBox {
 
     private static double zoomingFactor = 0.1;
 
-    private static Point2D.Double currentCursorPosition = new Point2D.Double(0, 0);
+    private static Point2D.Double currentCursorAbsulatePosition = new Point2D.Double(0, 0);
 
     private static double defaultAxisStrokeWidth = 3;
 
@@ -60,7 +61,8 @@ public class GardenController extends VBox {
     private Line xAxis;
 
     private Line yAxis;
-
+    Circle circle1;
+    double scaleUnit = 1;
     /**
      * The garden instance
      */
@@ -94,22 +96,28 @@ public class GardenController extends VBox {
 
     private void initCoordinateSystem() {
         coordinateSystem = new Group();
-        coordinateSystem.setTranslateX(garden.getPrefWidth()/2);
-        coordinateSystem.setTranslateY(garden.getPrefHeight()/2);
-        garden.getChildren().add(coordinateSystem);
+        Circle circle = new Circle(0, 0, 10);
+        circle.setFill(Color.BLUE);
+        circle1 = new Circle(0, 0, 20);
+        circle1.setFill(Color.GRAY);
+        garden.getChildren().add(circle1);
+        coordinateSystem.getChildren().add(circle);
+        coordinateSystem.setTranslateX(gardenFrame.getPrefWidth()/2);
+        coordinateSystem.setTranslateY(gardenFrame.getPrefHeight()/2);
+        gardenFrame.getChildren().add(coordinateSystem);
     }
 
     public static Point2D.Double adjustCoordinate(Point2D.Double coordinate) {
         Point2D.Double graphicalPoint = new Point2D.Double();
         double x = coordinate.getX();
         double y = coordinate.getY();
-        double cursorX = currentCursorPosition.getX();
-        double cursorY = currentCursorPosition.getY();
+        double cursorX = currentCursorAbsulatePosition.getX();
+        double cursorY = currentCursorAbsulatePosition.getY();
 //        System.out.println("The cursor position is: " + cursorX + ", " + cursorY);
         double newX = (cursorX + zoomingFactor * (x - cursorX));
         double newY = (cursorY + zoomingFactor * (y - cursorY));
         graphicalPoint.setLocation(newX, newY);
-        System.out.println(zoomingFactor);
+//        System.out.println(zoomingFactor);
 //        System.out.println(x==graphicalPoint.getX() && y==graphicalPoint.getY());
         return graphicalPoint;
     }
@@ -133,8 +141,8 @@ public class GardenController extends VBox {
         yAxis.setEndY(garden.getPrefHeight() - defaultAxisStrokeWidth);
         yAxis.setFill(Color.BLACK);
         yAxis.setStrokeWidth(defaultAxisStrokeWidth);
-//        yAxis.setTranslateX(garden.getPrefWidth() / 2);
-//        yAxis.setTranslateY(defaultAxisStrokeWidth / 2);
+        yAxis.setTranslateX(garden.getPrefWidth() / 2);
+        yAxis.setTranslateY(defaultAxisStrokeWidth / 2);
         coordinateSystem.getChildren().add(yAxis);
     }
 
@@ -164,13 +172,16 @@ public class GardenController extends VBox {
      */
     private void robotsInitBooster() {
         //set onClickListener for creating robots
-        garden.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        gardenFrame.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY && controlPanelFacade.getCurrentRightClickFunction() == RightClickFunction.CreateRobot) {// add listener for left click
-                    Robot robot = controlPanelFacade.robotGenerator("No." + controlPanelFacade.getRobotNameCounter(), event.getX() - coordinateSystem.getTranslateX(), event.getY() - coordinateSystem.getTranslateY());
-                    System.out.println(robot.getPosition());
-                    System.out.println(robot.getGraphicalDisplay().getRobotPosition().getTranslateX()+","+robot.getGraphicalDisplay().getRobotPosition().getTranslateY());
+                    double moveX = coordinateSystem.parentToLocal(event.getX(), event.getY()).getX();
+                    double moveY = coordinateSystem.parentToLocal(event.getX(), event.getY()).getY();
+                    System.out.println("The cursor is at: " +event.getX() +", "+ event.getY() +". While the one is at : "+moveX +", " +moveY);
+                    Robot robot = controlPanelFacade.robotGenerator("No." + controlPanelFacade.getRobotNameCounter(), moveX, moveY);
+//                    System.out.println(robot.getPosition());
+//                    System.out.println(robot.getGraphicalDisplay().getRobotPosition().getTranslateX()+","+robot.getGraphicalDisplay().getRobotPosition().getTranslateY());
                     controlPanelFacade.increaseRobotNameCounter();
                     //adding to the graph
                     updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
@@ -254,7 +265,7 @@ public class GardenController extends VBox {
     }
 
     private void gardenMouseMoveOutListener() {
-        garden.hoverProperty().addListener(new ChangeListener<Boolean>() {
+        gardenFrame.hoverProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (!newValue) {
@@ -269,11 +280,20 @@ public class GardenController extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 controlPanelFacade.setMouseCoordinate(event.getX(), event.getY());
-//                System.out.println((event.getX() - coordinateSystem.getTranslateX()) + "," + (event.getY() - coordinateSystem.getTranslateY()));
-//                currentCursorPosition.setLocation(event.getX(), event.getY());
+//                System.out.println("Ga:"+event.getX()+ "," + event.getY());
+//                currentCursorAbsulatePosition.setLocation(event.getX(), event.getY());
 
             }
         });
+//        coordinateSystem.setOnMouseMoved(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent event) {
+//                controlPanelFacade.setMouseCoordinate(event.getX(), event.getY());
+//                System.out.println("Co: "+event.getX()+ "," + event.getY());
+////                currentCursorAbsulatePosition.setLocation(event.getX(), event.getY());
+//
+//            }
+//        });
     }
 
     /**
@@ -379,13 +399,17 @@ public class GardenController extends VBox {
     }
 
     private void gardenMouseScrollListener() {
-        Scale scale = new Scale();
-        garden.getTransforms().add(scale);
+        Scale coordinateScale = new Scale();
+        coordinateSystem.getTransforms().add(coordinateScale);
+
+        Scale gardenScale = new Scale();
+        garden.getTransforms().add(gardenScale);
 
         gardenFrame.setOnScroll(new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
-                currentCursorPosition.setLocation(event.getX(), event.getY());
+                currentCursorAbsulatePosition.setLocation(event.getX(), event.getY());
+
                 double scrollAmount = event.getDeltaY();
                 isScrollingUp = scrollAmount >= 0;
 
@@ -404,11 +428,14 @@ public class GardenController extends VBox {
 //                if (zoomingFactor > 1) {
 //                    zoomingFactor = 1;
 //                }
-                double scaleUnit;
+
+
+
+
                 if (isScrollingUp) {
-                    scaleUnit = scale.getX() + zoomingFactor;
+                    scaleUnit = coordinateScale.getX() + zoomingFactor;
                 } else {
-                    scaleUnit = scale.getY() - zoomingFactor;
+                    scaleUnit = coordinateScale.getY() - zoomingFactor;
                 }
                 if (scaleUnit < 0) {
                     scaleUnit = 0;
@@ -417,13 +444,73 @@ public class GardenController extends VBox {
                     scaleUnit = 1;
                 }
 //                System.out.println(scaleUnit);
-                scale.setX(scaleUnit);
-                scale.setY(scaleUnit);
+
+
+
+                javafx.geometry.Point2D p = coordinateSystem.parentToLocal(currentCursorAbsulatePosition.getX(), currentCursorAbsulatePosition.getY());
+//                System.out.println(p.getX()*scaleUnit+","+p.getY()*scaleUnit);
+                coordinateScale.pivotXProperty().bind(Bindings.createDoubleBinding(() -> (currentCursorAbsulatePosition.getX() - coordinateSystem.getTranslateX())));
+                coordinateScale.pivotYProperty().bind(Bindings.createDoubleBinding(() -> (currentCursorAbsulatePosition.getY() - coordinateSystem.getTranslateY())));
+//                Point2D.Double target = adjustCoordinate(new Point2D.Double(p.getX(), p.getY()));
+//                coordinateSystem.setTranslateX(coordinateSystem.getTranslateX() - p.getX());
+//                coordinateSystem.setTranslateY(coordinateSystem.getTranslateY() - p.getY());
+                coordinateScale.setX(scaleUnit);
+                coordinateScale.setY(scaleUnit);
+                gardenScale.setX(scaleUnit);
+                gardenScale.setY(scaleUnit);
+//                coordinateScale.pivotXProperty().bind(Bindings.createDoubleBinding(() -> coordinateSystem.parentToLocal(event.getX(), event.getY()).getX()));
+//                coordinateScale.pivotYProperty().bind(Bindings.createDoubleBinding(() -> coordinateSystem.parentToLocal(event.getX(), event.getY()).getY()));
+
+
+//                System.out.println(currentCursorAbsulatePosition.getX());
+//                System.out.println(finalScaleUnit);
+//                System.out.println((currentCursorAbsulatePosition.getX() - coordinateSystem.getTranslateX()));
+//                System.out.println(coordinateSystem.getTranslateX());
+
+//                gardenScale.pivotXProperty().bind(Bindings.createDoubleBinding(() -> (currentCursorAbsulatePosition.getX() - coordinateSystem.getTranslateX())));
+//                gardenScale.pivotYProperty().bind(Bindings.createDoubleBinding(() -> (currentCursorAbsulatePosition.getX() - coordinateSystem.getTranslateX())));
+
+//                System.out.println("Pivot X: " + coordinateScale.getPivotX());
+//                System.out.println("Curr Absu Posi: " + currentCursorAbsulatePosition.getX());
+//                System.out.println("Result: " + (1-coordinateScale.getX()) * coordinateScale.getPivotX());
+//                circle1.setTranslateX((1-coordinateScale.getX()) * coordinateScale.getPivotX());
+//                circle1.setTranslateY((1-coordinateScale.getY()) * coordinateScale.getPivotY());
+//                System.out.println();
+
                 garden.setPrefWidth(gardenFrame.getPrefWidth()/scaleUnit);
                 garden.setPrefHeight(gardenFrame.getPrefHeight()/scaleUnit);
-                Point2D.Double adjustedCoordinatePosition = adjustCoordinate(new Point2D.Double(gardenFrame.getPrefWidth()/2, gardenFrame.getPrefHeight()/2));
-                coordinateSystem.setTranslateX(adjustedCoordinatePosition.getX());
-                coordinateSystem.setTranslateY(adjustedCoordinatePosition.getY());
+                gardenScale.setX(scaleUnit);
+                gardenScale.setY(scaleUnit);
+//
+
+//                if (isScrollingUp) {
+//                    System.out.println("===");
+//                    garden.setTranslateX(-((1 - scaleUnit) * gardenScale.getPivotX()) /scaleUnit  );
+//                    garden.setTranslateY(-((1 - scaleUnit) * gardenScale.getPivotY()) /scaleUnit  );
+//                }else {
+//                    System.out.println("????");
+//                    garden.setTranslateX(-((1 - scaleUnit) * gardenScale.getPivotX()) /scaleUnit  );
+//                    garden.setTranslateY(-((1 - scaleUnit) * gardenScale.getPivotY()) /scaleUnit  );
+//                }
+//                Circle circle = new Circle(garden.getPrefWidth()/2 ,garden.getPrefHeight()/2, 10);
+                Circle circle = new Circle(0 ,0, 10);
+                circle.setFill(Color.BLUE);
+                coordinateSystem.getChildren().add(circle);
+
+//                Point2D.Double adjustedCoordinatePosition = adjustCoordinate(new Point2D.Double(gardenFrame.getPrefWidth()/2, gardenFrame.getPrefHeight()/2));
+//                coordinateSystem.setTranslateX(garden.getPrefWidth()/2);
+//                coordinateSystem.setTranslateY(garden.getPrefHeight()/2);
+//                for (Node node : coordinateSystem.getChildren()) {
+//                    System.out.println(node.getTranslateX() + "," + node.getTranslateY());
+//                }
+
+
+
+
+
+
+
+
 //                for (Robot robot : controlPanelFacade.getRobots()) {
 //                    robot.getGraphicalDisplay().moveTo(adjustCoordinate(robot.getPosition()));
 //                    if (isScrollingUp) {

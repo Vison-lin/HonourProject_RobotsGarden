@@ -23,7 +23,7 @@ public class StatisticDataDisplayHelper extends VBox {
     public StatisticDataDisplayHelper(GardenController gardenController, Robot robot) {
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(gardenController.getGarden().getScene().getWindow());
+        dialog.initOwner(gardenController.getCoordinateSystem().getScene().getWindow());
         FXMLLoader fxmlLoader;
         try {
             fxmlLoader = new FXMLLoader(getClass().getResource("/robot_statistic_display.fxml"));

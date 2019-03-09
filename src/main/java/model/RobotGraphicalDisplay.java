@@ -154,10 +154,15 @@ public class RobotGraphicalDisplay {
         this.robotBorder.setTranslateX(x);
         this.robotBorder.setTranslateY(y);
 
-        for (DisplayAdapter displayAdapter : this.layers) {
-            Point2D.Double newCoordinate = GardenController.adjustCoordinate(displayAdapter.getAbsolutePosition());
-            displayAdapter.getDisplayPattern().setTranslateX(newCoordinate.getX());
-            displayAdapter.getDisplayPattern().setTranslateY(newCoordinate.getY());
+        //todo 3
+//        for (DisplayAdapter displayAdapter : this.layers) {
+//            Point2D.Double newCoordinate = GardenController.adjustCoordinate(displayAdapter.getAbsolutePosition());
+//            displayAdapter.getDisplayPattern().setTranslateX(newCoordinate.getX());
+//            displayAdapter.getDisplayPattern().setTranslateY(newCoordinate.getY());
+//        }
+                for (DisplayAdapter displayAdapter : this.layers) {
+            displayAdapter.getDisplayPattern().setTranslateX(newPosition.getX());
+            displayAdapter.getDisplayPattern().setTranslateY(newPosition.getY());
         }
     }
     /**

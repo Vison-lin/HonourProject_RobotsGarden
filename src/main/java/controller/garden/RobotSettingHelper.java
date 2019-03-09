@@ -96,7 +96,7 @@ public class RobotSettingHelper extends VBox {
 
         dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(gardenController.getGarden().getScene().getWindow());
+        dialog.initOwner(gardenController.getCoordinateSystem().getScene().getWindow());
         FXMLLoader fxmlLoader;
         this.robots = robots;
         try {

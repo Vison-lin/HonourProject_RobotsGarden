@@ -36,12 +36,12 @@ public class RobotsLabController extends HBox {
 //        resizeGardenWindow();
     }
 
-    private void resizeGardenWindow() {
-        heightProperty().addListener((observable, oldValue, newValue) -> {
-            gardenController.minWidthProperty().bind(observable);
-            gardenController.minHeightProperty().bind(observable);
-            gardenController.getGarden().minWidthProperty().bind(observable);
-            gardenController.getGarden().minHeightProperty().bind(observable);
-        });
-    }
+//    private void resizeGardenWindow() {
+//        heightProperty().addListener((observable, oldValue, newValue) -> {
+//            gardenController.minWidthProperty().bind(observable);
+//            gardenController.minHeightProperty().bind(observable);
+//            gardenController.getCoordinateSystem().minWidthProperty().bind(observable);
+//            gardenController.getCoordinateSystem().minHeightProperty().bind(observable);
+//        });
+//    }
 }

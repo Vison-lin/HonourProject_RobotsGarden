@@ -93,13 +93,17 @@ public class Robot {
         }
         if(norm<= unit){
             coordinate = new Point2D.Double(x, y);
-            Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);
-            graphicalDisplay.moveTo(positionForGraphicalDisplay);
+            //todo 1
+//            Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);
+//            graphicalDisplay.moveTo(positionForGraphicalDisplay);
+            graphicalDisplay.moveTo(coordinate);
         }else{
             end = resize(norm,getPosition(),end);
             coordinate = new Point2D.Double(end.getX(), end.getY());
-            Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);
-            graphicalDisplay.moveTo(positionForGraphicalDisplay);
+            //todo 2
+//            Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);
+//            graphicalDisplay.moveTo(positionForGraphicalDisplay);
+            graphicalDisplay.moveTo(end);
         }
 
     }

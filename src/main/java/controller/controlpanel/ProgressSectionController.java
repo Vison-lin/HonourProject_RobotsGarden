@@ -353,11 +353,11 @@ public class ProgressSectionController extends VBox {
 //        }
 //
 //        //boundary check
-//        if (point.getX() > controlPanelFacade.getGardenController().getGarden().getWidth()) {
-//            point.setLocation(controlPanelFacade.getGardenController().getGarden().getWidth(), point.getY());
+//        if (point.getX() > controlPanelFacade.getGardenController().getCoordinateSystem().getWidth()) {
+//            point.setLocation(controlPanelFacade.getGardenController().getCoordinateSystem().getWidth(), point.getY());
 //        }
-//        if (point.getY() > controlPanelFacade.getGardenController().getGarden().getHeight()) {
-//            point.setLocation(point.getX(), controlPanelFacade.getGardenController().getGarden().getHeight());
+//        if (point.getY() > controlPanelFacade.getGardenController().getCoordinateSystem().getHeight()) {
+//            point.setLocation(point.getX(), controlPanelFacade.getGardenController().getCoordinateSystem().getHeight());
 //        }
 //        return point;
         return point;

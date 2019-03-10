@@ -83,7 +83,7 @@ public class GardenController extends VBox {
             throw new RuntimeException(e);
         }
 //        coordinateSystem.setBorder();
-//        clipChildren(garden);
+        clipChildren(gardenFrame);
         initCoordinateSystem();
 //        drawXYAxis();
         robotsInitBooster();

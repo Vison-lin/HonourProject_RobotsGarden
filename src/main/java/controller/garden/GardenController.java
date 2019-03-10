@@ -3,7 +3,8 @@ package controller.garden;
 
 import controller.controlpanel.ControlPanelFacade;
 import core.RightClickFunction;
-import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -133,6 +134,7 @@ public class GardenController extends VBox {
 //        xAxis.setTranslateX(defaultAxisStrokeWidth / 2);
 //        xAxis.setTranslateY(garden.getPrefHeight() / 2);
         coordinateSystem.getChildren().add(xAxis);
+//        coordinateSystem.layoutBoundsProperty().
 
         yAxis = new Line();//LineBuilder.create()
         yAxis.setStartX(0);
@@ -178,13 +180,27 @@ public class GardenController extends VBox {
                 if (event.getButton() == MouseButton.PRIMARY && controlPanelFacade.getCurrentRightClickFunction() == RightClickFunction.CreateRobot) {// add listener for left click
                     double moveX = coordinateSystem.parentToLocal(event.getX(), event.getY()).getX();
                     double moveY = coordinateSystem.parentToLocal(event.getX(), event.getY()).getY();
-                    System.out.println("The cursor is at: " +event.getX() +", "+ event.getY() +". While the one is at : "+moveX +", " +moveY);
+                    Point2D.Double coordinateSystemPosition = new Point2D.Double(coordinateSystem.getTranslateX(), coordinateSystem.getTranslateY());
+//                    System.out.println(coordinateSystem.getTranslateX() +", "+coordinateSystem.getTranslateY());
+//                    System.out.println(garden.getTranslateX() +", "+garden.getTranslateY());
+//                    System.out.println(gardenFrame.getTranslateX() +", "+gardenFrame.getTranslateY());
+//                    System.out.println("The cursor is at: " +event.getX() +", "+ event.getY() +". While the one is at : "+moveX +", " +moveY);
+
                     Robot robot = controlPanelFacade.robotGenerator("No." + controlPanelFacade.getRobotNameCounter(), moveX, moveY);
 //                    System.out.println(robot.getPosition());
 //                    System.out.println(robot.getGraphicalDisplay().getRobotPosition().getTranslateX()+","+robot.getGraphicalDisplay().getRobotPosition().getTranslateY());
                     controlPanelFacade.increaseRobotNameCounter();
                     //adding to the graph
+
                     updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
+                    Circle circle = new Circle(0, 0, 10);
+                    circle.setFill(Color.RED);
+                    coordinateSystem.getChildren().add(circle);
+//                    coordinateSystem.setTranslateX(coordinateSystemPosition.getX());
+//                    coordinateSystem.setTranslateY(coordinateSystemPosition.getY());
+//                    System.out.println(coordinateSystem.getTranslateX() +", "+coordinateSystem.getTranslateY());
+//                    System.out.println(garden.getTranslateX() +", "+garden.getTranslateY());
+//                    System.out.println(gardenFrame.getTranslateX() +", "+gardenFrame.getTranslateY());
                 }
             }
         });
@@ -399,8 +415,14 @@ public class GardenController extends VBox {
     }
 
     private void gardenMouseScrollListener() {
-        Scale coordinateScale = new Scale();
+        DoubleProperty myScale = new SimpleDoubleProperty(1.0);
+        final Scale coordinateScale = new Scale();
+//        coordinateScale.setPivotX(0);
+//        coordinateScale.setPivotY(0);
         coordinateSystem.getTransforms().add(coordinateScale);
+//        coordinateSystem.scaleXProperty().bind(myScale);
+//        coordinateSystem.scaleYProperty().bind(myScale);
+//        coordinateSystem.getTransforms().add(coordinateScale);
 
         Scale gardenScale = new Scale();
         garden.getTransforms().add(gardenScale);
@@ -408,141 +430,51 @@ public class GardenController extends VBox {
         gardenFrame.setOnScroll(new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
-                currentCursorAbsulatePosition.setLocation(event.getX(), event.getY());
 
                 double scrollAmount = event.getDeltaY();
                 isScrollingUp = scrollAmount >= 0;
 
-//                double intentStrokeWidth = defaultAxisStrokeWidth;
-
-//                if (isScrollingUp) {
-//                    zoomingFactor += 0.1;
-//                    intentStrokeWidth = xAxis.getStrokeWidth() + strokeWidthIncrement;
-//                } else {
-//                    zoomingFactor -= 0.1;
-//                    intentStrokeWidth = xAxis.getStrokeWidth() - strokeWidthIncrement;
-//                }
-//                if (zoomingFactor < 0) {
-//                    zoomingFactor = 0;
-//                }
-//                if (zoomingFactor > 1) {
-//                    zoomingFactor = 1;
-//                }
-
-
-
-
                 if (isScrollingUp) {
-                    scaleUnit = coordinateScale.getX() + zoomingFactor;
+                    scaleUnit = myScale.getValue() + zoomingFactor;
                 } else {
-                    scaleUnit = coordinateScale.getY() - zoomingFactor;
+                    scaleUnit = myScale.getValue() - zoomingFactor;
                 }
-                if (scaleUnit < 0) {
-                    scaleUnit = 0;
-                }
-                if (scaleUnit > 1) {
-                    scaleUnit = 1;
-                }
-//                System.out.println(scaleUnit);
 
 
+                double scale = coordinateScale.getX(); // currently we only use Y, same value is used for X
+                double oldScale = scale;
 
-                javafx.geometry.Point2D p = coordinateSystem.parentToLocal(currentCursorAbsulatePosition.getX(), currentCursorAbsulatePosition.getY());
-//                System.out.println(p.getX()*scaleUnit+","+p.getY()*scaleUnit);
-                coordinateScale.pivotXProperty().bind(Bindings.createDoubleBinding(() -> (currentCursorAbsulatePosition.getX() - coordinateSystem.getTranslateX())));
-                coordinateScale.pivotYProperty().bind(Bindings.createDoubleBinding(() -> (currentCursorAbsulatePosition.getY() - coordinateSystem.getTranslateY())));
-//                Point2D.Double target = adjustCoordinate(new Point2D.Double(p.getX(), p.getY()));
-//                coordinateSystem.setTranslateX(coordinateSystem.getTranslateX() - p.getX());
-//                coordinateSystem.setTranslateY(coordinateSystem.getTranslateY() - p.getY());
-                coordinateScale.setX(scaleUnit);
-                coordinateScale.setY(scaleUnit);
+                scale *= Math.pow(1.01, event.getDeltaY());
+
+                if (scale <= 0) {
+                    scale = 0;
+                } else if (scale >= 1) {
+                    scale = 1;
+                }
+
+                double f = (scale / oldScale) - 1;
+                myScale.setValue(scale);
+                coordinateScale.setX(myScale.getValue());
+                coordinateScale.setY(myScale.getValue());
+
+                double dx = event.getX() - coordinateSystem.localToParent(0, 0).getX();
+                double dy = event.getY() - coordinateSystem.localToParent(0, 0).getY();
+
+                coordinateSystem.setTranslateX(coordinateSystem.getTranslateX() - f * dx);
+                coordinateSystem.setTranslateY(coordinateSystem.getTranslateY() - f * dy);
+
                 gardenScale.setX(scaleUnit);
                 gardenScale.setY(scaleUnit);
-//                coordinateScale.pivotXProperty().bind(Bindings.createDoubleBinding(() -> coordinateSystem.parentToLocal(event.getX(), event.getY()).getX()));
-//                coordinateScale.pivotYProperty().bind(Bindings.createDoubleBinding(() -> coordinateSystem.parentToLocal(event.getX(), event.getY()).getY()));
-
-
-//                System.out.println(currentCursorAbsulatePosition.getX());
-//                System.out.println(finalScaleUnit);
-//                System.out.println((currentCursorAbsulatePosition.getX() - coordinateSystem.getTranslateX()));
-//                System.out.println(coordinateSystem.getTranslateX());
-
-//                gardenScale.pivotXProperty().bind(Bindings.createDoubleBinding(() -> (currentCursorAbsulatePosition.getX() - coordinateSystem.getTranslateX())));
-//                gardenScale.pivotYProperty().bind(Bindings.createDoubleBinding(() -> (currentCursorAbsulatePosition.getX() - coordinateSystem.getTranslateX())));
-
-//                System.out.println("Pivot X: " + coordinateScale.getPivotX());
-//                System.out.println("Curr Absu Posi: " + currentCursorAbsulatePosition.getX());
-//                System.out.println("Result: " + (1-coordinateScale.getX()) * coordinateScale.getPivotX());
-//                circle1.setTranslateX((1-coordinateScale.getX()) * coordinateScale.getPivotX());
-//                circle1.setTranslateY((1-coordinateScale.getY()) * coordinateScale.getPivotY());
-//                System.out.println();
 
                 garden.setPrefWidth(gardenFrame.getPrefWidth()/scaleUnit);
                 garden.setPrefHeight(gardenFrame.getPrefHeight()/scaleUnit);
                 gardenScale.setX(scaleUnit);
                 gardenScale.setY(scaleUnit);
-//
 
-//                if (isScrollingUp) {
-//                    System.out.println("===");
-//                    garden.setTranslateX(-((1 - scaleUnit) * gardenScale.getPivotX()) /scaleUnit  );
-//                    garden.setTranslateY(-((1 - scaleUnit) * gardenScale.getPivotY()) /scaleUnit  );
-//                }else {
-//                    System.out.println("????");
-//                    garden.setTranslateX(-((1 - scaleUnit) * gardenScale.getPivotX()) /scaleUnit  );
-//                    garden.setTranslateY(-((1 - scaleUnit) * gardenScale.getPivotY()) /scaleUnit  );
-//                }
-//                Circle circle = new Circle(garden.getPrefWidth()/2 ,garden.getPrefHeight()/2, 10);
-                Circle circle = new Circle(0 ,0, 10);
-                circle.setFill(Color.BLUE);
-                coordinateSystem.getChildren().add(circle);
+//                Circle circle = new Circle(coordinateSystem.parentToLocal(event.getX(), event.getY()).getX() ,coordinateSystem.parentToLocal(event.getX(), event.getY()).getY(), 10);
+//                circle.setFill(Color.BLUE);
+//                coordinateSystem.getChildren().add(circle);
 
-//                Point2D.Double adjustedCoordinatePosition = adjustCoordinate(new Point2D.Double(gardenFrame.getPrefWidth()/2, gardenFrame.getPrefHeight()/2));
-//                coordinateSystem.setTranslateX(garden.getPrefWidth()/2);
-//                coordinateSystem.setTranslateY(garden.getPrefHeight()/2);
-//                for (Node node : coordinateSystem.getChildren()) {
-//                    System.out.println(node.getTranslateX() + "," + node.getTranslateY());
-//                }
-
-
-
-
-
-
-
-
-//                for (Robot robot : controlPanelFacade.getRobots()) {
-//                    robot.getGraphicalDisplay().moveTo(adjustCoordinate(robot.getPosition()));
-//                    if (isScrollingUp) {
-//                        robot.getGraphicalDisplay().setRatioScale(zoomingFactor);
-//                    } else {
-//
-//                        robot.getGraphicalDisplay().setRatioScale(-zoomingFactor);
-//                    }
-//                }
-//
-//                //ensure the axis's size is reasonable
-//                if (intentStrokeWidth >= defaultAxisStrokeWidth) {
-//                    intentStrokeWidth = defaultAxisStrokeWidth;
-//                } else if (intentStrokeWidth <= 0) {
-//                    intentStrokeWidth = 0.1;
-//                }
-//                xAxis.setStrokeWidth(intentStrokeWidth);
-//                yAxis.setStrokeWidth(intentStrokeWidth);
-//                Point2D.Double xPosition = adjustCoordinate(new Point2D.Double(defaultAxisStrokeWidth / 2, garden.getPrefHeight() / 2));
-//                Point2D.Double yPosition = adjustCoordinate(new Point2D.Double(garden.getPrefWidth() / 2, defaultAxisStrokeWidth / 2));
-//                double differXAxisStart = intentStrokeWidth / 2 - xPosition.getX();
-//                double differXAxisEnd = intentStrokeWidth / 2 + xPosition.getX();
-//                double differYAxisStart = intentStrokeWidth / 2 - yPosition.getY();
-//                double differYAxisEnd = intentStrokeWidth / 2 + yPosition.getY();
-//                xAxis.setTranslateX(xPosition.getX());
-//                xAxis.setTranslateY(xPosition.getY());
-//                yAxis.setTranslateX(yPosition.getX());
-//                yAxis.setTranslateY(yPosition.getY());
-//                xAxis.setStartX(differXAxisStart);
-//                xAxis.setEndX(garden.getPrefWidth() - differXAxisEnd);
-//                yAxis.setStartY(differYAxisStart);
-//                yAxis.setEndY(garden.getPrefHeight() - differYAxisEnd);
             }
         });
     }

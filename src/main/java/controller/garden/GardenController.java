@@ -184,9 +184,6 @@ public class GardenController extends VBox {
                     //adding to the graph
 
                     updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
-                    Circle circle = new Circle(0, 0, 10);
-                    circle.setFill(Color.RED);
-                    coordinateSystem.getChildren().add(circle);
 //                    coordinateSystem.setTranslateX(coordinateSystemPosition.getX());
 //                    coordinateSystem.setTranslateY(coordinateSystemPosition.getY());
 //                    System.out.println(coordinateSystem.getTranslateX() +", "+coordinateSystem.getTranslateY());

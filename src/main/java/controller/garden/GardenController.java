@@ -280,24 +280,13 @@ public class GardenController extends VBox {
     }
 
     private void gardenMouseHoverListener() {
-        garden.setOnMouseMoved(new EventHandler<MouseEvent>() {
+        gardenFrame.setOnMouseMoved(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                controlPanelFacade.setMouseCoordinate(event.getX(), event.getY());
-//                System.out.println("Ga:"+event.getX()+ "," + event.getY());
-//                currentCursorAbsulatePosition.setLocation(event.getX(), event.getY());
-
+                javafx.geometry.Point2D relativePositionInCoordinateSystem = coordinateSystem.parentToLocal(event.getX(), event.getY());
+                controlPanelFacade.setMouseCoordinate(relativePositionInCoordinateSystem.getX(), relativePositionInCoordinateSystem.getY());
             }
         });
-//        coordinateSystem.setOnMouseMoved(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                controlPanelFacade.setMouseCoordinate(event.getX(), event.getY());
-//                System.out.println("Co: "+event.getX()+ "," + event.getY());
-////                currentCursorAbsulatePosition.setLocation(event.getX(), event.getY());
-//
-//            }
-//        });
     }
 
     /**

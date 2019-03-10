@@ -3,8 +3,6 @@ package controller.garden;
 
 import controller.controlpanel.ControlPanelFacade;
 import core.RightClickFunction;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -62,8 +60,7 @@ public class GardenController extends VBox {
     private Line xAxis;
 
     private Line yAxis;
-    Circle circle1;
-    double scaleUnit = 1;
+
     /**
      * The garden instance
      */
@@ -92,17 +89,11 @@ public class GardenController extends VBox {
         robotsInitBooster();
         gardenMouseHoverListener();
         gardenMouseMoveOutListener();
-        gardenMouseScrollListener();
+        zoomingImplementer();
     }
 
     private void initCoordinateSystem() {
         coordinateSystem = new Group();
-        Circle circle = new Circle(0, 0, 10);
-        circle.setFill(Color.BLUE);
-        circle1 = new Circle(0, 0, 20);
-        circle1.setFill(Color.GRAY);
-        garden.getChildren().add(circle1);
-        coordinateSystem.getChildren().add(circle);
         coordinateSystem.setTranslateX(gardenFrame.getPrefWidth()/2);
         coordinateSystem.setTranslateY(gardenFrame.getPrefHeight()/2);
         gardenFrame.getChildren().add(coordinateSystem);
@@ -414,16 +405,23 @@ public class GardenController extends VBox {
         this.controlPanelFacade = controlPanelFacade;
     }
 
-    private void gardenMouseScrollListener() {
-        DoubleProperty myScale = new SimpleDoubleProperty(1.0);
-        final Scale coordinateScale = new Scale();
-//        coordinateScale.setPivotX(0);
-//        coordinateScale.setPivotY(0);
-        coordinateSystem.getTransforms().add(coordinateScale);
-//        coordinateSystem.scaleXProperty().bind(myScale);
-//        coordinateSystem.scaleYProperty().bind(myScale);
-//        coordinateSystem.getTransforms().add(coordinateScale);
+    private void zoomingImplementer() {
 
+        /*
+         *
+         * Developing cost: $110.
+         *
+         * Got pulled over by police because of the expired licence plate sticker.
+         *
+         * Planed to renew the sticker last night but coding till 5:30 A.M. and completely forgot... :(
+         *
+         */
+
+        //Scale transformation for coordinate
+        Scale coordinateScale = new Scale();
+        coordinateSystem.getTransforms().add(coordinateScale);
+
+        //Scale transformation for garden
         Scale gardenScale = new Scale();
         garden.getTransforms().add(gardenScale);
 
@@ -431,49 +429,67 @@ public class GardenController extends VBox {
             @Override
             public void handle(ScrollEvent event) {
 
-                double scrollAmount = event.getDeltaY();
-                isScrollingUp = scrollAmount >= 0;
+                double scale = coordinateScale.getX(); // get the current scale from coordinateScale. Note that X and Y always has the same scale
+                double oldScale = scale;// duplicate the this scale value since we will change the scale value below
 
-                if (isScrollingUp) {
-                    scaleUnit = myScale.getValue() + zoomingFactor;
-                } else {
-                    scaleUnit = myScale.getValue() - zoomingFactor;
-                }
+                scale *= Math.pow(1.01, event.getDeltaY()); // to get the new scale.
+                /*
+                 * The new scale is calculated as following:
+                 *
+                 * We first init a delta to be the factor to be used to let the scale performs by factor. Scaling in factor can make the scaling more smoothly.
+                 * Then we use the built-in event.getDeltaY() to detect the mouse orientation. Note that the value is completely DEPENDED ON different mouse/system setting.
+                 * We then adjust our scale accordingly.
+                 * The above is coded as below and is the same as "scale *= Math.pow(1.01, event.getDeltaY())";
+                 *
+                 * double delta = 1.01;
+                 *
+                 * if (event.getDeltaY() < 0) {
+                 *     scale /= delta;
+                 * } else {
+                 *     scale *= delta;
+                 * }
+                 */
 
-
-                double scale = coordinateScale.getX(); // currently we only use Y, same value is used for X
-                double oldScale = scale;
-
-                scale *= Math.pow(1.01, event.getDeltaY());
-
+                // bounds the scale value
                 if (scale <= 0) {
                     scale = 0;
                 } else if (scale >= 1) {
                     scale = 1;
                 }
 
+                // calculate the f, which is used for factoring the moving step
                 double f = (scale / oldScale) - 1;
-                myScale.setValue(scale);
-                coordinateScale.setX(myScale.getValue());
-                coordinateScale.setY(myScale.getValue());
 
+                // scale the coordinateSystem
+                coordinateScale.setX(scale);
+                coordinateScale.setY(scale);
+
+
+                /*
+                 *             .
+                 *            ..
+                 *           . .
+                 *          .  .
+                 *         ..  .
+                 *        . .  .
+                 *       .  .  .
+                 *      .   .  .
+                 *     .........
+                 */
+
+                // calculate the dx and dy. The dx and dy is the x and y distance, IN PARENT SCALE: gardenFrame, between the current mouse position, IN PARENT SCALE: gardenFrame, and the coordinate center point (0, 0), IN PARENT SCALE: gardenFrame.
                 double dx = event.getX() - coordinateSystem.localToParent(0, 0).getX();
                 double dy = event.getY() - coordinateSystem.localToParent(0, 0).getY();
 
+                // move the coordinateSystem. the moving distance is the moving factor, f, times the moving distance, dx and dy.
                 coordinateSystem.setTranslateX(coordinateSystem.getTranslateX() - f * dx);
                 coordinateSystem.setTranslateY(coordinateSystem.getTranslateY() - f * dy);
 
-                gardenScale.setX(scaleUnit);
-                gardenScale.setY(scaleUnit);
-
-                garden.setPrefWidth(gardenFrame.getPrefWidth()/scaleUnit);
-                garden.setPrefHeight(gardenFrame.getPrefHeight()/scaleUnit);
-                gardenScale.setX(scaleUnit);
-                gardenScale.setY(scaleUnit);
-
-//                Circle circle = new Circle(coordinateSystem.parentToLocal(event.getX(), event.getY()).getX() ,coordinateSystem.parentToLocal(event.getX(), event.getY()).getY(), 10);
-//                circle.setFill(Color.BLUE);
-//                coordinateSystem.getChildren().add(circle);
+                // increment the garden and scale it accordingly so that the size of the garden increases but the display size unchanged.
+                garden.setPrefWidth(gardenFrame.getPrefWidth() / scale);
+                garden.setPrefHeight(gardenFrame.getPrefHeight() / scale);
+                gardenScale.setX(scale);
+                gardenScale.setY(scale);
 
             }
         });

@@ -53,7 +53,7 @@ public class ProgressSectionController extends VBox {
 
     private ControlPanelFacade controlPanelFacade;
     private List<Robot> robots;
-    private boolean isRunning = false;
+    private boolean toBeStopAutoRunning = false;
     private HashMap<String, HashMap<String, StatisticData>> statisticDataTempStoringList = new HashMap<>();
     private boolean afterAllTerminate = false;
 
@@ -79,6 +79,7 @@ public class ProgressSectionController extends VBox {
         }
         initNodesText();
         autoRunListener();
+        prev.setDisable(true);//init prev as disabled
         prevBtnListener();
         nextBtnListener();
         cleanBtnListener();
@@ -119,8 +120,8 @@ public class ProgressSectionController extends VBox {
         autoRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (isRunning) {//if is already auto running, stop it
-                    isRunning = false;
+                if (toBeStopAutoRunning) {// STATE OF STOP: if is already auto running, stop it
+                    toBeStopAutoRunning = false;
                     autoRun.setStyle("-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/autorun.png); -fx-background-size: contain;");
                     prev.setDisable(false);
                     if (!afterAllTerminate) {
@@ -130,21 +131,20 @@ public class ProgressSectionController extends VBox {
                     create.setDisable(false);
                     clean.setDisable(false);
                     autoRunSpeed.setDisable(false);
-                } else {
-                    System.out.println("===");
-                    isRunning = true;
+                } else { // STATE OF RUNNING
+                    toBeStopAutoRunning = true;
                     autoRun.setStyle("-fx-background-radius: 5em; -fx-min-width: 3em; -fx-min-height: 3em; -fx-min-height: 3em; -fx-max-height: 3em; -fx-background-image: url(/img/stop.png); -fx-background-size: contain;");
                     Task task = new Task<Void>() {//create a new task
                         @Override
                         protected Void call() throws InterruptedException {
-                            while (isRunning) {
+                            while (toBeStopAutoRunning) {
                                 try {
                                     int timeInterval = (int) autoRunSpeed.getValue() + 1;// Note: by cast, 6.99 -> 6
                                     Platform.runLater(ProgressSectionController.this::nextAction);//update in UI thread
                                     Thread.sleep(timeInterval);
                                 } catch (NumberFormatException e) {
                                     controlPanelFacade.getWarning().setText("Invalid Input! The ms must be an integer!");
-                                    isRunning = false;
+                                    toBeStopAutoRunning = false;
                                 }
                             }
 
@@ -178,6 +178,7 @@ public class ProgressSectionController extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 if (!robotStackPrev.empty()) {
+                    next.setDisable(false);
                     addDeepCopiedRobotList(robotStackNext, robots, statisticDataTempStoringList);//store the current to the next
                     robots.removeAll(robots);//clean the current
                     Pair<List<Robot>, HashMap<String, HashMap<String, StatisticData>>> pop = robotStackPrev.pop();
@@ -187,6 +188,10 @@ public class ProgressSectionController extends VBox {
                     controlPanelFacade.updateGarden();
 //                    singleAlgorithm = preSingleAlgorithm.pop();
                     showStatistic();
+                }
+                // after each prev btn clicked, update the state of prev btn
+                if (robotStackPrev.empty()) {
+                    prev.setDisable(true);
                 }
             }
         });
@@ -211,7 +216,6 @@ public class ProgressSectionController extends VBox {
     }
 
     private void nextAction() {
-
         //remove unnecessary info (to ensure obliviousness <- KEY OF THE PROJECT)
         for (Robot robot : robots) {
             robot.iForgot();
@@ -287,7 +291,7 @@ public class ProgressSectionController extends VBox {
 
             if (afterAllTerminate) {
                 next.setDisable(true);
-                isRunning = false;
+                toBeStopAutoRunning = false;
 //                prev.setDisable(true);
 //                            autoRun.setText(AUTO_RUN_BTN_TO_START);
                 controlPanelFacade.getWarning().setText("Terminated!");
@@ -297,7 +301,10 @@ public class ProgressSectionController extends VBox {
 
         }
         controlPanelFacade.updateGarden();
-
+        // after each click of next btn, update the prev btn state. Calls only if is not in autoRunning (when the state is not to be stopped)
+        if (!robotStackPrev.empty() && !toBeStopAutoRunning) {
+            prev.setDisable(false);
+        }
     }
 
     /**
@@ -366,7 +373,7 @@ public class ProgressSectionController extends VBox {
         robotStackNext.clear();
 //        preSingleAlgorithm.clear();
 //        singleAlgorithm = true;
-        prev.setDisable(false);
+        prev.setDisable(true);
         next.setDisable(false);
         clean.setDisable(false);
         autoRun.setDisable(false);

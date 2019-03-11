@@ -4,9 +4,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<fx:root prefHeight="60.0" prefWidth="471.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <!--<Line endX="371.0" fill="#0720ff" startX="-100.0" stroke="#808eff" strokeWidth="3.0">-->
+<fx:root xmlns:fx="http://javafx.com/fxml/1" type="javafx.scene.control.ScrollPane"
+         xmlns="http://javafx.com/javafx/8.0.172-ea">
+    <content>
+        <VBox>
+            <children>
+
+
+                <!--<Line endX="371.0" fill="#0720ff" startX="-100.0" stroke="#808eff" strokeWidth="3.0">-->
       <!--<VBox.margin>-->
       <!--<Insets bottom="5.0" top="10.0" />-->
       <!--</VBox.margin></Line>-->
@@ -18,7 +23,7 @@
          <VBox.margin>
             <Insets bottom="5.0" left="10.0" right="10.0" top="10.0" />
          </VBox.margin></RadioButton>
-      <VBox fx:id="autoGenerateBox" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                <VBox fx:id="autoGenerateBox" spacing="10.0">
          <children>
             <Button fx:id="randomCreateRobots" mnemonicParsing="false" text="Random Create Connected Robots" />
             <TextField fx:id="numberOfAutoCreatedRobots" />
@@ -34,7 +39,7 @@
          <font>
             <Font name="System Bold" size="18.0" />
          </font></Text>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                <HBox spacing="10.0">
          <children>
             <ComboBox fx:id="algorithmSelection" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="30.0" prefWidth="362.0" />
             <Button mnemonicParsing="false" text="Gear" />
@@ -62,7 +67,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                <HBox spacing="5.0">
          <children>
             <RadioButton fx:id="visionCustomize" mnemonicParsing="false" />
             <TextField fx:id="inputVision" prefWidth="300.0" />
@@ -85,7 +90,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Text>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                <HBox spacing="5.0">
          <children>
             <RadioButton fx:id="unitCustomize" mnemonicParsing="false" prefHeight="20.0" prefWidth="27.0" />
             <TextField fx:id="inputUnit" prefWidth="300.0" />
@@ -108,5 +113,7 @@
       <!--<VBox.margin>-->
       <!--<Insets bottom="5.0" top="10.0" />-->
       <!--</VBox.margin></Line>-->
-   </children>
+            </children>
+        </VBox>
+    </content>
 </fx:root>

@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RobotGenerationPageController extends VBox {
+public class RobotGenerationPageController extends ScrollPane {
 
     private static final double DEFAULT_ROBOT_VISION = 100;
     private static final double DEFAULT_ROBOT_UNIT = Double.POSITIVE_INFINITY;

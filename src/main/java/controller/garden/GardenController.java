@@ -589,7 +589,7 @@ public class GardenController extends VBox {
         gardenFrame.setOnZoom(new EventHandler<ZoomEvent>() {
             @Override
             public void handle(ZoomEvent event) {
-                zoomingImplementer(event, (event.getTotalZoomFactor() - 1) * 1.01);//todo FRED: make smoother
+                zoomingImplementer(event, (event.getTotalZoomFactor() - 1) * 3);//todo FRED: make smoother
             }
         });
     }

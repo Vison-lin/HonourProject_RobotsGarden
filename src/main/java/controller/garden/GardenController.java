@@ -57,7 +57,7 @@ public class GardenController extends VBox {
     private Pane gardenFrame;
 
     /**
-     * The coordinateSystem group. The coordinateSystem group is a group that represent the coordinate system of this application. Its X-axis is increasing from left to right and its Y-axis increasing is from TOP to BOTTOM.
+     * The coordinateSystem group. The coordinateSystem group is a group that represent the coordinate system of this application. Its X-axis is increasing from left to right (>) and its Y-axis increasing is from bottom to top (^).
      * <br/>
      * <strong>All the nodes (robots, etc.) are stored in this group.</strong>
      * <br/>
@@ -99,6 +99,7 @@ public class GardenController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        gardenFrame.setScaleY(-1);
         clipChildren(gardenFrame);// clip anything outside of the gardenFrame
         initCoordinateSystem();
         gardenFrameOnMouseClickListeners();

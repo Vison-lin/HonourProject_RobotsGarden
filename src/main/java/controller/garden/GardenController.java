@@ -11,10 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.input.GestureEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -108,6 +105,7 @@ public class GardenController extends VBox {
         gardenFrameMouseHoverListener();
         gardenMouseMoveOutListener();
         gardenFrameScrollListener();
+        gardenFrameZoomingListener();
     }
 
     private void initCoordinateSystem() {
@@ -572,7 +570,26 @@ public class GardenController extends VBox {
         gardenFrame.setOnScroll(new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
+                System.out.println("..." + event.getDeltaY());
                 zoomingImplementer(event, event.getDeltaY());
+            }
+        });
+    }
+
+    /**
+     * <p>The listenerRegister for <strong>mouse zooming</strong> for gardenFrame pane.</p>
+     * <br/>
+     * <p>This listenerRegister is used for implementing the following feature(s):</p>
+     * <br/>
+     * <ul>
+     * <li>Zooming feature</li>
+     * </ul>
+     */
+    private void gardenFrameZoomingListener() {
+        gardenFrame.setOnZoom(new EventHandler<ZoomEvent>() {
+            @Override
+            public void handle(ZoomEvent event) {
+                zoomingImplementer(event, (event.getTotalZoomFactor() - 1) * 1.01);//todo FRED: make smoother
             }
         });
     }

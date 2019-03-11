@@ -96,8 +96,6 @@ public class ProgressSectionController extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 rightClickFunction = RightClickFunction.CreateRobot;
-                System.out.println("-=-");
-                System.out.println(rightClickFunction);
             }
         });
     }

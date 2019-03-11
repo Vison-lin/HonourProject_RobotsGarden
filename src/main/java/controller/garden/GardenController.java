@@ -11,15 +11,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.input.GestureEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.util.Pair;
@@ -39,39 +38,57 @@ import java.util.List;
 public class GardenController extends VBox {
 
     /**
-     * The size (radius) of the robot that displays on the screen. The default value is 21.
+     * THe zooming factor used to implement zooming feature. The default value is 1.01
      */
-    private static double ROBOT_SIZE = 9;
-
-    private ControlPanelFacade controlPanelFacade;
-
-    private GardenController gardenController = this;
-
-    private static double zoomingFactor = 0.1;
-
-    private static Point2D.Double currentCursorAbsulatePosition = new Point2D.Double(0, 0);
-
-    private static double defaultAxisStrokeWidth = 3;
-
-    private static double strokeWidthIncrement = 0.5;
-
-    private static boolean isScrollingUp = false;
-
-    private Line xAxis;
-
-    private Line yAxis;
+    private static double ZOOMING_FACTOR = 1.01;
 
     /**
-     * The garden instance
+     * The garden pane. The garden pane is used as the background for the coordinateSystem. It is a child of the gardenFrame pane
      */
     @FXML
     private Pane garden;
 
+    /**
+     * The gardenFrame pane. The gardenFrame pane is the base of the garden.fxml. Its size is fixed unless users change it. The gardenFrame is the parent of both the garden pane and the coordinateSystem group.
+     * <br/>
+     * Any listener should be set onto this pane since its size and position are both fixed.
+     */
     @FXML
     private Pane gardenFrame;
 
-
+    /**
+     * The coordinateSystem group. The coordinateSystem group is a group that represent the coordinate system of this application. Its X-axis is increasing from left to right and its Y-axis increasing is from TOP to BOTTOM.
+     * <br/>
+     * <strong>All the nodes (robots, etc.) are stored in this group.</strong>
+     * <br/>
+     * Its' init position, at the time the app start, without any zooming or dragging, is in the middle of the screen.
+     */
     private Group coordinateSystem;
+
+    /**
+     * The instance of ControlPanelFacade. Used to retrieve date from all the control panel related controllers.
+     */
+    private ControlPanelFacade controlPanelFacade;
+
+    /**
+     * Used for implementing dragging feature: the position of the mouse when user press the mouse in order to drag.
+     */
+    private Point2D.Double mousePressPosition = new Point2D.Double(0, 0);
+
+    /**
+     * Used for implementing dragging feature: the position of the coordinateSystem at the time the current drag session start.
+     */
+    private Point2D.Double storedCoordinateSystemLocation = new Point2D.Double(0, 0);
+
+    /**
+     * The scale that used for scaling the coordinateSystem. This scale has default pivot point, (0, 0). And it is only responsible for scaling the x and y axis for the zooming feature
+     */
+    private Scale coordinateScale;
+
+    /**
+     * The scale that used for scaling the garden. This scale has default pivot point, (0, 0). And it is only responsible for scaling the x and y axis for the zooming feature.
+     */
+    private Scale gardenScale;
 
     public GardenController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/garden.fxml"));
@@ -82,14 +99,14 @@ public class GardenController extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-//        coordinateSystem.setBorder();
-        clipChildren(gardenFrame);
+        clipChildren(gardenFrame);// clip anything outside of the gardenFrame
         initCoordinateSystem();
-//        drawXYAxis();
-        robotsInitBooster();
-        gardenMouseHoverListener();
+        gardenFrameOnMouseClickListeners();
+        gardenFrameOnMousePressListener();
+        gardenFrameOnMouseDraggedListener();
+        gardenFrameMouseHoverListener();
         gardenMouseMoveOutListener();
-        zoomingImplementer();
+        gardenFrameScrollListener();
     }
 
     private void initCoordinateSystem() {
@@ -97,103 +114,149 @@ public class GardenController extends VBox {
         coordinateSystem.setTranslateX(gardenFrame.getPrefWidth()/2);
         coordinateSystem.setTranslateY(gardenFrame.getPrefHeight()/2);
         gardenFrame.getChildren().add(coordinateSystem);
-    }
+        //Scale transformation for coordinate
+        coordinateScale = new Scale();
+        coordinateSystem.getTransforms().add(coordinateScale);
 
-    public static Point2D.Double adjustCoordinate(Point2D.Double coordinate) {
-        Point2D.Double graphicalPoint = new Point2D.Double();
-        double x = coordinate.getX();
-        double y = coordinate.getY();
-        double cursorX = currentCursorAbsulatePosition.getX();
-        double cursorY = currentCursorAbsulatePosition.getY();
-//        System.out.println("The cursor position is: " + cursorX + ", " + cursorY);
-        double newX = (cursorX + zoomingFactor * (x - cursorX));
-        double newY = (cursorY + zoomingFactor * (y - cursorY));
-        graphicalPoint.setLocation(newX, newY);
-//        System.out.println(zoomingFactor);
-//        System.out.println(x==graphicalPoint.getX() && y==graphicalPoint.getY());
-        return graphicalPoint;
-    }
-
-    private void drawXYAxis() {
-        xAxis = new Line();//LineBuilder.create()
-        xAxis.setStartX(0);
-        xAxis.setStartY(0);
-        xAxis.setEndX(garden.getPrefWidth() - defaultAxisStrokeWidth);
-        xAxis.setEndY(0);
-        xAxis.setFill(Color.BLACK);
-        xAxis.setStrokeWidth(defaultAxisStrokeWidth);
-//        xAxis.setTranslateX(defaultAxisStrokeWidth / 2);
-//        xAxis.setTranslateY(garden.getPrefHeight() / 2);
-        coordinateSystem.getChildren().add(xAxis);
-//        coordinateSystem.layoutBoundsProperty().
-
-        yAxis = new Line();//LineBuilder.create()
-        yAxis.setStartX(0);
-        yAxis.setStartY(0);
-        yAxis.setEndX(0);
-        yAxis.setEndY(garden.getPrefHeight() - defaultAxisStrokeWidth);
-        yAxis.setFill(Color.BLACK);
-        yAxis.setStrokeWidth(defaultAxisStrokeWidth);
-        yAxis.setTranslateX(garden.getPrefWidth() / 2);
-        yAxis.setTranslateY(defaultAxisStrokeWidth / 2);
-        coordinateSystem.getChildren().add(yAxis);
+        //Scale transformation for garden
+        gardenScale = new Scale();
+        garden.getTransforms().add(gardenScale);
     }
 
     /**
-     * Get the size of the robots that display on the screen
+     * <p>The listenerRegister for <strong>mouse click</strong> for gardenFrame pane.</p>
+     * <br/>
+     * <p>This listenerRegister is used for implementing the following feature(s):</p>
+     * <br/>
+     * <ul>
+     *     <li>Create new robots</li>
+     * </ul>
      *
-     * @return size of the robots
      */
-    public static double getRobotSize() {
-        return ROBOT_SIZE;
-    }
-
-    /**
-     * Set the size of the robots that display on the screen
-     *
-     * @param robotSize size of the robots. Throw IllegalArgumentException if the size is not bigger than 0.
-     */
-    public static void setRobotSize(double robotSize) {
-        if (robotSize <= 0) {
-            throw new IllegalArgumentException("The robot size must bigger than 0");
-        }
-        ROBOT_SIZE = robotSize;
-    }
-
-    /**
-     * Init the robots: add on click to the pane(coordinateSystem) so wherever click the pane, a new robots will be created.
-     */
-    private void robotsInitBooster() {
+    private void gardenFrameOnMouseClickListeners() {
         //set onClickListener for creating robots
         gardenFrame.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (event.getButton() == MouseButton.PRIMARY && controlPanelFacade.getCurrentRightClickFunction() == RightClickFunction.CreateRobot) {// add listener for left click
-                    double moveX = coordinateSystem.parentToLocal(event.getX(), event.getY()).getX();
-                    double moveY = coordinateSystem.parentToLocal(event.getX(), event.getY()).getY();
-                    Point2D.Double coordinateSystemPosition = new Point2D.Double(coordinateSystem.getTranslateX(), coordinateSystem.getTranslateY());
-//                    System.out.println(coordinateSystem.getTranslateX() +", "+coordinateSystem.getTranslateY());
-//                    System.out.println(garden.getTranslateX() +", "+garden.getTranslateY());
-//                    System.out.println(gardenFrame.getTranslateX() +", "+gardenFrame.getTranslateY());
-//                    System.out.println("The cursor is at: " +event.getX() +", "+ event.getY() +". While the one is at : "+moveX +", " +moveY);
 
-                    Robot robot = controlPanelFacade.robotGenerator("No." + controlPanelFacade.getRobotNameCounter(), moveX, moveY);
-//                    System.out.println(robot.getPosition());
-//                    System.out.println(robot.getGraphicalDisplay().getRobotPosition().getTranslateX()+","+robot.getGraphicalDisplay().getRobotPosition().getTranslateY());
-                    controlPanelFacade.increaseRobotNameCounter();
-                    //adding to the graph
+                /*
+                 * Listeners for LEFT CLICK
+                 */
 
-                    updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
-//                    coordinateSystem.setTranslateX(coordinateSystemPosition.getX());
-//                    coordinateSystem.setTranslateY(coordinateSystemPosition.getY());
-//                    System.out.println(coordinateSystem.getTranslateX() +", "+coordinateSystem.getTranslateY());
-//                    System.out.println(garden.getTranslateX() +", "+garden.getTranslateY());
-//                    System.out.println(gardenFrame.getTranslateX() +", "+gardenFrame.getTranslateY());
+                if (event.getButton() == MouseButton.PRIMARY) {
+
+                    /* CreateRobot
+                     *Init the robots: add on click to the pane(coordinateSystem) so wherever click the pane, a new robots will be created.
+                     * When the right click is used for creating robots, right clicking on gardenFrame will create a new robot in the current cursor position where the position is converted into coordinateSystem coordinate space.
+                     */
+
+                    if (controlPanelFacade.getCurrentRightClickFunction() == RightClickFunction.CreateRobot) {// add listener for left click
+                        double moveX = coordinateSystem.parentToLocal(event.getX(), event.getY()).getX();
+                        double moveY = coordinateSystem.parentToLocal(event.getX(), event.getY()).getY();
+                        Robot robot = controlPanelFacade.robotGenerator("No." + controlPanelFacade.getRobotNameCounter(), moveX, moveY);
+                        System.out.println(robot.getPosition());
+                        controlPanelFacade.increaseRobotNameCounter();
+                        //adding to the graph
+                        updateGarden();//using this method for insert in order to ensure the robot position is always overlapped the robot body and the robot body is always in front of the robot vision.
+
+                    }
+                }
+
+
+
+
+            }
+        });
+    }
+
+    /**
+     * <p>The listenerRegister for <strong>mouse press</strong> for gardenFrame pane.</p>
+     * <br/>
+     * <p>This listenerRegister is used for implementing the following feature(s):</p>
+     * <br/>
+     * <ul>
+     * <li>Dragging feature starting position handler</li>
+     * </ul>
+     */
+    private void gardenFrameOnMousePressListener() {
+
+        gardenFrame.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                /*
+                 * Listeners for LEFT CLICK
+                 */
+
+                if (event.getButton() == MouseButton.PRIMARY) {
+
+                    /*
+                     * Dragging Feature starting position handler
+                     * Getting the current mouse position as the dragging start position
+                     * Saving the current coordinateSystem location as the position of the coordinateSystem before dragging.
+                     */
+                    if (controlPanelFacade.getCurrentRightClickFunction() == RightClickFunction.Drag) {// add listener for left click
+                        mousePressPosition.setLocation(event.getX(), event.getY());
+                        storedCoordinateSystemLocation.setLocation(coordinateSystem.getTranslateX(), coordinateSystem.getTranslateY());
+                    }
+                }
+            }
+        });
+
+
+    }
+
+    /**
+     * <p>The listenerRegister for <strong>mouse dragged</strong> for gardenFrame pane.</p>
+     * <br/>
+     * <p>This listenerRegister is used for implementing the following feature(s):</p>
+     * <br/>
+     * <ul>
+     * <li>Dragging feature ending position handler</li>
+     * </ul>
+     */
+    private void gardenFrameOnMouseDraggedListener() {
+        gardenFrame.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                /*
+                 * Listeners for LEFT CLICK
+                 */
+
+                if (event.getButton() == MouseButton.PRIMARY) {
+
+                    /*
+                     * Dragging Feature ending position handler
+                     */
+                    if (controlPanelFacade.getCurrentRightClickFunction() == RightClickFunction.Drag) {// add listener for left click
+                        double movingDistanceX = event.getX() - mousePressPosition.getX();
+                        double movingDistanceY = event.getY() - mousePressPosition.getY();
+                        coordinateSystem.setTranslateX(storedCoordinateSystemLocation.getX() + movingDistanceX);
+                        coordinateSystem.setTranslateY(storedCoordinateSystemLocation.getY() + movingDistanceY);
+                    }
+
                 }
             }
         });
     }
 
+    /**
+     * To be used when an update is needed. This method will do the following, in sequence:
+     * <ul>
+     * <li>Clean all the children within the coordinateSystem group</li>
+     * <li>Adding all the robots all layers, starting from the bottom. The sequence is the following, in sequence:
+     * <ul>
+     * <li>Adding all the displayAdapters from all the robots into the screen, starting from the most bottom one, the deepest one,</li>
+     * <li>Adding all the visions from all the robots which its vision is visible into the screen</li>
+     * <li>Adding all the borders from all the robots into the screen</li>
+     * <li>Adding all the bodies from all the robots into the screen</li>
+     * <li>Adding all the position from all the robots into the screen</li>
+     * </ul>
+     * </li>
+     *
+     * </ul>
+     */
     public void updateGarden() {
         coordinateSystem.getChildren().removeAll(coordinateSystem.getChildren());//remove all the element
         List<Circle> robotsPosition = new ArrayList<>();
@@ -258,16 +321,22 @@ public class GardenController extends VBox {
         //ensure the position is always in front of anything
         coordinateSystem.getChildren().addAll(robotsPosition);
 
-        //redraw the coordinate
-//        coordinateSystem.getChildren().add(xAxis);
-//        coordinateSystem.getChildren().add(yAxis);
-
         //remove unnecessary info (to ensure obliviousness <- KEY OF THE PROJECT)
 //        for (Robot robot : controlPanelController.getRobots()) {
 //            robot.getGraphicalDisplay().cleanBottomLayers();//todo FRED: why change color of position will change directly?
 //        }
     }
 
+    /**
+     * <p>The listenerRegister for <strong>mouse move out</strong> for gardenFrame pane.</p>
+     * <br/>
+     * <p>This listenerRegister is used for implementing the following feature(s):</p>
+     * <br/>
+     * <ul>
+     *     <li>Clean the coordinate display when the cursor is outside of the gardenFrame region</li>
+     * </ul>
+     *
+     */
     private void gardenMouseMoveOutListener() {
         gardenFrame.hoverProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -279,7 +348,17 @@ public class GardenController extends VBox {
         });
     }
 
-    private void gardenMouseHoverListener() {
+    /**
+     * <p>The listenerRegister for <strong>mouse move, or hover,</strong> for gardenFrame pane.</p>
+     * <br/>
+     * <p>This listenerRegister is used for implementing the following feature(s):</p>
+     * <br/>
+     * <ul>
+     *     <li>Update the coordinate display when the cursor is inside the gardenFrame region</li>
+     * </ul>
+     *
+     */
+    private void gardenFrameMouseHoverListener() {
         gardenFrame.setOnMouseMoved(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -291,12 +370,13 @@ public class GardenController extends VBox {
 
     /**
      *
-     * Assign necessary listener to the given robot -- in order to response user click.
+     * Assign necessary listener to the given robot -- in order to response user click. It also add the robots into the list through calling updateGarden method.
      *
      * @param robot the robot object need to add to the coordinateSystem pane.
      */
     public void addListenerToRobot(Robot robot) {
         RobotGraphicalDisplay robotGraphicalDisplay = robot.getGraphicalDisplay();
+        GardenController gardenController = this;
         //set onClickListener for opening robot setting & displaying vision range
         robotGraphicalDisplay.getRobotBody().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -319,24 +399,6 @@ public class GardenController extends VBox {
                 }
             }
         });
-    }
-
-
-    private boolean isOverlay(Point2D.Double location, List<Robot> localCopiedRobotsList) {
-        System.out.println(location.getX() + ", " + location.getY());
-        int ctr = 0;
-        for (Robot robot : localCopiedRobotsList) {
-            if (robot.getPosition().getX() == location.getX() && robot.getPosition().getY() == location.getY()) {
-                ctr++;
-                if (ctr > 1) {//if there is one except robot itself also in this location
-                    return true;
-                }
-            }
-        }
-        if (ctr == 0) {
-            throw new IllegalStateException("Cannot find robot itself while adding listener.");
-        }
-        return false;
     }
 
     /**
@@ -367,6 +429,9 @@ public class GardenController extends VBox {
 
     /**
      *
+     * Round up the coordinate. Used for determine the accuracy of overlay pending.
+     *
+     * For example, (0.3, 0.3) will be seen as (0, 0)
      *
      * @param location the location to be round up
      * @return return a new Point2D.Double object with the rounded up location
@@ -379,19 +444,45 @@ public class GardenController extends VBox {
         return result;
     }
 
+    /**
+     *
+     * Get the current coordinateSystem
+     *
+     * @return the coordinateSystem instance.
+     */
     public Group getCoordinateSystem() {
         return coordinateSystem;
     }
 
-    public ControlPanelFacade getControlPanelFacade() {
+    /**
+     *
+     * Get the current controlPanelFacade
+     *
+     * @return the controlPanelFacade instance.
+     */
+    ControlPanelFacade getControlPanelFacade() {
         return this.controlPanelFacade;
     }
 
+    /**
+     *
+     * Set the current controlPanelFacade. Or pass the controlPanelFacade into this controller.
+     *
+     */
     public void setControlPanelFacade(ControlPanelFacade controlPanelFacade) {
         this.controlPanelFacade = controlPanelFacade;
     }
 
-    private void zoomingImplementer() {
+    /**
+     *
+     * The realization of zooming feature.
+     *
+     * @param event The event when occurring the zooming.
+     * @param pixelAmount The number of movement for this event, usually is the pixel movement.
+     */
+    private void zoomingImplementer(GestureEvent event, double pixelAmount) {
+
+
 
         /*
          *
@@ -403,84 +494,94 @@ public class GardenController extends VBox {
          *
          */
 
-        //Scale transformation for coordinate
-        Scale coordinateScale = new Scale();
-        coordinateSystem.getTransforms().add(coordinateScale);
 
-        //Scale transformation for garden
-        Scale gardenScale = new Scale();
-        garden.getTransforms().add(gardenScale);
+        double scale = coordinateScale.getX(); // get the current scale from coordinateScale. Note that X and Y always has the same scale
+        double oldScale = scale;// duplicate the this scale value since we will change the scale value below
 
+        scale *= Math.pow(ZOOMING_FACTOR, pixelAmount); // to get the new scale.
+        /*
+         * The new scale is calculated as following:
+         *
+         * We first init a delta to be the factor to be used to let the scale performs by factor. Scaling in factor can make the scaling more smoothly.
+         * Then we use the built-in event.getDeltaY() to detect the mouse orientation. Note that the value is completely DEPENDED ON different mouse/system setting.
+         * We then adjust our scale accordingly.
+         * The above is coded as below and is the same as "scale *= Math.pow(1.01, event.getDeltaY())";
+         *
+         * double delta = 1.01;
+         *
+         * if (event.getDeltaY() < 0) {
+         *     scale /= delta;
+         * } else {
+         *     scale *= delta;
+         * }
+         */
+
+        // bounds the scale value
+        if (scale <= 0) {
+            scale = 0;
+        } else if (scale >= 1) {
+            scale = 1;
+        }
+
+        // calculate the f, which is used for factoring the moving step
+        double f = (scale / oldScale) - 1;
+
+        // scale the coordinateSystem
+        coordinateScale.setX(scale);
+        coordinateScale.setY(scale);
+
+
+        /*
+         *             .
+         *            ..
+         *           . .
+         *          .  .
+         *         ..  .
+         *        . .  .
+         *       .  .  .
+         *      .   .  .
+         *     .........
+         */
+
+        // calculate the dx and dy. The dx and dy is the x and y distance, IN PARENT SCALE: gardenFrame, between the current mouse position, IN PARENT SCALE: gardenFrame, and the coordinate center point (0, 0), IN PARENT SCALE: gardenFrame.
+        double dx = event.getX() - coordinateSystem.localToParent(0, 0).getX();
+        double dy = event.getY() - coordinateSystem.localToParent(0, 0).getY();
+
+        // move the coordinateSystem. the moving distance is the moving factor, f, times the moving distance, dx and dy.
+        coordinateSystem.setTranslateX(coordinateSystem.getTranslateX() - f * dx);
+        coordinateSystem.setTranslateY(coordinateSystem.getTranslateY() - f * dy);
+
+        // increment the garden and scale it accordingly so that the size of the garden increases but the display size unchanged.
+        garden.setPrefWidth(gardenFrame.getPrefWidth() / scale);
+        garden.setPrefHeight(gardenFrame.getPrefHeight() / scale);
+        gardenScale.setX(scale);
+        gardenScale.setY(scale);
+    }
+
+    /**
+     * <p>The listenerRegister for <strong>mouse scrolling</strong> for gardenFrame pane.</p>
+     * <br/>
+     * <p>This listenerRegister is used for implementing the following feature(s):</p>
+     * <br/>
+     * <ul>
+     * <li>Zooming feature</li>
+     * </ul>
+     */
+    private void gardenFrameScrollListener() {
         gardenFrame.setOnScroll(new EventHandler<ScrollEvent>() {
             @Override
             public void handle(ScrollEvent event) {
-
-                double scale = coordinateScale.getX(); // get the current scale from coordinateScale. Note that X and Y always has the same scale
-                double oldScale = scale;// duplicate the this scale value since we will change the scale value below
-
-                scale *= Math.pow(1.01, event.getDeltaY()); // to get the new scale.
-                /*
-                 * The new scale is calculated as following:
-                 *
-                 * We first init a delta to be the factor to be used to let the scale performs by factor. Scaling in factor can make the scaling more smoothly.
-                 * Then we use the built-in event.getDeltaY() to detect the mouse orientation. Note that the value is completely DEPENDED ON different mouse/system setting.
-                 * We then adjust our scale accordingly.
-                 * The above is coded as below and is the same as "scale *= Math.pow(1.01, event.getDeltaY())";
-                 *
-                 * double delta = 1.01;
-                 *
-                 * if (event.getDeltaY() < 0) {
-                 *     scale /= delta;
-                 * } else {
-                 *     scale *= delta;
-                 * }
-                 */
-
-                // bounds the scale value
-                if (scale <= 0) {
-                    scale = 0;
-                } else if (scale >= 1) {
-                    scale = 1;
-                }
-
-                // calculate the f, which is used for factoring the moving step
-                double f = (scale / oldScale) - 1;
-
-                // scale the coordinateSystem
-                coordinateScale.setX(scale);
-                coordinateScale.setY(scale);
-
-
-                /*
-                 *             .
-                 *            ..
-                 *           . .
-                 *          .  .
-                 *         ..  .
-                 *        . .  .
-                 *       .  .  .
-                 *      .   .  .
-                 *     .........
-                 */
-
-                // calculate the dx and dy. The dx and dy is the x and y distance, IN PARENT SCALE: gardenFrame, between the current mouse position, IN PARENT SCALE: gardenFrame, and the coordinate center point (0, 0), IN PARENT SCALE: gardenFrame.
-                double dx = event.getX() - coordinateSystem.localToParent(0, 0).getX();
-                double dy = event.getY() - coordinateSystem.localToParent(0, 0).getY();
-
-                // move the coordinateSystem. the moving distance is the moving factor, f, times the moving distance, dx and dy.
-                coordinateSystem.setTranslateX(coordinateSystem.getTranslateX() - f * dx);
-                coordinateSystem.setTranslateY(coordinateSystem.getTranslateY() - f * dy);
-
-                // increment the garden and scale it accordingly so that the size of the garden increases but the display size unchanged.
-                garden.setPrefWidth(gardenFrame.getPrefWidth() / scale);
-                garden.setPrefHeight(gardenFrame.getPrefHeight() / scale);
-                gardenScale.setX(scale);
-                gardenScale.setY(scale);
-
+                zoomingImplementer(event, event.getDeltaY());
             }
         });
     }
 
+    /**
+     *
+     * Clip all the children that are outside of the given region. For the child that is partially outside of the region, clip the outside-part body only.
+     *
+     * @param region the region to be clipped
+     */
     public void clipChildren(Region region) {
         final Rectangle clipPane = new Rectangle();
         region.setClip(clipPane);

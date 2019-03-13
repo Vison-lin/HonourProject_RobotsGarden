@@ -1,7 +1,6 @@
 package core;
 
 
-import javafx.util.Pair;
 import model.Algorithm;
 import model.Robot;
 
@@ -21,11 +20,11 @@ public class AlgorithmLoadingHelper {
      * <br/>
      * In order to prevent any non-algorithm class been displayed on the screen, <strong>all other files, such as the algorithm helpers, have to be placed under /src/garden/garden.algorithms/src</strong>. It is recommended to create a sub package for each algorithm.
      *
-     * @return list of Pairs with type <String, String> where the first one (Key) represents the algorithm's displaying name, and the second one (Value) is the file name of the algorithm. Note all the algorithm have to be placed under folder /src/garden/garden.algorithms.
+     * @return list of algorithms. Note all the algorithm have to be placed under folder /src/garden/garden.algorithms.
      */
-    public List<Pair<String, String>> getAlgorithmList() throws IllegalStateException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    public List<Algorithm> getAlgorithmList() throws IllegalStateException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
-        ArrayList<Pair<String, String>> algorithmList = new ArrayList<>();
+        ArrayList<Algorithm> algorithmList = new ArrayList<>();
 
         String basePath = new File("").getAbsolutePath();
         String algPath = basePath + "/src/main/java/algorithms";
@@ -70,8 +69,8 @@ public class AlgorithmLoadingHelper {
                     String algFileName = algFiles[i].getName();
                     if (algFileName.length() > 5) {
                         String algName = algFileName.substring(0, algFileName.length() - 5);//delete .java postfix
-                        String nameOfAlg = AlgorithmClassLoader.getAlgorithmInstanceByName(algName).algorithmName();
-                        algorithmList.add(new Pair<>(nameOfAlg, algName));
+                        Algorithm algorithm = AlgorithmClassLoader.getAlgorithmInstanceByName(algName);
+                        algorithmList.add(algorithm);
                     }
                 }
             }

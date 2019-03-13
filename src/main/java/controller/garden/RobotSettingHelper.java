@@ -2,6 +2,7 @@ package controller.garden;
 
 
 import controller.controlpanel.ControlPanelFacade;
+import core.AlgorithmClassLoader;
 import core.AlgorithmLoadingHelper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -22,12 +23,13 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import javafx.util.StringConverter;
+import model.Algorithm;
 import model.Robot;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
 import java.util.List;
 
 public class RobotSettingHelper extends VBox {
@@ -41,7 +43,7 @@ public class RobotSettingHelper extends VBox {
     private static final String WARING_TEXT = "Warning information";
 
     @FXML
-    private ComboBox<Pair<String, String>> algorithmSelection;
+    private ComboBox<Algorithm> algorithmSelection;
     @FXML
     private ColorPicker colorPicker;
     @FXML
@@ -75,7 +77,7 @@ public class RobotSettingHelper extends VBox {
 
     private AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
 
-    private String selectedAlgorithm;
+    private Algorithm selectedAlgorithm;
 
     private double selectedRobotVision;
 
@@ -164,7 +166,7 @@ public class RobotSettingHelper extends VBox {
 
         selectedRobotColor = robot.getGraphicalDisplay().getRobotBody().getFill();
         colorPicker.setValue(Color.valueOf(selectedRobotColor+""));
-        selectedAlgorithm = robot.getAlgorithm().getClass().getSimpleName();
+        selectedAlgorithm = robot.getAlgorithm();
 
 
 
@@ -282,8 +284,8 @@ public class RobotSettingHelper extends VBox {
 
 
     private void algorithmSelectionInit() {
-        ObservableList<Pair<String, String>> value = FXCollections.observableArrayList();
-        List<Pair<String, String>> allAlgInfo = null;
+        ObservableList<Algorithm> value = FXCollections.observableArrayList();
+        List<Algorithm> allAlgInfo = null;
         try {
             allAlgInfo = algorithmLoadingHelper.getAlgorithmList();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -294,35 +296,49 @@ public class RobotSettingHelper extends VBox {
         AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
         String algorithmFileName = "";
         try {
-            List<Pair<String, String>> algorithmList = algorithmLoadingHelper.getAlgorithmList();
-            for (Pair<String, String> algName : algorithmList) {
-                if (algName.getKey().equals(selectedAlgorithm)) {
-                    algorithmFileName = algName.getValue();
+            List<Algorithm> algorithmList = algorithmLoadingHelper.getAlgorithmList();
+            for (Algorithm algName : algorithmList) {
+                if (algName.algorithmName().equals(selectedAlgorithm.algorithmName())) {
+                    algorithmFileName = algName.getClass().getSimpleName();//todo VISON: What is it used for?
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
-//        algorithmSelection.getSelectionModel(); //todo FRED & VISON: let this display the variable which is "selectedAlgorithm". 你是要我显示当前robot的alg吗？
+        Iterator<Algorithm> iterator = algorithmSelection.getItems().iterator();
+        Algorithm isSelectedOne = null;
+        while (iterator.hasNext()) {
+            Algorithm currAlg = iterator.next();
+            if (currAlg.getClass().getSimpleName().equals(robot.getAlgorithm().getClass().getSimpleName())) {
+                isSelectedOne = currAlg;
+            }
+        }
+        if (isSelectedOne != null) {
+            algorithmSelection.getSelectionModel().select(isSelectedOne);//todo VISON: display issue?
+        }
 //        System.out.println(selectedAlgorithm);
 //        System.out.println(algorithmFileName+"~~~~~");
 //        System.out.println(algorithmSelection.getSelectionModel().getSelectedIndex());
-        algorithmSelection.setConverter(new StringConverter<Pair<String, String>>() {
+        algorithmSelection.setConverter(new StringConverter<Algorithm>() {
             @Override
-            public String toString(Pair<String, String> object) {
-                return object.getKey();
+            public String toString(Algorithm object) {
+                return object.algorithmName();
             }
 
             @Override
-            public Pair<String, String> fromString(String string) {
-                return null;
+            public Algorithm fromString(String string) {
+                try {
+                    return AlgorithmClassLoader.getAlgorithmInstanceByName(string);
+                } catch (ClassNotFoundException e) {
+                    throw new IllegalStateException("Algorithm not found");
+                }
             }
         });
     }
 
     private void algorithmSelectionListener() {
         algorithmSelection.valueProperty().addListener(
-                (obs, oldVal, newVal) -> selectedAlgorithm = newVal.getValue()
+                (obs, oldVal, newVal) -> selectedAlgorithm = newVal
         );
     }
 
@@ -341,7 +357,7 @@ public class RobotSettingHelper extends VBox {
             @Override
             public void handle(MouseEvent event) {
                 robot.getGraphicalDisplay().setRobotVision(selectedRobotVision);
-                algorithmLoadingHelper.assignAlgorithmToRobot(robot, selectedAlgorithm);
+                algorithmLoadingHelper.assignAlgorithmToRobot(robot, selectedAlgorithm.getClass().getSimpleName());
                 robot.setUnit(selectedRobotUnit);
                 robot.getGraphicalDisplay().setColor(selectedRobotColor);
                 robot.setRandomUnit(selectRandom);

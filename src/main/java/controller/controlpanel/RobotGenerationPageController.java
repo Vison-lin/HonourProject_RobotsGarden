@@ -1,5 +1,6 @@
 package controller.controlpanel;
 
+import core.AlgorithmClassLoader;
 import core.AlgorithmLoadingHelper;
 import core.RightClickFunction;
 import javafx.beans.value.ChangeListener;
@@ -17,8 +18,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.util.Pair;
 import javafx.util.StringConverter;
+import model.Algorithm;
 import model.Robot;
 import model.RobotGraphicalDisplay;
 import model.Statisticable;
@@ -42,7 +43,7 @@ public class RobotGenerationPageController extends ScrollPane {
     public static double ROBOT_NAME_COUNTER = 0;
 
     @FXML
-    private ComboBox<Pair<String, String>> algorithmSelection;
+    private ComboBox<Algorithm> algorithmSelection;
     @FXML
     private ColorPicker colorPicker;
     @FXML
@@ -82,7 +83,7 @@ public class RobotGenerationPageController extends ScrollPane {
 
     private AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
 
-    private String selectedAlgorithm;
+    private Algorithm selectedAlgorithm;
 
     private double selectedRobotVision;
 
@@ -257,35 +258,39 @@ public class RobotGenerationPageController extends ScrollPane {
 
 
     private void algorithmSelectionInit() {//todo FRED: how to deal with no algorithm found?
-        ObservableList<Pair<String, String>> value = FXCollections.observableArrayList();
-        List<Pair<String, String>> allAlgInfo = null;
+        ObservableList<Algorithm> value = FXCollections.observableArrayList();
+        List<Algorithm> allAlgorithms = null;
         try {
-            allAlgInfo = algorithmLoadingHelper.getAlgorithmList();
+            allAlgorithms = algorithmLoadingHelper.getAlgorithmList();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        value.addAll(allAlgInfo);
+        value.addAll(allAlgorithms);
         algorithmSelection.setItems(value);
         algorithmSelection.getSelectionModel().select(0);
-        if (allAlgInfo.size() > 0) {
-            selectedAlgorithm = algorithmSelection.getSelectionModel().getSelectedItem().getValue();//assign the first algorithm as the default selected item
+        if (allAlgorithms.size() > 0) {
+            selectedAlgorithm = algorithmSelection.getSelectionModel().getSelectedItem();//assign the first algorithm as the default selected item
         }
-        algorithmSelection.setConverter(new StringConverter<Pair<String, String>>() {
+        algorithmSelection.setConverter(new StringConverter<Algorithm>() {
             @Override
-            public String toString(Pair<String, String> object) {
-                return object.getKey();
+            public String toString(Algorithm object) {
+                return object.algorithmName();
             }
 
             @Override
-            public Pair<String, String> fromString(String string) {
-                return null;
+            public Algorithm fromString(String string) {
+                try {
+                    return AlgorithmClassLoader.getAlgorithmInstanceByName(string);
+                } catch (ClassNotFoundException e) {
+                    throw new IllegalStateException("Algorithm not found");
+                }
             }
         });
     }
 
     private void algorithmSelectionListener() {
         algorithmSelection.valueProperty().addListener(
-                (obs, oldVal, newVal) -> selectedAlgorithm = newVal.getValue()
+                (obs, oldVal, newVal) -> selectedAlgorithm = newVal
         );
     }
 
@@ -319,7 +324,7 @@ public class RobotGenerationPageController extends ScrollPane {
         Robot robot = new Robot(robotGraphicalDisplay);
         robot.moveTo(x, y);
         robot.setTag(tag);
-        algorithmLoadingHelper.assignAlgorithmToRobot(robot, selectedAlgorithm);
+        algorithmLoadingHelper.assignAlgorithmToRobot(robot, selectedAlgorithm.getClass().getSimpleName());//todo FRED: robot.setalg?
         robots.add(robot);//add the robot into the robots list
         robot.setRandomUnit(selectRandom); //set the boolean whether random unit;
         robot.setUnit(selectedRobotUnit);//set the unit number for the robot;
@@ -421,7 +426,9 @@ public class RobotGenerationPageController extends ScrollPane {
         this.robots = controlPanelFacade.getRobots();
     }
 
-    public String getSelectAlgorithm(){return selectedAlgorithm;}
+    public Algorithm getSelectAlgorithm() {
+        return selectedAlgorithm;
+    }
 
     public TextField getInputVision() {
         return inputVision;

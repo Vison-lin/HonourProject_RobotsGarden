@@ -323,6 +323,9 @@ public class GatheringGoToSec extends Algorithm implements Statisticable {
         StatisticData<Integer> numOfRun = currentStatisticData.get(NumOfRun.TAG);
         StatisticData<Double> totalDistance = currentStatisticData.get(TotalDistance.TAG);
         numOfRun.update(1);
+        if (distance > getRobot().getUnit()) {
+            distance = getRobot().getUnit();
+        }
         totalDistance.update(distance);
         return currentStatisticData;
     }

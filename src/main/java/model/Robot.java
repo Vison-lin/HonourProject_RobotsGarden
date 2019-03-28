@@ -2,7 +2,6 @@ package model;
 
 
 import algorithms.DefaultAlgorithm;
-import controller.garden.GardenController;
 import core.AlgorithmClassLoader;
 
 import java.awt.geom.Point2D;
@@ -167,6 +166,9 @@ public class Robot {
         sensor.setGlobalRobots(robots);//set curr global robots to sensor
 //        algorithm.getRobot().getGraphicalDisplay().insertBottomLayer();
         Point2D.Double point = algorithm.next(this.sensor.getAllVisibleRobotsInLocalScale());
+        if (point.x == Double.NaN || point.y == Double.NaN) {
+            throw new IllegalStateException("The algorithm returned next position contains NaN!");
+        }
         Point2D.Double globalPoint = this.sensor.convertToGlobal(point);
 
 

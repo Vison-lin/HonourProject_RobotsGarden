@@ -292,33 +292,31 @@ public class RobotSettingHelper extends VBox {
             e.printStackTrace();
         }
         value.addAll(allAlgInfo);
+ //       System.out.println("!!"+value.get(0).getClass().getName());
         algorithmSelection.setItems(value);
-        AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
-        String algorithmFileName = "";
-        try {
-            List<Algorithm> algorithmList = algorithmLoadingHelper.getAlgorithmList();
-            for (Algorithm algName : algorithmList) {
-                if (algName.algorithmName().equals(selectedAlgorithm.algorithmName())) {
-                    algorithmFileName = algName.getClass().getSimpleName();//todo VISON: What is it used for?
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+//        AlgorithmLoadingHelper algorithmLoadingHelper = new AlgorithmLoadingHelper();
+//        String algorithmFileName = "";
+//        try {
+//            List<Algorithm> algorithmList = algorithmLoadingHelper.getAlgorithmList();
+//            for (Algorithm algName : algorithmList) {
+//                if (algName.algorithmName().equals(selectedAlgorithm.algorithmName())) {
+//                    algorithmFileName = algName.getClass().getSimpleName();//todo VISON: What is it used for?
+//                }
+//            }
+//        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+//            e.printStackTrace();
+//        }
         Iterator<Algorithm> iterator = algorithmSelection.getItems().iterator();
         Algorithm isSelectedOne = null;
         while (iterator.hasNext()) {
             Algorithm currAlg = iterator.next();
-            if (currAlg.getClass().getSimpleName().equals(robot.getAlgorithm().getClass().getSimpleName())) {
-                isSelectedOne = currAlg;
-            }
+           if (currAlg.getClass().getSimpleName().equals(robot.getAlgorithm().getClass().getSimpleName())) {
+               isSelectedOne = currAlg;
+               break;
+
+           }
         }
-        if (isSelectedOne != null) {
-            algorithmSelection.getSelectionModel().select(isSelectedOne);//todo VISON: display issue?
-        }
-//        System.out.println(selectedAlgorithm);
-//        System.out.println(algorithmFileName+"~~~~~");
-//        System.out.println(algorithmSelection.getSelectionModel().getSelectedIndex());
+
         algorithmSelection.setConverter(new StringConverter<Algorithm>() {
             @Override
             public String toString(Algorithm object) {
@@ -334,6 +332,15 @@ public class RobotSettingHelper extends VBox {
                 }
             }
         });
+
+        if (isSelectedOne != null) {
+            algorithmSelection.getSelectionModel().select(isSelectedOne);//todo VISON: display issue?
+
+        }
+//        System.out.println(selectedAlgorithm);
+//        System.out.println(algorithmFileName+"~~~~~");
+//        System.out.println(algorithmSelection.getSelectionModel().getSelectedIndex());
+
     }
 
     private void algorithmSelectionListener() {

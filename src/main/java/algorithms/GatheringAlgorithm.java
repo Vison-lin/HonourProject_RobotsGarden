@@ -52,7 +52,7 @@ public class GatheringAlgorithm extends Algorithm implements Statisticable {
      * @return
      */
 
-    private Point2D.Double generateOneRobot (ArrayList<Robot> visibles , double range){
+    public Point2D.Double generateOneRobot (ArrayList<Robot> visibles , double range){
         Point2D.Double result = new Point2D.Double();
 
         visibles =getUniqueRobots(visibles);
@@ -87,6 +87,9 @@ public class GatheringAlgorithm extends Algorithm implements Statisticable {
 
 //        System.out.println("Final:" +connectedCenter);
 //        System.out.println("Final Global:"+getRobot().getSensor().convertToGlobal(connectedCenter));
+
+   //     System.out.println("gathering: "+connectedCenter);
+
         return connectedCenter;
 
     }
@@ -292,7 +295,6 @@ public class GatheringAlgorithm extends Algorithm implements Statisticable {
 //        System.out.println(getRobot().getSensor().getGlobalRobots().size());
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
         this.range = getRobot().getVision();
-
 
         return generateOneRobot(new ArrayList<>(state),range);
     }

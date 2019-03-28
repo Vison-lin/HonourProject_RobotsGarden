@@ -52,7 +52,7 @@ public class GatheringGoToSec extends Algorithm implements Statisticable {
      * @return
      */
 
-    private Point2D.Double generateOneRobot (ArrayList<Robot> visibles , double range){
+    public Point2D.Double generateOneRobot (ArrayList<Robot> visibles , double range){
         Point2D.Double result = new Point2D.Double();
 
         visibles =getUniqueRobots(visibles);
@@ -89,7 +89,7 @@ public class GatheringGoToSec extends Algorithm implements Statisticable {
 //            destination = goal.resize(unit).getEnd();
 //
 //        }
-
+    //    System.out.println("go to sec : "+destination);
         return destination;
 
 
@@ -264,6 +264,7 @@ public class GatheringGoToSec extends Algorithm implements Statisticable {
     private Point2D.Double getConnectedCenter(double V,Point2D.Double ci, Point2D.Double Ri,ArrayList<Robot> R){
         Vector Vgoal = new Vector(Ri,ci);
         if(Vgoal.getNorm()==0){
+            System.out.println(Ri);
             return Ri;
         }
         ArrayList<Double> test = new ArrayList<Double>();
@@ -291,6 +292,7 @@ public class GatheringGoToSec extends Algorithm implements Statisticable {
     public Point2D.Double next(List<Robot> robotList) {
         this.state = new ArrayList<>(this.getRobot().getSensor().getAllVisibleRobotsInLocalScale());
         this.range = getRobot().getVision();
+
         return generateOneRobot(new ArrayList<>(state),range);
     }
 

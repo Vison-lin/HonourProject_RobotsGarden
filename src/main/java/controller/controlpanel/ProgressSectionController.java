@@ -201,7 +201,9 @@ public class ProgressSectionController extends VBox {
         next.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                System.out.println("=====start====");
                 nextAction();
+                System.out.println("====end=====");
             }
         });
     }
@@ -223,6 +225,13 @@ public class ProgressSectionController extends VBox {
 //        if (robots.size() != 0) {
 //            selectedAlgorithm = robots.get(0).getAlgorithm().getClass().getSimpleName();
 //        }
+//        System.out.println("in ctrl" + robots.size());
+//        for (Robot robot:robots){
+//
+//            System.out.println("postion: "+robot.getPosition());
+//
+//        }
+//        System.out.println("====end postion====");
 
         addDeepCopiedRobotList(robotStackPrev, robots, statisticDataTempStoringList);//store the current to the prev
 //        preSingleAlgorithm.add(singleAlgorithm);
@@ -319,6 +328,7 @@ public class ProgressSectionController extends VBox {
         while (iterator.hasNext()) {
             Robot curr = iterator.next();
             try {
+//                System.out.println(curr.getPosition());
                 Robot robot = curr.deepCopy();
                 controlPanelFacade.addListenerToGivenRobot(robot);
                 deepCopied.getKey().add(robot);

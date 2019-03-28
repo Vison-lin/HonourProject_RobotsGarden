@@ -73,7 +73,7 @@ public class Vector {
      */
     public Vector resize(double newNorm){
         Vector vs = new Vector(this.start,this.end);
-        if(this.norm!=newNorm){
+        if(this.norm!=newNorm && this.norm!=0){
             double newDeltaX = this.deltaX*newNorm/this.norm;
             double newDeltaY = this.deltaY*newNorm/this.norm;
             Point2D.Double newEnd= new Point2D.Double();

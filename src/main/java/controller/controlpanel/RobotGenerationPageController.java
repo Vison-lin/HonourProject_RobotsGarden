@@ -339,7 +339,7 @@ public class RobotGenerationPageController extends ScrollPane {
         return robot;
     }
 
-    /****************** Auto Generate ******************************/
+    /****************** Auto Generation ******************************/
 
     private void randomCreateConnectedRobotsBtnListener() {
         randomCreateRobots.setOnMouseClicked(new EventHandler<MouseEvent>() {

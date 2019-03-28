@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -69,6 +70,8 @@ public class RobotGenerationPageController extends ScrollPane {
     @FXML
     private RadioButton autoGenerate;
     @FXML
+    private RadioButton coordinateGenerate;
+    @FXML
     private RadioButton visionCustomize;
     @FXML
     private VBox autoGenerateBox;
@@ -76,6 +79,15 @@ public class RobotGenerationPageController extends ScrollPane {
     private Button randomCreateRobots;
     @FXML
     private TextField numberOfAutoCreatedRobots;
+    @FXML
+    private HBox coordinateGenerateBox;
+    @FXML
+    private Button coordinateCreate;
+    @FXML
+    private TextField XcoordinateInput;
+    @FXML
+    private TextField YcoordinateInput;
+
 
 
 
@@ -109,6 +121,7 @@ public class RobotGenerationPageController extends ScrollPane {
         }
         initNodesText();
         randomCreateConnectedRobotsBtnListener();
+        coordinateGenerateCheckListener();
         inputVisionListener();
         inputUnitListener();
         colorPickerListener();
@@ -126,6 +139,7 @@ public class RobotGenerationPageController extends ScrollPane {
         inputUnit.setText("");
         inputUnit.setDisable(true);
         autoGenerateBox.setDisable(true);
+        coordinateGenerateBox.setDisable(true);
         selectedRobotUnit = DEFAULT_ROBOT_UNIT;
         colorText.setText(DEFAULT_COLOR_TEXT);
         visionText.setText(DEFAULT_VISION_TEXT);
@@ -137,6 +151,7 @@ public class RobotGenerationPageController extends ScrollPane {
         visionCheck.setUserData("Infinity");
         clickGenerate.setUserData("Click");
         autoGenerate.setUserData("Auto");
+        coordinateGenerate.setUserData("Coordinate");
 
     }
 
@@ -175,22 +190,61 @@ public class RobotGenerationPageController extends ScrollPane {
         autoGenerate.setToggleGroup(clickCheckGroup);
         clickGenerate.setSelected(true);
         clickGenerate.setToggleGroup(clickCheckGroup);
+        coordinateGenerate.setToggleGroup(clickCheckGroup);
 
         clickCheckGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
                 if(clickCheckGroup.getSelectedToggle().getUserData().toString().equals("Auto")){
                     autoGenerateBox.setDisable(false);
+                    coordinateGenerateBox.setDisable(true);
                     controlPanelFacade.setRightClickFunction(RightClickFunction.Drag);
                 }else if(clickCheckGroup.getSelectedToggle().getUserData().toString().equals("Click")){
                     autoGenerateBox.setDisable(true);
+                    coordinateGenerateBox.setDisable(true);
                     controlPanelFacade.setRightClickFunction(RightClickFunction.CreateRobot);
+
+                }else if(clickCheckGroup.getSelectedToggle().getUserData().toString().equals("Coordinate")){
+                    coordinateGenerateBox.setDisable(false);
+                    autoGenerateBox.setDisable(true);
+                    controlPanelFacade.setRightClickFunction(RightClickFunction.Drag);
 
                 }
 
 
             }
         });
+
+    }
+
+    private void coordinateGenerateCheckListener(){
+        coordinateCreate.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                try {
+                    double X = Integer.valueOf(XcoordinateInput.getText());
+                    double Y = Integer.valueOf(YcoordinateInput.getText());
+                    Robot robot = controlPanelFacade.robotGenerator("No." + controlPanelFacade.getRobotNameCounter(), X, Y);
+                    controlPanelFacade.increaseRobotNameCounter();
+                    controlPanelFacade.getGardenController().updateGarden();
+
+                } catch (NumberFormatException e) {
+                    controlPanelFacade.getWarning().setText("The coordinates must be number");
+                }
+
+
+
+
+
+            }
+        });
+
+
+
+
+
+
 
     }
 
@@ -461,6 +515,8 @@ public class RobotGenerationPageController extends ScrollPane {
         unitCheck.setSelected(true);
         randomCreateRobots.setDisable(false);
         numberOfAutoCreatedRobots.setText("");
+        XcoordinateInput.setText("");
+        YcoordinateInput.setText("");
         algorithmSelection.getSelectionModel().select(0);
     }
 

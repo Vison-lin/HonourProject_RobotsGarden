@@ -201,9 +201,9 @@ public class ProgressSectionController extends VBox {
         next.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                System.out.println("=====start====");
+                //System.out.println("=====start====");
                 nextAction();
-                System.out.println("====end=====");
+               // System.out.println("====end=====");
             }
         });
     }

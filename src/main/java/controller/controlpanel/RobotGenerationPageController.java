@@ -223,8 +223,8 @@ public class RobotGenerationPageController extends ScrollPane {
             public void handle(MouseEvent event) {
 
                 try {
-                    double X = Integer.valueOf(XcoordinateInput.getText());
-                    double Y = Integer.valueOf(YcoordinateInput.getText());
+                    double X = Double.valueOf(XcoordinateInput.getText());
+                    double Y = Double.valueOf(YcoordinateInput.getText());
                     Robot robot = controlPanelFacade.robotGenerator("No." + controlPanelFacade.getRobotNameCounter(), X, Y);
                     controlPanelFacade.increaseRobotNameCounter();
                     controlPanelFacade.getGardenController().updateGarden();

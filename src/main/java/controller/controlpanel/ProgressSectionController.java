@@ -111,7 +111,7 @@ public class ProgressSectionController extends VBox {
     }
 
     private void autoRunListener() {
-        autoRunSpeed.setMin(0);
+        autoRunSpeed.setMin(1);
         autoRunSpeed.setMax(5000);
         autoRunSpeed.setValue(2500);
         autoRunSpeed.setMajorTickUnit(500);

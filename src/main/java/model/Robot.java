@@ -97,7 +97,7 @@ public class Robot {
 //            graphicalDisplay.moveTo(positionForGraphicalDisplay);
             graphicalDisplay.moveTo(coordinate);
         }else{
-            end = resize(norm,getPosition(),end);
+            end = resize(unit,getPosition(),end);
             coordinate = new Point2D.Double(end.getX(), end.getY());
             //todo 2
 //            Point2D.Double positionForGraphicalDisplay = GardenController.adjustCoordinate(coordinate);

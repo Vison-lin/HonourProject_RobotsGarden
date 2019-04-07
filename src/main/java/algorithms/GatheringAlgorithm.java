@@ -301,7 +301,7 @@ public class GatheringAlgorithm extends Algorithm implements Statisticable {
 
     @Override
     public String algorithmName() {
-        return "Gathering(Go-To-Center)";
+        return "Gathering Algorithm";
     }
 
     @Override

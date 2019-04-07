@@ -298,7 +298,7 @@ public class GatheringGoToSec extends Algorithm implements Statisticable {
 
     @Override
     public String algorithmName() {
-        return "Gathering(Go-To-Sec)";
+        return "SEC Formation Algorithm";
     }
 
     @Override

@@ -20,7 +20,7 @@ public class RobotGraphicalDisplay {
     private List<DisplayAdapter> layers;
 
     /**
-     * init with the default value:
+     * Init with the default value:
      * <br/>
      * For robot position: the default radius is 1, and the color is white
      * <br/>
@@ -262,24 +262,4 @@ public class RobotGraphicalDisplay {
         this.layers.clear();
     }
 
-    public void setRatioScale(double scale) {
-//        robotPosition.setRadius(robotPosition.getRadius() + scale);
-//        robotBody.setRadius(robotBody.getRadius() + scale);
-//        robotBorder.setRadius(robotBorder.getRadius() + scale);
-//        robotVision.setRadius(robotVision.getRadius() + scale);
-        robotPosition.setScaleX(scale);
-        robotPosition.setScaleY(scale);
-
-        robotBody.setScaleX(scale);
-        robotBody.setScaleY(scale);
-
-        robotBorder.setScaleX(scale);
-        robotBorder.setScaleY(scale);
-
-        robotVision.setScaleX(scale);
-        robotVision.setScaleY(scale);
-        for (DisplayAdapter layer : layers) {
-            layer.zoomingReactor(scale);
-        }
-    }
 }

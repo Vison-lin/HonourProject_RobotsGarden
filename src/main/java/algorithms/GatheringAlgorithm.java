@@ -369,7 +369,7 @@ public class GatheringAlgorithm extends Algorithm implements Statisticable {
     }
 
     @Override
-    public HashMap<String, StatisticData> init() {
+    public HashMap<String, StatisticData> statisticInit() {
         HashMap<String, StatisticData> newInstance = new HashMap<>();
         newInstance.put(NumOfRun.TAG, new NumOfRun());
         newInstance.put(TotalDistance.TAG, new TotalDistance());

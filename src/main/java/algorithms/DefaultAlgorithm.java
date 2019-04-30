@@ -8,7 +8,7 @@ import java.awt.geom.Point2D;
 import java.util.List;
 
 /**
- * This represent the default behavior of each robot -- Do nothing: robot will stay where they are in each step. All the robots will be init with this algorithm.
+ * This represent the default behavior of each robot -- Do nothing: robot will stay where they are in each step. All the robots will be statisticInit with this algorithm.
  */
 public class DefaultAlgorithm extends Algorithm {
 

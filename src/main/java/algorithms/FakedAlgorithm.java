@@ -54,7 +54,7 @@ public class FakedAlgorithm extends Algorithm implements Statisticable {
     }
 
     @Override
-    public HashMap<String, StatisticData> init() {
+    public HashMap<String, StatisticData> statisticInit() {
         HashMap a = new HashMap();
         a.put("", new mStatisticData());
         return a;

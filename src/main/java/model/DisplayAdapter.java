@@ -96,23 +96,4 @@ public abstract class DisplayAdapter<T extends Shape> {
         absolutePosition.setLocation(x, y);
     }
 
-    /**
-     * Change the display of the the displayPattern for each scroll in order to support ZOOMING. More specific, each time the user scroll the mouse, change the display of the pattern.
-     * <br/>
-     * This method often used to change the size of the displayPattern.
-     * <br/>
-     * For example, to increase the radius width for each scroll:
-     * <br/>
-     * getDisplayPattern().setRadius(getDisplayPattern().getRadius() + increment);
-     *
-     * @param increment the increment of the stroke for the display pattern (shape). The stroke will decrease if the increment is a negative number
-     */
-    public void zoomingReactor(double increment) {
-        displayPattern.setScaleX(increment);
-        displayPattern.setScaleY(increment);
-    }
-
-    public Point2D.Double getAbsolutePosition() {
-        return absolutePosition;
-    }
 }

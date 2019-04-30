@@ -388,7 +388,7 @@ public class RobotGenerationPageController extends ScrollPane {
         if (robot.getAlgorithm() instanceof Statisticable) {
             Statisticable statisticable = (Statisticable) robot.getAlgorithm();
 //            System.out.println(statisticable + "==========");
-            controlPanelFacade.insertToStatisticDataTempStoringList(robot.getTag(), statisticable.init());
+            controlPanelFacade.insertToStatisticDataTempStoringList(robot.getTag(), statisticable.statisticInit());
         }
         return robot;
     }

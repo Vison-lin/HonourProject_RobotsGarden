@@ -9,7 +9,7 @@ Moving pattern is determined by pattern formation algorithm (PFA).
 
 
 ## Visualizer
-
+![avatar](https://github.com/Vison-lin/HonourProject_RobotsGarden/blob/master/image.gif)
 ## Observed Algorithms - Gathering Algo
 In order to gather Algorithm, we initially put robots in a arbitrary distinct position, and finally robots will gather together into one point.
 

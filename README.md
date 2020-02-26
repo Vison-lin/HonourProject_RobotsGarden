@@ -12,6 +12,13 @@ Also, different variables of oblivious robots, such as limited memory, restricte
 In order to gather Algorithm, we initially put robots in a arbitrary distinct position, and finally robots will gather together into one point.
 <br/><br/>
 ![avatar](https://github.com/Vison-lin/HonourProject_RobotsGarden/blob/master/preview1.gif)
+<br/><br/>
+![avatar](https://github.com/Vison-lin/HonourProject_RobotsGarden/blob/master/preview2.gif)
 ## Observed Algorithms - Random Algorithm
 In order to random Algorithm, we initially put robots in a arbitrary distinct position, and finally robots will move toward a random position in its own vision.
+
+## Observed Algorithms - Combination Algorithm
+By Combining two differents Algorithm which are gather Algorithm and ranom Agorithm to get various result of a experiment. 
+<br/><br/>
+![avatar](https://github.com/Vison-lin/HonourProject_RobotsGarden/blob/master/preview3.gif)
 

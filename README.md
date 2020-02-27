@@ -1,6 +1,6 @@
 # HonourProject_RobotsGarden
 
-This is a Computer Science Honours Project at University of Ottawa. The major purpose of this project is to develop a visualizer to observe oblivious robots moving patterns. In terms of the complexity of the problem and the originality of the project, there are two algorithms are analyzed and implemented: gathering algorithm and random algorithm. 
+This is a Computer Science Honours Project at University of Ottawa. The major purpose of this project is to develop a visualizer to observe oblivious robots moving patterns. In terms of the complexity of the problem and the originality of the project, there are several algorithms analyzed and implemented, such as gathering algorithm and random algorithm. 
 
 Also, different variables of oblivious robots, such as limited memory, restricted vision, and implicit communication, are measured during this project. Moving pattern is determined by pattern formation algorithm (PFA).
 
